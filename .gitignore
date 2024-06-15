@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+media
+
+# Environments
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Testing
+coverage/
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Static and media files
+/staticfiles
+/media
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Virtual Environment
+.Python
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Docker
+**/Dockerfile
+docker-compose.yml
+
+# Logs
+*.log
