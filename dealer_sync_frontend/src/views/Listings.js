@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Card from '../components/Card';
 import CardContent from '../components/CardContent';
 import CardHeader from '../components/CardHeader';
@@ -7,20 +8,56 @@ import { Search, Edit, Trash2 } from 'lucide-react';
 
 const Listings = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [listings, setListings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock data - replace with actual data fetching logic
-  const listings = [
-    { id: 1, make: 'Toyota', model: 'Camry', year: 2023, price: 25000, status: 'Active' },
-    { id: 2, make: 'Honda', model: 'Civic', year: 2022, price: 22000, status: 'Pending' },
-    { id: 3, make: 'Ford', model: 'F-150', year: 2023, price: 35000, status: 'Active' },
-    { id: 4, make: 'Chevrolet', model: 'Malibu', year: 2022, price: 23000, status: 'Inactive' },
-  ];
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/api/listings/', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        });
+        setListings(response.data);
+      } catch (err) {
+        setError('Failed to fetch listings');
+        console.error('Listings fetch error:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
+
+  const handleEdit = async (id) => {
+    // Implement edit functionality
+    console.log('Edit listing', id);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/listings/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      setListings(listings.filter(listing => listing.id !== id));
+    } catch (err) {
+      console.error('Delete error:', err);
+    }
+  };
 
   const filteredListings = listings.filter(listing =>
     Object.values(listing).some(value =>
       value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="bg-background min-h-screen text-text p-6">
@@ -74,10 +111,10 @@ const Listings = () => {
                     <td className="py-2 px-4">${listing.price}</td>
                     <td className="py-2 px-4">{listing.status}</td>
                     <td className="py-2 px-4">
-                      <button className="text-blue-500 hover:text-blue-700 mr-2">
+                      <button onClick={() => handleEdit(listing.id)} className="text-blue-500 hover:text-blue-700 mr-2">
                         <Edit size={18} />
                       </button>
-                      <button className="text-red-500 hover:text-red-700">
+                      <button onClick={() => handleDelete(listing.id)} className="text-red-500 hover:text-red-700">
                         <Trash2 size={18} />
                       </button>
                     </td>

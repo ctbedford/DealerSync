@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Card from '../components/Card';
 import CardContent from '../components/CardContent';
@@ -7,27 +8,36 @@ import CardTitle from '../components/CardTitle';
 import { Car, Activity, Clock, Eye } from 'lucide-react';
 
 const Dashboard = () => {
-  const stats = [
-    { title: 'Total Listings', value: 150, icon: Car },
-    { title: 'Active Syncs', value: 3, icon: Activity },
-    { title: 'Pending Updates', value: 10, icon: Clock },
-    { title: 'Total Views', value: 1250, icon: Eye },
-  ];
+  const [dashboardData, setDashboardData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const recentActivity = [
-    { title: 'New Listing Added', description: '2023 Toyota Camry', time: '2 hours ago' },
-    { title: 'Sync Completed', description: 'Marketplace A', time: '4 hours ago' },
-    { title: 'Price Updated', description: '5 listings', time: '1 day ago' },
-    { title: 'New Inquiry', description: 'Regarding 2022 Honda Civic', time: '2 days ago' },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        const response = await axios.get('http://localhost:8000/api/dashboard/', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setDashboardData(response.data);
+      } catch (err) {
+        setError('Failed to fetch dashboard data');
+        console.error('Dashboard fetch error:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const chartData = [
-    { name: 'Jan', listings: 120, views: 1000 },
-    { name: 'Feb', listings: 135, views: 1100 },
-    { name: 'Mar', listings: 142, views: 1200 },
-    { name: 'Apr', listings: 150, views: 1250 },
-  ];
+    fetchDashboardData();
+  }, []);
 
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!dashboardData) return null;
+
+  const { stats, recentActivity, chartData } = dashboardData;
   return (
     <div className="bg-background min-h-screen text-text p-6">
       <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">DealerSync Dashboard</h1>

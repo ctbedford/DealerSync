@@ -1,0 +1,197 @@
+{
+  "files": [
+    {
+      "name": ".env",
+      "path": ".env",
+      "size": 166,
+      "type": "other"
+    },
+    {
+      "name": "requirements.txt",
+      "path": "requirements.txt",
+      "size": 140,
+      "type": "other"
+    },
+    {
+      "name": "manage.py",
+      "path": "manage.py",
+      "size": 675,
+      "type": "text",
+      "content_preview": "#!/usr/bin/env python\n\n\"\"\"Django's command-line utility for administrative tasks.\"\"\"\n\nimport os\n\nimport sys\n\n\n\n\n\ndef main():\n\n    \"\"\"Run administrative tasks.\"\"\"\n\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"dealer_sync_backend.settings\")\n\n    try:\n",
+      "line_count": 20
+    },
+    {
+      "name": "apps.py",
+      "path": "authentication/apps.py",
+      "size": 160,
+      "type": "text",
+      "content_preview": "from django.apps import AppConfig\n\n\n\n\n\nclass AuthenticationConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'authentication'\n",
+      "line_count": 12
+    },
+    {
+      "name": "urls.py",
+      "path": "authentication/urls.py",
+      "size": 442,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import RegisterView, UserView\nfrom rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView\n\nurlpatterns = [\n    path('register/', RegisterView.as_view(), name='register'),\n    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),\n    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),\n    path('user/', UserView.as_view(), name='user'),\n]\n",
+      "line_count": 10
+    },
+    {
+      "name": "views.py",
+      "path": "authentication/views.py",
+      "size": 1023,
+      "type": "text",
+      "content": "from django.shortcuts import render\nfrom rest_framework import status\nfrom rest_framework.response import Response\nfrom rest_framework.views import APIView\nfrom rest_framework.permissions import IsAuthenticated\nfrom rest_framework_simplejwt.tokens import RefreshToken\nfrom .serializers import UserSerializer\n\nclass RegisterView(APIView):\n    def post(self, request):\n        serializer = UserSerializer(data=request.data)\n        if serializer.is_valid():\n            user = serializer.save()\n            refresh = RefreshToken.for_user(user)\n            return Response({\n                'user': serializer.data,\n                'refresh': str(refresh),\n                'access': str(refresh.access_token),\n            }, status=status.HTTP_201_CREATED)\n        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\n\nclass UserView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        serializer = UserSerializer(request.user)\n        return Response(serializer.data)\n",
+      "line_count": 27
+    },
+    {
+      "name": "tests.py",
+      "path": "authentication/tests.py",
+      "size": 60,
+      "type": "text",
+      "content_preview": "from django.test import TestCase\n\n\n\n# Create your tests here.\n",
+      "line_count": 6
+    },
+    {
+      "name": "serializers.py",
+      "path": "authentication/serializers.py",
+      "size": 552,
+      "type": "text",
+      "content": "#!/usr/bin/env python3\n\nfrom rest_framework import serializers\nfrom django.contrib.auth.models import User\n\nclass UserSerializer(serializers.ModelSerializer):\n    password = serializers.CharField(write_only=True)\n\n    class Meta:\n        model = User\n        fields = ('username', 'email', 'password')\n\n    def create(self, validated_data):\n        user = User.objects.create_user(\n            username=validated_data['username'],\n            email=validated_data['email'],\n            password=validated_data['password']\n        )\n        return user\n",
+      "line_count": 19
+    },
+    {
+      "name": "__init__.py",
+      "path": "authentication/__init__.py",
+      "size": 0,
+      "type": "text",
+      "content_preview": "",
+      "line_count": 1
+    },
+    {
+      "name": "admin.py",
+      "path": "authentication/admin.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "authentication/models.py",
+      "size": 57,
+      "type": "text",
+      "content": "from django.db import models\n\n# Create your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/urls.py",
+      "size": 920,
+      "type": "text",
+      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\nfrom rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n]\n",
+      "line_count": 24
+    },
+    {
+      "name": "wsgi.py",
+      "path": "dealer_sync_backend/wsgi.py",
+      "size": 415,
+      "type": "text",
+      "content_preview": "\"\"\"\n\nWSGI config for dealer_sync_backend project.\n\n\n\nIt exposes the WSGI callable as a module-level variable named ``application``.\n\n\n\nFor more information on this file, see\n\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/\n\n\"\"\"\n\n\n\nimport os\n",
+      "line_count": 20
+    },
+    {
+      "name": "__init__.py",
+      "path": "dealer_sync_backend/__init__.py",
+      "size": 0,
+      "type": "text",
+      "content_preview": "",
+      "line_count": 1
+    },
+    {
+      "name": "asgi.py",
+      "path": "dealer_sync_backend/asgi.py",
+      "size": 415,
+      "type": "text",
+      "content_preview": "\"\"\"\n\nASGI config for dealer_sync_backend project.\n\n\n\nIt exposes the ASGI callable as a module-level variable named ``application``.\n\n\n\nFor more information on this file, see\n\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/asgi/\n\n\"\"\"\n\n\n\nimport os\n",
+      "line_count": 20
+    },
+    {
+      "name": "settings.py",
+      "path": "dealer_sync_backend/settings.py",
+      "size": 4384,
+      "type": "text",
+      "content": "\"\"\"\nDjango settings for dealer_sync_backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.6.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom decouple import config\nfrom pathlib import Path\nfrom datetime import timedelta\nimport os\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = \"django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz\"\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    'scraping',\n    'rest_framework',\n    'rest_framework_simplejwt',\n    'corsheaders',\n    'authentication',\n]\n\nMIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n    'corsheaders.middleware.CorsMiddleware',\n]\n\nROOT_URLCONF = \"dealer_sync_backend.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"dealer_sync_backend.wsgi.application\"\n\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\n\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': config('POSTGRES_DB'),\n        'USER': config('POSTGRES_USER'),\n        'PASSWORD': config('POSTGRES_PASSWORD'),\n        'HOST': config('DATABASE_HOST'),\n        'PORT': config('DATABASE_PORT'),\n    }\n}\n\n\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\",\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = \"en-us\"\n\nTIME_ZONE = \"UTC\"\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nCORS_ALLOW_ALL_ORIGINS = True  # For development only\nCORS_ALLOW_CREDENTIALS = True\n\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",\n]\n\nSIMPLE_JWT = {\n    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),\n    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),\n    'ROTATE_REFRESH_TOKENS': True,\n    'BLACKLIST_AFTER_ROTATION': True,\n    'AUTH_HEADER_TYPES': ('Bearer',),\n    'USER_ID_FIELD': 'id',\n    'USER_ID_CLAIM': 'user_id',\n}\n\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': (\n        'rest_framework_simplejwt.authentication.JWTAuthentication',\n    ),\n    'DEFAULT_PERMISSION_CLASSES': (\n        'rest_framework.permissions.IsAuthenticated',\n    ),\n}\n",
+      "line_count": 168
+    },
+    {
+      "name": "apps.py",
+      "path": "scraping/apps.py",
+      "size": 148,
+      "type": "text",
+      "content_preview": "from django.apps import AppConfig\n\n\n\n\n\nclass ScrapingConfig(AppConfig):\n\n    default_auto_field = \"django.db.models.BigAutoField\"\n\n    name = \"scraping\"\n",
+      "line_count": 12
+    },
+    {
+      "name": "views.py",
+      "path": "scraping/views.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.shortcuts import render\n\n# Create your views here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "tests.py",
+      "path": "scraping/tests.py",
+      "size": 60,
+      "type": "text",
+      "content_preview": "from django.test import TestCase\n\n\n\n# Create your tests here.\n",
+      "line_count": 6
+    },
+    {
+      "name": "__init__.py",
+      "path": "scraping/__init__.py",
+      "size": 0,
+      "type": "text",
+      "content_preview": "",
+      "line_count": 1
+    },
+    {
+      "name": "admin.py",
+      "path": "scraping/admin.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "scraping/models.py",
+      "size": 57,
+      "type": "text",
+      "content": "from django.db import models\n\n# Create your models here.\n",
+      "line_count": 3
+    }
+  ],
+  "directories": [
+    {
+      "path": "authentication",
+      "name": "authentication"
+    },
+    {
+      "path": "dealer_sync_backend",
+      "name": "dealer_sync_backend"
+    },
+    {
+      "path": "scraping",
+      "name": "scraping"
+    }
+  ],
+  "analysis": {
+    "framework": "Django",
+    "django_apps": [
+      "authentication",
+      "scraping"
+    ]
+  }
+}

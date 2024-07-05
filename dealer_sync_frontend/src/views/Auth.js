@@ -24,10 +24,6 @@ const Auth = ({ onAuth }) => {
       setError('Email is required for registration');
       return false;
     }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters long');
-      return false;
-    }
     return true;
   };
 
@@ -40,32 +36,30 @@ const Auth = ({ onAuth }) => {
     try {
       let response;
       if (isLogin) {
-        response = await axios.post('http://localhost:8000/api/token/', {
+        response = await axios.post('http://localhost:8000/api/auth/token/', {
           username,
           password
         });
-        localStorage.setItem('access_token', response.data.access);
-        localStorage.setItem('refresh_token', response.data.refresh);
+        const { access, refresh } = response.data;
+        localStorage.setItem('access_token', access);
+        localStorage.setItem('refresh_token', refresh);
+        onAuth({ username }, access);
       } else {
         response = await axios.post('http://localhost:8000/api/auth/register/', {
           username,
           email,
           password
         });
-        // After successful registration, log the user in
-        const loginResponse = await axios.post('http://localhost:8000/api/token/', {
-          username,
-          password
-        });
-        localStorage.setItem('access_token', loginResponse.data.access);
-        localStorage.setItem('refresh_token', loginResponse.data.refresh);
+        const { access, refresh } = response.data;
+        localStorage.setItem('access_token', access);
+        localStorage.setItem('refresh_token', refresh);
+        onAuth({ username, email }, access);
       }
 
-      const userData = { username, email: isLogin ? '' : email };
-      localStorage.setItem('user', JSON.stringify(userData));
-      onAuth(userData);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
       navigate('/');
     } catch (err) {
+      console.error('Authentication error:', err.response?.data || err.message);
       setError(err.response?.data?.detail || 'Authentication failed. Please try again.');
     }
   };
