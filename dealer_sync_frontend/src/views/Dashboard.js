@@ -1,0 +1,91 @@
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import Card from '../components/Card';
+import CardContent from '../components/CardContent';
+import CardHeader from '../components/CardHeader';
+import CardTitle from '../components/CardTitle';
+import { Car, Activity, Clock, Eye } from 'lucide-react';
+
+const Dashboard = () => {
+  const stats = [
+    { title: 'Total Listings', value: 150, icon: Car },
+    { title: 'Active Syncs', value: 3, icon: Activity },
+    { title: 'Pending Updates', value: 10, icon: Clock },
+    { title: 'Total Views', value: 1250, icon: Eye },
+  ];
+
+  const recentActivity = [
+    { title: 'New Listing Added', description: '2023 Toyota Camry', time: '2 hours ago' },
+    { title: 'Sync Completed', description: 'Marketplace A', time: '4 hours ago' },
+    { title: 'Price Updated', description: '5 listings', time: '1 day ago' },
+    { title: 'New Inquiry', description: 'Regarding 2022 Honda Civic', time: '2 days ago' },
+  ];
+
+  const chartData = [
+    { name: 'Jan', listings: 120, views: 1000 },
+    { name: 'Feb', listings: 135, views: 1100 },
+    { name: 'Mar', listings: 142, views: 1200 },
+    { name: 'Apr', listings: 150, views: 1250 },
+  ];
+
+  return (
+    <div className="bg-background min-h-screen text-text p-6">
+      <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">DealerSync Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium text-text-light">{stat.title}</CardTitle>
+              <stat.icon className="h-4 w-4 text-secondary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-primary">{stat.value}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-primary">Listings and Views Over Time</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <Tooltip />
+                <Legend />
+                <Bar yAxisId="left" dataKey="listings" fill="#8B4513" name="Listings" />
+                <Bar yAxisId="right" dataKey="views" fill="#DAA520" name="Views" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-primary">Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <li key={index} className="bg-background p-3 rounded-md border border-secondary">
+                  <h4 className="font-semibold text-primary">{activity.title}</h4>
+                  <p className="text-sm text-text">{activity.description}</p>
+                  <span className="text-xs text-text-light">{activity.time}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
