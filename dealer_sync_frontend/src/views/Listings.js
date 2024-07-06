@@ -13,13 +13,18 @@ const Listings = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log('Listings component mounted');
     const fetchListings = async () => {
+      console.log('Fetching listings...');
       try {
+        const token = localStorage.getItem('access_token');
+        console.log('Access token:', token);
         const response = await axios.get('http://localhost:8000/api/listings/', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            Authorization: `Bearer ${token}`
           }
         });
+        console.log('Listings response:', response.data);
         setListings(response.data);
       } catch (err) {
         setError('Failed to fetch listings');
@@ -32,6 +37,7 @@ const Listings = () => {
     fetchListings();
   }, []);
 
+  console.log('Rendering Listings component');
   const handleEdit = async (id) => {
     // Implement edit functionality
     console.log('Edit listing', id);
@@ -74,9 +80,9 @@ const Listings = () => {
               placeholder="Search listings..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary"
+              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary bg-background-light text-text"
             />
-            <button className="bg-primary text-white p-2 rounded-r-md hover:bg-primary-dark">
+            <button className="btn rounded-l-none">
               <Search size={20} />
             </button>
           </div>
@@ -89,8 +95,8 @@ const Listings = () => {
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white">
-              <thead className="bg-gray-100">
+            <table className="min-w-full bg-background-light">
+              <thead className="bg-background">
                 <tr>
                   <th className="py-2 px-4 text-left">ID</th>
                   <th className="py-2 px-4 text-left">Make</th>
@@ -103,7 +109,7 @@ const Listings = () => {
               </thead>
               <tbody>
                 {filteredListings.map((listing) => (
-                  <tr key={listing.id} className="border-b">
+                  <tr key={listing.id} className="border-b border-gray-700">
                     <td className="py-2 px-4">{listing.id}</td>
                     <td className="py-2 px-4">{listing.make}</td>
                     <td className="py-2 px-4">{listing.model}</td>
@@ -111,10 +117,10 @@ const Listings = () => {
                     <td className="py-2 px-4">${listing.price}</td>
                     <td className="py-2 px-4">{listing.status}</td>
                     <td className="py-2 px-4">
-                      <button onClick={() => handleEdit(listing.id)} className="text-blue-500 hover:text-blue-700 mr-2">
+                      <button onClick={() => handleEdit(listing.id)} className="text-amber-400 hover:text-amber-300 mr-2">
                         <Edit size={18} />
                       </button>
-                      <button onClick={() => handleDelete(listing.id)} className="text-red-500 hover:text-red-700">
+                      <button onClick={() => handleDelete(listing.id)} className="text-red-400 hover:text-red-300">
                         <Trash2 size={18} />
                       </button>
                     </td>

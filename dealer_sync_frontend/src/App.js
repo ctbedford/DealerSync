@@ -69,7 +69,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <Auth onAuth={handleAuth} />} />
-
         <Route element={<ProtectedRoute user={user} />}>
           <Route element={<Layout user={user} onLogout={handleLogout} />}>
             <Route path="/" element={<Dashboard />} />
@@ -77,7 +76,6 @@ function App() {
             <Route path="/sync" element={<Sync />} />
           </Route>
         </Route>
-
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>

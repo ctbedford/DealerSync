@@ -85,7 +85,7 @@ const Sync = () => {
           <button
             onClick={startSync}
             disabled={syncStatus === 'syncing'}
-            className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Start Sync
           </button>

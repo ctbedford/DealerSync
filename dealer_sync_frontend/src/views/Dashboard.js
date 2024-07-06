@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("Dashboard");
     const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem('access_token');
@@ -44,9 +45,9 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
-          <Card key={index}>
+          <Card key={index} className="bg-background-light">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium text-text-light">{stat.title}</CardTitle>
+              <CardTitle className="text-sm font-medium text-text">{stat.title}</CardTitle>
               <stat.icon className="h-4 w-4 text-secondary" />
             </CardHeader>
             <CardContent>
@@ -57,7 +58,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <Card>
+        <Card className="card mb-6">
           <CardHeader>
             <CardTitle className="text-primary">Listings and Views Over Time</CardTitle>
           </CardHeader>
@@ -70,8 +71,8 @@ const Dashboard = () => {
                 <YAxis yAxisId="right" orientation="right" />
                 <Tooltip />
                 <Legend />
-                <Bar yAxisId="left" dataKey="listings" fill="#8B4513" name="Listings" />
-                <Bar yAxisId="right" dataKey="views" fill="#DAA520" name="Views" />
+                <Bar yAxisId="left" dataKey="listings" fill="#d4af37" name="Listings" />
+                <Bar yAxisId="right" dataKey="views" fill="#c41e3a" name="Views" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

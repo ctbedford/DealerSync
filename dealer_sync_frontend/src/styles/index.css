@@ -1,50 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #1a1a1a;
+  background-color: #121212;
   color: #e0e0e0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.bg-background {
+  background-color: #1e1e1e;
 }
 
-:root {
-  --background: #1a1a2e;
-  --card-background: #16213e;
-  --primary: #0f3460;
-  --secondary: #e94560;
-  --text-primary: #ffffff;
-  --text-secondary: #a9a9a9;
-  --accent: #fca311;
+.text-primary {
+  color: #d4af37;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--text-primary);
+.bg-primary {
+  background-color: #2d2d2d;
+}
+
+.bg-primary-light {
+  background-color: #3a3a3a;
+}
+
+.bg-primary-dark {
+  background-color: #1a1a1a;
+}
+
+.text-secondary {
+  color: #c41e3a;
+}
+
+.border-primary {
+  border-color: #d4af37;
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: #1a1a1a;
 }
 
 .card {
-  background-color: var(--card-background);
-  border: 1px solid var(--primary);
+  background-color: #2d2d2d;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.card-title {
-  color: var(--accent);
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.btn-primary {
-  background-color: var(--primary);
-  border-color: var(--primary);
+.btn {
+  background-color: #d4af37;
+  color: #121212;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-.btn-secondary {
-  background-color: var(--secondary);
-  border-color: var(--secondary);
+.btn:hover {
+  background-color: #c41e3a;
+  color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #3a3a3a;
+}
+
+.recharts-text {
+  fill: #e0e0e0;
+}
+
+.recharts-legend-item-text {
+  color: #e0e0e0 !important;
 }

@@ -9,7 +9,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-amber-50 text-amber-900;
   @apply bg-background text-text;
 }
 
@@ -17,11 +16,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom color classes */
+.bg-primary {
+  @apply bg-amber-600;
+}
+
+.text-primary {
+  @apply text-amber-400;
+}
+
+.bg-secondary {
+  @apply bg-red-600;
+}
+
+.text-secondary {
+  @apply text-red-400;
+}
+
 /* Add any additional custom styles here */
 .hover-effect {
   @apply transition-all duration-300 ease-in-out;
 }
 
 .hover-effect:hover {
-  @apply shadow-lg;
+  @apply shadow-lg shadow-amber-900/30;
+}
+
+/* Custom button style */
+.btn {
+  @apply bg-amber-600 text-white font-semibold py-2 px-4 rounded transition-colors duration-300;
+}
+
+.btn:hover {
+  @apply bg-red-600;
+}
+
+/* Custom card style */
+.card {
+  @apply bg-background-light shadow-md rounded-lg p-6 transition-shadow duration-300;
+}
+
+.card:hover {
+  @apply shadow-lg shadow-amber-900/30;
 }

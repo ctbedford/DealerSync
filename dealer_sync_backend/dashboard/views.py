@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from scraper.tasks import run_scrapers
 
 class DashboardView(APIView):
     permission_classes = [IsAuthenticated]
@@ -51,9 +52,14 @@ class SyncHistoryView(APIView):
         }
         return Response(sync_history)
 
+
 class SyncStartView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        # In a real scenario, you'd start the sync process here
-        return Response({"message": "Sync process started"})
+        # Trigger the Celery task
+        task = run_scrapers.delay()
+        return Response({
+            "message": "Sync process started",
+            "task_id": task.id
+        })
