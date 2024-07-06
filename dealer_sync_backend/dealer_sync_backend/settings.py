@@ -41,13 +41,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'scraping',
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'corsheaders',
-    'authentication',
-    'dashboard',
+    "rest_framework",
+    "rest_framework_simplejwt",
+    "corsheaders",
+    "scraper",
+    "dashboard",
+    "authentication",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
