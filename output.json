@@ -17,7 +17,7 @@
     {
       "name": "output.json",
       "path": "output.json",
-      "size": 60750,
+      "size": 61781,
       "type": "text",
       "content_preview": "{\n\n  \"files\": [\n\n    {\n\n      \"name\": \"project.py\",\n\n      \"path\": \"project.py\",\n\n      \"size\": 3921,\n\n      \"type\": \"text\",\n\n      \"content_preview\": \"import os\\n\\nimport json\\n\\nfrom typing import Dict, List, Union\\n\\n\\n\\nEXCLUDED_DIRS = {'node_modules', 'venv', '.git', '__pycache__', 'migrations', 'build'}\\n\\nIMPORTANT_FILE_TYPES = {'.py', '.js', '.jsx', '.ts', '.tsx', '.json', '.yml', '.yaml', '.md', '.html', '.css'}\\n\\nKEY_FILES_DJANGO = {'models.py', 'views.py', 'urls.py', 'settings.py', 'serializers.py', 'forms.py', 'admin.py'}\\n\\nKEY_FILES_REACT = {'.jsx', '.js'}\\n\\n\\n\\ndef analyze_project(root_dir: str) -> Dict[str, Union[List[Dict[str, str]], Dict[str, str]]]:\\n\",\n\n      \"line_count\": 20\n\n    },\n",
       "line_count": 20
@@ -191,10 +191,10 @@
     {
       "name": "Sync.js",
       "path": "dealer_sync_frontend/src/views/Sync.js",
-      "size": 3975,
+      "size": 4788,
       "type": "text",
-      "content": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { RefreshCw, Check, AlertTriangle } from 'lucide-react';\n\nconst Sync = () => {\n  const [syncStatus, setSyncStatus] = useState('idle');\n  const [progress, setProgress] = useState(0);\n  const [syncHistory, setSyncHistory] = useState(null);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    fetchSyncHistory();\n  }, []);\n\n  const fetchSyncHistory = async () => {\n    try {\n      const response = await axios.get('http://localhost:8000/api/sync/history/', {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setSyncHistory(response.data);\n    } catch (err) {\n      console.error('Sync history fetch error:', err);\n      setError('Failed to fetch sync history');\n    }\n  };\n\n  const startSync = async () => {\n    setSyncStatus('syncing');\n    setProgress(0);\n    try {\n      const response = await axios.post('http://localhost:8000/api/sync/start/', {}, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n\n      // Simulating progress updates\n      const interval = setInterval(() => {\n        setProgress((prevProgress) => {\n          if (prevProgress >= 100) {\n            clearInterval(interval);\n            setSyncStatus('completed');\n            fetchSyncHistory();\n            return 100;\n          }\n          return prevProgress + 10;\n        });\n      }, 500);\n    } catch (err) {\n      console.error('Sync error:', err);\n      setSyncStatus('error');\n      setError('Sync failed. Please try again.');\n    }\n  };\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">Sync Dashboard</h1>\n\n      <Card className=\"mb-6\">\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync Status</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"flex items-center mb-4\">\n            <div className=\"mr-4\">\n              {syncStatus === 'idle' && <RefreshCw size={24} className=\"text-secondary\" />}\n              {syncStatus === 'syncing' && <RefreshCw size={24} className=\"text-primary animate-spin\" />}\n              {syncStatus === 'completed' && <Check size={24} className=\"text-green-500\" />}\n              {syncStatus === 'error' && <AlertTriangle size={24} className=\"text-red-500\" />}\n            </div>\n            <span className=\"capitalize text-lg\">{syncStatus}</span>\n          </div>\n          {syncStatus === 'syncing' && (\n            <div className=\"w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700\">\n              <div className=\"bg-primary h-2.5 rounded-full\" style={{ width: `${progress}%` }}></div>\n            </div>\n          )}\n          <button\n            onClick={startSync}\n            disabled={syncStatus === 'syncing'}\n            className=\"btn disabled:opacity-50 disabled:cursor-not-allowed\"\n          >\n            Start Sync\n          </button>\n        </CardContent>\n      </Card>\n\n      <Card>\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync History</CardTitle>\n        </CardHeader>\n        <CardContent>\n          {error && <div className=\"text-red-500 mb-4\">{error}</div>}\n          {syncHistory ? (\n            <ul className=\"space-y-2\">\n              <li>Last successful sync: {syncHistory.lastSuccessful}</li>\n              <li>Total syncs today: {syncHistory.totalToday}</li>\n              <li>Failed syncs today: {syncHistory.failedToday}</li>\n            </ul>\n          ) : (\n            <div>Loading sync history...</div>\n          )}\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Sync;\n",
-      "line_count": 116
+      "content": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { RefreshCw, Check, AlertTriangle } from 'lucide-react';\n\nconst Sync = () => {\n  const [syncStatus, setSyncStatus] = useState('idle');\n  const [progress, setProgress] = useState(0);\n  const [syncHistory, setSyncHistory] = useState(null);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    fetchSyncHistory();\n  }, []);\n\n  const fetchSyncHistory = async () => {\n    try {\n      const response = await axios.get('http://localhost:8000/api/sync/history/', {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setSyncHistory(response.data);\n    } catch (err) {\n      console.error('Sync history fetch error:', err);\n      setError('Failed to fetch sync history');\n    }\n  };\n\n  const startSync = async () => {\n    setSyncStatus('syncing');\n    setProgress(0);\n    try {\n      const response = await axios.post('http://localhost:8000/api/sync/start/', {}, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n\n      // Simulating progress updates\n      const interval = setInterval(() => {\n        setProgress((prevProgress) => {\n          if (prevProgress >= 100) {\n            clearInterval(interval);\n            setSyncStatus('completed');\n            fetchSyncHistory();\n            return 100;\n          }\n          return prevProgress + 10;\n        });\n      }, 500);\n    } catch (err) {\n      console.error('Sync error:', err);\n      setSyncStatus('error');\n      setError('Sync failed. Please try again.');\n    }\n  };\n\n  const runScraperNow = async () => {\n    setSyncStatus('syncing');\n    setProgress(0);\n    try {\n      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setSyncStatus('completed');\n      setProgress(100);\n      fetchSyncHistory();\n    } catch (err) {\n      console.error('Run scraper now error:', err);\n      setSyncStatus('error');\n      setError('Failed to run scraper. Please try again.');\n    }\n  };\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">Sync Dashboard</h1>\n\n      <Card className=\"mb-6\">\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync Status</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"flex items-center mb-4\">\n            <div className=\"mr-4\">\n              {syncStatus === 'idle' && <RefreshCw size={24} className=\"text-secondary\" />}\n              {syncStatus === 'syncing' && <RefreshCw size={24} className=\"text-primary animate-spin\" />}\n              {syncStatus === 'completed' && <Check size={24} className=\"text-green-500\" />}\n              {syncStatus === 'error' && <AlertTriangle size={24} className=\"text-red-500\" />}\n            </div>\n            <span className=\"capitalize text-lg\">{syncStatus}</span>\n          </div>\n          {syncStatus === 'syncing' && (\n            <div className=\"w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700\">\n              <div className=\"bg-primary h-2.5 rounded-full\" style={{ width: `${progress}%` }}></div>\n            </div>\n          )}\n          <button\n            onClick={startSync}\n            disabled={syncStatus === 'syncing'}\n            className=\"btn disabled:opacity-50 disabled:cursor-not-allowed mr-4\"\n          >\n            Start Scheduled Sync\n          </button>\n          <button\n            onClick={runScraperNow}\n            disabled={syncStatus === 'syncing'}\n            className=\"btn disabled:opacity-50 disabled:cursor-not-allowed\"\n          >\n            Run Scraper Now\n          </button>\n        </CardContent>\n      </Card>\n\n      <Card>\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync History</CardTitle>\n        </CardHeader>\n        <CardContent>\n          {error && <div className=\"text-red-500 mb-4\">{error}</div>}\n          {syncHistory ? (\n            <ul className=\"space-y-2\">\n              <li>Last successful sync: {syncHistory.lastSuccessful}</li>\n              <li>Total syncs today: {syncHistory.totalToday}</li>\n              <li>Failed syncs today: {syncHistory.failedToday}</li>\n            </ul>\n          ) : (\n            <div>Loading sync history...</div>\n          )}\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Sync;",
+      "line_count": 142
     },
     {
       "name": "Dashboard.js",
@@ -301,16 +301,8 @@
     {
       "name": "requirements.txt",
       "path": "dealer_sync_backend/requirements.txt",
-      "size": 140,
+      "size": 691,
       "type": "other"
-    },
-    {
-      "name": "celery.py",
-      "path": "dealer_sync_backend/celery.py",
-      "size": 302,
-      "type": "text",
-      "content_preview": "from __future__ import absolute_import, unicode_literals\n\nimport os\n\nfrom celery import Celery\n\n\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dealer_sync_backend.settings')\n\n\n\napp = Celery('dealer_sync_backend')\n\napp.config_from_object('django.conf:settings', namespace='CELERY')\n\napp.autodiscover_tasks()",
-      "line_count": 17
     },
     {
       "name": "manage.py",
@@ -385,12 +377,84 @@
       "line_count": 3
     },
     {
+      "name": "apps.py",
+      "path": "dealer_sync_backend/scraper/apps.py",
+      "size": 171,
+      "type": "text",
+      "content_preview": "from django.apps import AppConfig\n\n\n\nclass ScraperConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'scraper'  # Changed from 'scraping'",
+      "line_count": 9
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/scraper/urls.py",
+      "size": 341,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import StartScraperView, ScraperStatusView, RunScraperNowView\n\nurlpatterns = [\n    path('start/', StartScraperView.as_view(), name='start_scraper'),\n    path('status/', ScraperStatusView.as_view(), name='scraper_status'),\n    path('run-now/', RunScraperNowView.as_view(), name='run_scraper_now'),\n]\n\n",
+      "line_count": 9
+    },
+    {
+      "name": "views.py",
+      "path": "dealer_sync_backend/scraper/views.py",
+      "size": 1258,
+      "type": "text",
+      "content": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated\nfrom .tasks import run_scrapers\nfrom .scraper import scrape_mclarty_daniel\nfrom celery.result import AsyncResult\n\nclass StartScraperView(APIView):\n    permission_classes = [IsAuthenticated]\n    \n    def post(self, request):\n        task = run_scrapers.delay()\n        return Response({\"message\": \"Scraper task started\", \"task_id\": str(task.id)})\n\nclass ScraperStatusView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        task_id = request.query_params.get('task_id')\n        if not task_id:\n            return Response({\"error\": \"No task_id provided\"}, status=400)\n\n        task_result = AsyncResult(task_id)\n        return Response({\n            \"task_id\": task_id,\n            \"status\": task_result.status,\n            \"result\": task_result.result\n        })\n\nclass RunScraperNowView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def post(self, request):\n        try:\n            scrape_mclarty_daniel()\n            return Response({\"message\": \"Scraper ran successfully\"})\n        except Exception as e:\n            return Response({\"error\": str(e)}, status=500)\n",
+      "line_count": 38
+    },
+    {
+      "name": "tests.py",
+      "path": "dealer_sync_backend/scraper/tests.py",
+      "size": 1202,
+      "type": "text",
+      "content_preview": "from django.test import TestCase\n\nfrom unittest.mock import patch\n\nfrom .scraper import scrape_mclarty_daniel\n\nfrom .models import VehicleListing\n\n\n\nclass McLartyDanielScraperTests(TestCase):\n\n\n\n    @patch('scraper.scrape_mclarty_daniel.webdriver.Chrome')\n\n    def test_successful_scrape(self, mock_chrome):\n\n        # Mock the Chrome driver and its methods\n",
+      "line_count": 20
+    },
+    {
+      "name": "scraper.py",
+      "path": "dealer_sync_backend/scraper/scraper.py",
+      "size": 4047,
+      "type": "text",
+      "content_preview": "import requests\n\nfrom bs4 import BeautifulSoup\n\nfrom django.utils import timezone\n\nfrom .models import VehicleListing\n\nimport logging\n\nimport re\n\nfrom django.db import DataError\n\n\n\nlogger = logging.getLogger(__name__)\n\n\n",
+      "line_count": 20
+    },
+    {
+      "name": "__init__.py",
+      "path": "dealer_sync_backend/scraper/__init__.py",
+      "size": 49,
+      "type": "text",
+      "content_preview": "default_app_config = 'scraper.apps.ScraperConfig'",
+      "line_count": 1
+    },
+    {
+      "name": "tasks.py",
+      "path": "dealer_sync_backend/scraper/tasks.py",
+      "size": 290,
+      "type": "text",
+      "content_preview": "from celery import shared_task\n\nfrom .scraper import run_all_scrapers\n\nfrom celery.utils.log import get_task_logger\n\n\n\nlogger = get_task_logger(__name__)\n\n\n\n@shared_task\n\ndef run_scrapers():\n\n    logger.info(\"Starting scraper task\")\n\n    run_all_scrapers()\n",
+      "line_count": 20
+    },
+    {
+      "name": "admin.py",
+      "path": "dealer_sync_backend/scraper/admin.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "dealer_sync_backend/scraper/models.py",
+      "size": 779,
+      "type": "text",
+      "content": "from django.db import models\n\nclass VehicleListing(models.Model):\n    dealership = models.CharField(max_length=100)\n    title = models.CharField(max_length=500)  # Increased from 200 to 500\n    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)\n    msrp = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)\n    year = models.IntegerField()\n    make = models.CharField(max_length=50)\n    model = models.CharField(max_length=50)\n    image_url = models.URLField(max_length=500)  # Increased from default 200 to 500\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n\n    def __str__(self):\n        return f\"{self.year} {self.make} {self.model} - {self.dealership}\"\n",
+      "line_count": 16
+    },
+    {
       "name": "urls.py",
       "path": "dealer_sync_backend/dealer_sync_backend/urls.py",
-      "size": 901,
+      "size": 961,
       "type": "text",
-      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n    path('api/', include('dashboard.urls')),  # Add this line\n]\n",
-      "line_count": 24
+      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n    path('api/', include('dashboard.urls')),\n    path('api/scraper/', include('scraper.urls')),  # Changed from 'scraping'\n]",
+      "line_count": 25
     },
     {
       "name": "wsgi.py",
@@ -403,10 +467,10 @@
     {
       "name": "__init__.py",
       "path": "dealer_sync_backend/dealer_sync_backend/__init__.py",
-      "size": 0,
+      "size": 129,
       "type": "text",
-      "content_preview": "",
-      "line_count": 1
+      "content_preview": "# DEALERSYNC/dealer_sync_backend/dealer_sync_backend/__init__.py\n\nfrom .celery import app as celery_app\n\n\n\n__all__ = ('celery_app',)",
+      "line_count": 7
     },
     {
       "name": "asgi.py",
@@ -421,72 +485,16 @@
       "path": "dealer_sync_backend/dealer_sync_backend/settings.py",
       "size": 4825,
       "type": "text",
-      "content": "\"\"\"\nDjango settings for dealer_sync_backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.6.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom decouple import config\nfrom pathlib import Path\nfrom datetime import timedelta\nfrom celery.schedules import crontab\nimport os\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = \"django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz\"\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    'scraping',\n    'rest_framework',\n    'rest_framework_simplejwt',\n    'corsheaders',\n    'authentication',\n    'dashboard',\n]\n\nMIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n    'corsheaders.middleware.CorsMiddleware',\n]\n\nROOT_URLCONF = \"dealer_sync_backend.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"dealer_sync_backend.wsgi.application\"\n\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\n\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': config('POSTGRES_DB'),\n        'USER': config('POSTGRES_USER'),\n        'PASSWORD': config('POSTGRES_PASSWORD'),\n        'HOST': config('DATABASE_HOST'),\n        'PORT': config('DATABASE_PORT'),\n    }\n}\n\n\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\",\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = \"en-us\"\n\nTIME_ZONE = \"UTC\"\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nCORS_ALLOW_ALL_ORIGINS = True  # For development only\nCORS_ALLOW_CREDENTIALS = True\n\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",\n]\n\nSIMPLE_JWT = {\n    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),\n    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),\n    'ROTATE_REFRESH_TOKENS': True,\n    'BLACKLIST_AFTER_ROTATION': True,\n    'AUTH_HEADER_TYPES': ('Bearer',),\n    'USER_ID_FIELD': 'id',\n    'USER_ID_CLAIM': 'user_id',\n}\n\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': (\n        'rest_framework_simplejwt.authentication.JWTAuthentication',\n    ),\n    'DEFAULT_PERMISSION_CLASSES': (\n        'rest_framework.permissions.IsAuthenticated',\n    ),\n}\n\nCELERY_BROKER_URL = 'redis://localhost:6379'\nCELERY_RESULT_BACKEND = 'redis://localhost:6379'\nCELERY_ACCEPT_CONTENT = ['application/json']\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TASK_SERIALIZER = 'json'\n\nCELERY_BEAT_SCHEDULE = {\n    'run-scrapers-daily': {\n        'task': 'scraper.tasks.run_scrapers',\n        'schedule': crontab(hour=0, minute=0),  # Run daily at midnight\n    },\n}\n",
-      "line_count": 183
+      "content": "\"\"\"\nDjango settings for dealer_sync_backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.6.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom decouple import config\nfrom pathlib import Path\nfrom datetime import timedelta\nfrom celery.schedules import crontab\nimport os\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = \"django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz\"\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"rest_framework\",\n    \"rest_framework_simplejwt\",\n    \"corsheaders\",\n    \"scraper\",\n    \"dashboard\",\n    \"authentication\",\n]\n\n\nMIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n    'corsheaders.middleware.CorsMiddleware',\n]\n\nROOT_URLCONF = \"dealer_sync_backend.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"dealer_sync_backend.wsgi.application\"\n\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\n\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': config('POSTGRES_DB'),\n        'USER': config('POSTGRES_USER'),\n        'PASSWORD': config('POSTGRES_PASSWORD'),\n        'HOST': config('DATABASE_HOST'),\n        'PORT': config('DATABASE_PORT'),\n    }\n}\n\n\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\",\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = \"en-us\"\n\nTIME_ZONE = \"UTC\"\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nCORS_ALLOW_ALL_ORIGINS = True  # For development only\nCORS_ALLOW_CREDENTIALS = True\n\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",\n]\n\nSIMPLE_JWT = {\n    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),\n    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),\n    'ROTATE_REFRESH_TOKENS': True,\n    'BLACKLIST_AFTER_ROTATION': True,\n    'AUTH_HEADER_TYPES': ('Bearer',),\n    'USER_ID_FIELD': 'id',\n    'USER_ID_CLAIM': 'user_id',\n}\n\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': (\n        'rest_framework_simplejwt.authentication.JWTAuthentication',\n    ),\n    'DEFAULT_PERMISSION_CLASSES': (\n        'rest_framework.permissions.IsAuthenticated',\n    ),\n}\n\nCELERY_BROKER_URL = 'redis://localhost:6379'\nCELERY_RESULT_BACKEND = 'redis://localhost:6379'\nCELERY_ACCEPT_CONTENT = ['application/json']\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TASK_SERIALIZER = 'json'\n\nCELERY_BEAT_SCHEDULE = {\n    'run-scrapers-daily': {\n        'task': 'scraper.tasks.run_scrapers',\n        'schedule': crontab(hour=0, minute=0),  # Run daily at midnight\n    },\n}\n",
+      "line_count": 184
     },
     {
-      "name": "apps.py",
-      "path": "dealer_sync_backend/scraping/apps.py",
-      "size": 148,
+      "name": "celery.py",
+      "path": "dealer_sync_backend/dealer_sync_backend/celery.py",
+      "size": 406,
       "type": "text",
-      "content_preview": "from django.apps import AppConfig\n\n\n\n\n\nclass ScrapingConfig(AppConfig):\n\n    default_auto_field = \"django.db.models.BigAutoField\"\n\n    name = \"scraping\"\n",
-      "line_count": 12
-    },
-    {
-      "name": "views.py",
-      "path": "dealer_sync_backend/scraping/views.py",
-      "size": 63,
-      "type": "text",
-      "content": "from django.shortcuts import render\n\n# Create your views here.\n",
-      "line_count": 3
-    },
-    {
-      "name": "tests.py",
-      "path": "dealer_sync_backend/scraping/tests.py",
-      "size": 60,
-      "type": "text",
-      "content_preview": "from django.test import TestCase\n\n\n\n# Create your tests here.\n",
-      "line_count": 6
-    },
-    {
-      "name": "scraper.py",
-      "path": "dealer_sync_backend/scraping/scraper.py",
-      "size": 2224,
-      "type": "text",
-      "content_preview": "import requests\n\nfrom bs4 import BeautifulSoup\n\nfrom .models import VehicleListing\n\nfrom django.utils import timezone\n\nimport logging\n\n\n\nlogger = logging.getLogger(__name__)\n\n\n\ndef scrape_mclarty_daniel():\n\n    url = \"https://www.mclartydaniel.com/inventory/\"\n",
+      "content_preview": "from __future__ import absolute_import, unicode_literals\n\nimport os\n\nfrom celery import Celery\n\n\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dealer_sync_backend.settings')\n\n\n\napp = Celery('dealer_sync_backend')\n\napp.config_from_object('django.conf:settings', namespace='CELERY')\n\napp.autodiscover_tasks()\n\n\n",
       "line_count": 20
-    },
-    {
-      "name": "__init__.py",
-      "path": "dealer_sync_backend/scraping/__init__.py",
-      "size": 0,
-      "type": "text",
-      "content_preview": "",
-      "line_count": 1
-    },
-    {
-      "name": "tasks.py",
-      "path": "dealer_sync_backend/scraping/tasks.py",
-      "size": 289,
-      "type": "text",
-      "content_preview": "from celery import shared_task\n\nfrom .scraper import run_all_scrapers\n\nfrom celery.utils.log import get_task_logger\n\n\n\nlogger = get_task_logger(__name__)\n\n\n\n@shared_task\n\ndef run_scrapers():\n\n    logger.info(\"Starting scraper task\")\n\n    run_all_scrapers()\n",
-      "line_count": 20
-    },
-    {
-      "name": "admin.py",
-      "path": "dealer_sync_backend/scraping/admin.py",
-      "size": 63,
-      "type": "text",
-      "content": "from django.contrib import admin\n\n# Register your models here.\n",
-      "line_count": 3
-    },
-    {
-      "name": "models.py",
-      "path": "dealer_sync_backend/scraping/models.py",
-      "size": 1151,
-      "type": "text",
-      "content": "from django.db import models\n\nclass VehicleListing(models.Model):\n    dealership = models.CharField(max_length=100)\n    title = models.CharField(max_length=200)\n    subtitle = models.CharField(max_length=200, blank=True, null=True)\n    price = models.DecimalField(max_digits=10, decimal_places=2)\n    msrp = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)\n    discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)\n    exterior_color = models.CharField(max_length=50)\n    interior_color = models.CharField(max_length=50)\n    mileage = models.IntegerField()\n    fuel_economy = models.CharField(max_length=100)\n    transmission = models.CharField(max_length=50)\n    engine = models.CharField(max_length=100)\n    vin = models.CharField(max_length=17)\n    stock_number = models.CharField(max_length=50)\n    description = models.TextField()\n    image_url = models.URLField()\n    listing_url = models.URLField()\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n\n    def __str__(self):\n        return f\"{self.title} - {self.dealership}\"\n",
-      "line_count": 25
     },
     {
       "name": "apps.py",
@@ -579,12 +587,12 @@
       "name": "authentication"
     },
     {
-      "path": "dealer_sync_backend/dealer_sync_backend",
-      "name": "dealer_sync_backend"
+      "path": "dealer_sync_backend/scraper",
+      "name": "scraper"
     },
     {
-      "path": "dealer_sync_backend/scraping",
-      "name": "scraping"
+      "path": "dealer_sync_backend/dealer_sync_backend",
+      "name": "dealer_sync_backend"
     },
     {
       "path": "dealer_sync_backend/dashboard",
@@ -596,7 +604,7 @@
     "django_apps": [
       "dealer_sync_backend",
       "authentication",
-      "scraping",
+      "scraper",
       "dashboard"
     ],
     "frontend": "React"

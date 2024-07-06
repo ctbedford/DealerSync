@@ -59,6 +59,25 @@ const Sync = () => {
     }
   };
 
+  const runScraperNow = async () => {
+    setSyncStatus('syncing');
+    setProgress(0);
+    try {
+      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+      setSyncStatus('completed');
+      setProgress(100);
+      fetchSyncHistory();
+    } catch (err) {
+      console.error('Run scraper now error:', err);
+      setSyncStatus('error');
+      setError('Failed to run scraper. Please try again.');
+    }
+  };
+
   return (
     <div className="bg-background min-h-screen text-text p-6">
       <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">Sync Dashboard</h1>
@@ -85,9 +104,16 @@ const Sync = () => {
           <button
             onClick={startSync}
             disabled={syncStatus === 'syncing'}
+            className="btn disabled:opacity-50 disabled:cursor-not-allowed mr-4"
+          >
+            Start Scheduled Sync
+          </button>
+          <button
+            onClick={runScraperNow}
+            disabled={syncStatus === 'syncing'}
             className="btn disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Start Sync
+            Run Scraper Now
           </button>
         </CardContent>
       </Card>
