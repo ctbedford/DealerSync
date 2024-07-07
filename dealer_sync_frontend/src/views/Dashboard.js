@@ -13,7 +13,6 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Dashboard");
     const fetchDashboardData = async () => {
       try {
         const token = localStorage.getItem('access_token');
@@ -39,6 +38,7 @@ const Dashboard = () => {
   if (!dashboardData) return null;
 
   const { stats, recentActivity, chartData } = dashboardData;
+
   return (
     <div className="bg-background min-h-screen text-text p-6">
       <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">DealerSync Dashboard</h1>
@@ -48,7 +48,10 @@ const Dashboard = () => {
           <Card key={index} className="bg-background-light">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium text-text">{stat.title}</CardTitle>
-              <stat.icon className="h-4 w-4 text-secondary" />
+              {stat.icon === 'Car' && <Car className="h-4 w-4 text-secondary" />}
+              {stat.icon === 'Activity' && <Activity className="h-4 w-4 text-secondary" />}
+              {stat.icon === 'Clock' && <Clock className="h-4 w-4 text-secondary" />}
+              {stat.icon === 'Eye' && <Eye className="h-4 w-4 text-secondary" />}
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-primary">{stat.value}</div>

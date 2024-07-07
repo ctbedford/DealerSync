@@ -2,15 +2,34 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .tasks import run_scrapers
-from .scraper import scrape_mclarty_daniel
+from .models import SyncAttempt, VehicleListing
 from celery.result import AsyncResult
+from django.utils import timezone
+from celery.exceptions import OperationalError
+from .serializers import VehicleListingSerializer
+
+
+class DumpListingsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        listings = VehicleListing.objects.filter(user=request.user)
+        serializer = VehicleListingSerializer(listings, many=True)
+        return Response({
+            "count": listings.count(),
+            "listings": serializer.data
+        })
+
 
 class StartScraperView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
-        task = run_scrapers.delay()
-        return Response({"message": "Scraper task started", "task_id": str(task.id)})
+        try:
+            task = run_scrapers.delay()
+            return Response({"message": "Scraper task started", "task_id": str(task.id)})
+        except OperationalError:
+            return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
 
 class ScraperStatusView(APIView):
     permission_classes = [IsAuthenticated]
@@ -20,19 +39,44 @@ class ScraperStatusView(APIView):
         if not task_id:
             return Response({"error": "No task_id provided"}, status=400)
 
-        task_result = AsyncResult(task_id)
-        return Response({
-            "task_id": task_id,
-            "status": task_result.status,
-            "result": task_result.result
-        })
+        try:
+            task_result = AsyncResult(task_id)
+            return Response({
+                "task_id": task_id,
+                "status": task_result.status,
+                "result": task_result.result
+            })
+        except OperationalError:
+            return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
 
 class RunScraperNowView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        sync_attempt = SyncAttempt.objects.create(status='IN_PROGRESS', user=request.user)
         try:
-            scrape_mclarty_daniel()
-            return Response({"message": "Scraper ran successfully"})
-        except Exception as e:
-            return Response({"error": str(e)}, status=500)
+            task = run_scrapers.delay(request.user.id)
+            return Response({
+                "message": "Scraper started",
+                "sync_attempt_id": sync_attempt.id,
+                "task_id": str(task.id)
+            })
+        except OperationalError:
+            sync_attempt.status = 'FAILED'
+            sync_attempt.error_message = "Could not connect to task queue."
+            sync_attempt.save()
+            return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
+        
+class SyncHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        today = timezone.now().date()
+        last_successful = SyncAttempt.objects.filter(user=user, status='COMPLETED').order_by('-end_time').first()
+        sync_history = {
+            "lastSuccessful": last_successful.end_time.isoformat() if last_successful else None,
+            "totalToday": SyncAttempt.objects.filter(user=user, start_time__date=today).count(),
+            "failedToday": SyncAttempt.objects.filter(user=user, start_time__date=today, status='FAILED').count()
+        }
+        return Response(sync_history)

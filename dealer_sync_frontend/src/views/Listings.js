@@ -4,66 +4,59 @@ import Card from '../components/Card';
 import CardContent from '../components/CardContent';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
-import { Search, Edit, Trash2 } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
+
+const defaultVehicleImage = process.env.PUBLIC_URL + '/images/default-vehicle.webp';
 
 const Listings = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [listings, setListings] = useState([]);
+  const [filteredListings, setFilteredListings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
-    console.log('Listings component mounted');
-    const fetchListings = async () => {
-      console.log('Fetching listings...');
-      try {
-        const token = localStorage.getItem('access_token');
-        console.log('Access token:', token);
-        const response = await axios.get('http://localhost:8000/api/listings/', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        console.log('Listings response:', response.data);
-        setListings(response.data);
-      } catch (err) {
-        setError('Failed to fetch listings');
-        console.error('Listings fetch error:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    fetchListings(currentPage);
+  }, [currentPage]);
 
-    fetchListings();
-  }, []);
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm, listings]);
 
-  console.log('Rendering Listings component');
-  const handleEdit = async (id) => {
-    // Implement edit functionality
-    console.log('Edit listing', id);
-  };
-
-  const handleDelete = async (id) => {
+  const fetchListings = async (page) => {
+    setIsLoading(true);
     try {
-      await axios.delete(`http://localhost:8000/api/listings/${id}/`, {
+      const token = localStorage.getItem('access_token');
+      const response = await axios.get(`http://localhost:8000/api/listings/?page=${page}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          Authorization: `Bearer ${token}`
         }
       });
-      setListings(listings.filter(listing => listing.id !== id));
+      setListings(response.data.results);
+      setTotalPages(Math.ceil(response.data.count / 20));
+      setFilteredListings(response.data.results);
     } catch (err) {
-      console.error('Delete error:', err);
+      setError('Failed to fetch listings');
+      console.error('Listings fetch error:', err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const filteredListings = listings.filter(listing =>
-    Object.values(listing).some(value =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const handleSearch = () => {
+    const filtered = listings.filter(listing =>
+      Object.entries(listing).some(([key, value]) => {
+        if (value === null || value === undefined) return false;
+        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    );
+    setFilteredListings(filtered);
+  };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (isLoading) return <div className="text-center mt-8">Loading...</div>;
+  if (error) return <div className="text-center mt-8 text-red-500">{error}</div>;
 
   return (
     <div className="bg-background min-h-screen text-text p-6">
@@ -82,7 +75,7 @@ const Listings = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary bg-background-light text-text"
             />
-            <button className="btn rounded-l-none">
+            <button className="btn rounded-l-none" onClick={handleSearch}>
               <Search size={20} />
             </button>
           </div>
@@ -94,40 +87,42 @@ const Listings = () => {
           <CardTitle className="text-primary">Listings</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="min-w-full bg-background-light">
-              <thead className="bg-background">
-                <tr>
-                  <th className="py-2 px-4 text-left">ID</th>
-                  <th className="py-2 px-4 text-left">Make</th>
-                  <th className="py-2 px-4 text-left">Model</th>
-                  <th className="py-2 px-4 text-left">Year</th>
-                  <th className="py-2 px-4 text-left">Price</th>
-                  <th className="py-2 px-4 text-left">Status</th>
-                  <th className="py-2 px-4 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredListings.map((listing) => (
-                  <tr key={listing.id} className="border-b border-gray-700">
-                    <td className="py-2 px-4">{listing.id}</td>
-                    <td className="py-2 px-4">{listing.make}</td>
-                    <td className="py-2 px-4">{listing.model}</td>
-                    <td className="py-2 px-4">{listing.year}</td>
-                    <td className="py-2 px-4">${listing.price}</td>
-                    <td className="py-2 px-4">{listing.status}</td>
-                    <td className="py-2 px-4">
-                      <button onClick={() => handleEdit(listing.id)} className="text-amber-400 hover:text-amber-300 mr-2">
-                        <Edit size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(listing.id)} className="text-red-400 hover:text-red-300">
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredListings.map((listing) => (
+              <div key={listing.id} className="bg-background-light p-4 rounded-lg shadow">
+                <img 
+                  src={listing.image_url || defaultVehicleImage} 
+                  alt={listing.title} 
+                  className="w-full h-48 object-cover rounded-md mb-2"
+                  onError={(e) => {
+                    e.target.onerror = null; // Prevent infinite loop
+                    e.target.src = defaultVehicleImage;
+                  }}
+                />
+                <h3 className="text-lg font-semibold">{listing.title}</h3>
+                <p className="text-sm text-gray-400">{listing.dealership}</p>
+                <p className="mt-2">Price: ${listing.price}</p>
+                <p>MSRP: ${listing.msrp}</p>
+                <p>{listing.year} {listing.make} {listing.model}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex justify-center items-center">
+            <button
+              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="btn mr-2"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <span>Page {currentPage} of {totalPages}</span>
+            <button
+              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="btn ml-2"
+            >
+              <ChevronRight size={20} />
+            </button>
           </div>
         </CardContent>
       </Card>
