@@ -1,8 +1,11 @@
-DealerSync
-📋 Project Overview
+# DealerSync
+
+## 📋 Project Overview
 
 DealerSync is a comprehensive web application for managing vehicle listings. It comprises a frontend developed with React and a backend built using Django. The backend includes Django applications for authentication, data scraping, and dashboard functionalities. The frontend integrates Tailwind CSS for styling.
-🗂️ Project Structure
+
+## 🗂️ Project Structure
+
 Backend (Django)
 
     dealer_sync_backend: Main project directory containing settings and configuration files.
@@ -17,7 +20,8 @@ Frontend (React)
     src: Contains the source code for the React application, including components, views, and styles.
     mocks: Mock files for testing.
 
-📂 Directory Breakdown
+## 📂 Directory Breakdown
+
 Backend
 
     dealer_sync_backend
@@ -99,7 +103,8 @@ Frontend
                 default-vehicle.webp
                 logo.svg
 
-⚙️ Key Features
+## ⚙️ Key Features
+
 Backend
 
     Authentication: User registration, login, and token-based authentication using Django REST Framework and SimpleJWT.
@@ -113,7 +118,8 @@ Frontend
     Axios: For making API requests to the backend.
     React Router: Navigation and protected routes.
 
-🚀 Getting Started
+## 🚀 Getting Started
+
 Prerequisites
 
     Python 3.x
