@@ -4,15 +4,22 @@ from django.utils import timezone
 from django.conf import settings
 
 class VehicleListing(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='vehicle_listings')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='vehicle_listings',
+        null=True,  # Allow null for existing entries
+        default=1  # Set this to the ID of a default user, or use a function to get the default user
+    )
+
     # ... rest of the model fields ...)
     dealership = models.CharField(max_length=100)
     title = models.CharField(max_length=500)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     msrp = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     year = models.IntegerField()
-    make = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
+    make = models.TextField()  # Increase from 50 to 100 or more
+    model = models.TextField()  # Increase from 50 to 100 or more
     image_url = models.URLField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

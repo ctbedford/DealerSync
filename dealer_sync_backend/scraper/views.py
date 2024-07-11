@@ -19,13 +19,12 @@ class DumpListingsView(APIView):
             "listings": serializer.data
         })
 
-
 class StartScraperView(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
         try:
-            task = run_scrapers.delay()
+            task = run_scrapers.delay(request.user.id)
             return Response({"message": "Scraper task started", "task_id": str(task.id)})
         except OperationalError:
             return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
@@ -45,10 +44,17 @@ class ScraperStatusView(APIView):
                     'state': task_result.state,
                     'status': 'Sync task is pending...'
                 }
+            elif task_result.state == 'PROGRESS':
+                response = {
+                    'state': task_result.state,
+                    'current': task_result.info.get('current', 0),
+                    'total': task_result.info.get('total', 1),
+                    'percent': task_result.info.get('percent', 0)
+                }
             elif task_result.state != 'FAILURE':
                 response = {
                     'state': task_result.state,
-                    'status': str(task_result.info),
+                    'status': str(task_result.result),
                 }
             else:
                 response = {
@@ -58,7 +64,7 @@ class ScraperStatusView(APIView):
             return Response(response)
         except OperationalError:
             return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
-            
+
 class RunScraperNowView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -78,8 +84,6 @@ class RunScraperNowView(APIView):
             sync_attempt.save()
             return Response({"error": str(e)}, status=500)
 
-
-        
 class SyncHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 

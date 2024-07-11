@@ -39,7 +39,7 @@ def scrape_mclarty_daniel():
     offset = 0
     total_processed = 0
     total_saved = 0
-     
+    all_listings = []
     
     while True:
         PARAMS["offset"] = offset
@@ -99,6 +99,19 @@ def scrape_mclarty_daniel():
                     logger.info(f"New vehicle added: {title}")
                 else:
                     logger.info(f"Vehicle updated: {title}")
+                    
+                listing_data = {
+                    'dealership': "McLarty Daniel",
+                    'title': title,
+                    'price': price,
+                    'msrp': msrp,
+                    'image_url': image_url,
+                    'year': int(year),
+                    'make': make,
+                    'model': model,
+                }
+                all_listings.append(listing_data)
+    
                 
                 total_saved += 1
                 total_processed += 1
@@ -113,6 +126,11 @@ def scrape_mclarty_daniel():
             break
     
     logger.info(f"McLarty Daniel scraper finished. Processed: {total_processed}, Saved/Updated: {total_saved}")
+    return all_listings
 
 def run_all_scrapers():
-    scrape_mclarty_daniel()
+    try:
+        scrape_mclarty_daniel()
+    except Exception as e:
+        logger.error(f"Error in run_all_scrapers: {str(e)}")
+        return []
