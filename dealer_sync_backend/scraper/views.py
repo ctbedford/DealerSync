@@ -8,7 +8,6 @@ from django.utils import timezone
 from celery.exceptions import OperationalError
 from .serializers import VehicleListingSerializer
 
-
 class DumpListingsView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -41,31 +40,45 @@ class ScraperStatusView(APIView):
 
         try:
             task_result = AsyncResult(task_id)
-            return Response({
-                "task_id": task_id,
-                "status": task_result.status,
-                "result": task_result.result
-            })
+            if task_result.state == 'PENDING':
+                response = {
+                    'state': task_result.state,
+                    'status': 'Sync task is pending...'
+                }
+            elif task_result.state != 'FAILURE':
+                response = {
+                    'state': task_result.state,
+                    'status': str(task_result.info),
+                }
+            else:
+                response = {
+                    'state': task_result.state,
+                    'status': str(task_result.info),
+                }
+            return Response(response)
         except OperationalError:
             return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
-
+            
 class RunScraperNowView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        sync_attempt = SyncAttempt.objects.create(status='IN_PROGRESS', user=request.user)
+        user = request.user
+        sync_attempt = SyncAttempt.objects.create(user=user, status='IN_PROGRESS')
         try:
-            task = run_scrapers.delay(request.user.id)
+            task = run_scrapers.delay(user.id)
             return Response({
                 "message": "Scraper started",
                 "sync_attempt_id": sync_attempt.id,
                 "task_id": str(task.id)
             })
-        except OperationalError:
+        except Exception as e:
             sync_attempt.status = 'FAILED'
-            sync_attempt.error_message = "Could not connect to task queue."
+            sync_attempt.error_message = str(e)
             sync_attempt.save()
-            return Response({"error": "Could not connect to task queue. Please try again later."}, status=503)
+            return Response({"error": str(e)}, status=500)
+
+
         
 class SyncHistoryView(APIView):
     permission_classes = [IsAuthenticated]
