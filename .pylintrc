@@ -1,0 +1,8 @@
+[MASTER]
+init-hook='import sys; sys.path.append("/home/tyler/GithubStuff/DealerSync")'
+
+[FORMAT]
+max-line-length=100
+
+[MESSAGES CONTROL]
+disable=C0111

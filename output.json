@@ -1,6 +1,14 @@
 {
   "files": [
     {
+      "name": "README.md",
+      "path": "README.md",
+      "size": 8214,
+      "type": "text",
+      "content_preview": "# DealerSync\n\n\n\n## \ud83d\udccb Project Overview\n\n\n\nDealerSync is a comprehensive web application for managing vehicle listings. It comprises a frontend developed with React and a backend built using Django. The backend includes Django applications for authentication, data scraping, and dashboard functionalities. The frontend integrates Tailwind CSS for styling.\n\n\n\n## \ud83d\uddc2\ufe0f Project Structure\n\n\n\nBackend (Django)\n\n\n",
+      "line_count": 20
+    },
+    {
       "name": "project.py",
       "path": "project.py",
       "size": 3921,
@@ -17,7 +25,7 @@
     {
       "name": "output.json",
       "path": "output.json",
-      "size": 80007,
+      "size": 80369,
       "type": "text",
       "content_preview": "{\n\n  \"files\": [\n\n    {\n\n      \"name\": \"project.py\",\n\n      \"path\": \"project.py\",\n\n      \"size\": 3921,\n\n      \"type\": \"text\",\n\n      \"content_preview\": \"import os\\n\\nimport json\\n\\nfrom typing import Dict, List, Union\\n\\n\\n\\nEXCLUDED_DIRS = {'node_modules', 'venv', '.git', '__pycache__', 'migrations', 'build'}\\n\\nIMPORTANT_FILE_TYPES = {'.py', '.js', '.jsx', '.ts', '.tsx', '.json', '.yml', '.yaml', '.md', '.html', '.css'}\\n\\nKEY_FILES_DJANGO = {'models.py', 'views.py', 'urls.py', 'settings.py', 'serializers.py', 'forms.py', 'admin.py'}\\n\\nKEY_FILES_REACT = {'.jsx', '.js'}\\n\\n\\n\\ndef analyze_project(root_dir: str) -> Dict[str, Union[List[Dict[str, str]], Dict[str, str]]]:\\n\",\n\n      \"line_count\": 20\n\n    },\n",
       "line_count": 20
