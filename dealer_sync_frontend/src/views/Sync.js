@@ -1,24 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { setSyncStatus, setProgress, setTaskId, setError, resetSync, checkSyncStatus, setUserId } from '../store/syncSlice';
+import { RefreshCw, Check, AlertTriangle, Loader } from 'lucide-react';
 import Card from '../components/Card';
-import CardContent from '../components/CardContent';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
-import { RefreshCw, Check, AlertTriangle } from 'lucide-react';
+import CardContent from '../components/CardContent';
 
 const Sync = () => {
-  const [syncStatus, setSyncStatus] = useState('idle');
-  const [progress, setProgress] = useState(0);
+  const dispatch = useDispatch();
+  const { syncStatus, progress, taskId, error, totalItems, currentItem, userId } = useSelector((state) => state.sync);
   const [syncHistory, setSyncHistory] = useState(null);
-  const [error, setError] = useState(null);
-  const [taskId, setTaskId] = useState(null);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
   useEffect(() => {
-    fetchSyncHistory();
-  }, []);
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      dispatch(setUserId(user.id));
+    }
+  }, [dispatch]);
 
-  const fetchSyncHistory = async () => {
+  const fetchSyncStatus = useCallback(async () => {
+    if (taskId && userId) {
+      dispatch(checkSyncStatus({ taskId, userId }));
+    }
+  }, [taskId, userId, dispatch]);
+
+  const fetchSyncHistory = useCallback(async () => {
     try {
+      setIsLoadingHistory(true);
       const response = await axios.get('http://localhost:8000/api/scraper/sync/history/', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
@@ -26,55 +37,51 @@ const Sync = () => {
       });
       setSyncHistory(response.data);
     } catch (err) {
-      console.error('Sync history fetch error:', err);
-      setError('Failed to fetch sync history');
+      console.error('Failed to fetch sync history:', err);
+    } finally {
+      setIsLoadingHistory(false);
     }
-  };
+  }, []);
 
-  const checkSyncStatus = async (taskId) => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/scraper/status/?task_id=${taskId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`
-        }
-      });
-      
-      if (response.data.state === 'SUCCESS') {
-        setSyncStatus('completed');
-        setProgress(100);
-        fetchSyncHistory();
-      } else if (response.data.state === 'FAILURE') {
-        setSyncStatus('error');
-        setError('Sync failed. Please try again.');
-      } else if (response.data.state === 'PROGRESS') {
-        setSyncStatus('syncing');
-        setProgress(Math.round((response.data.status.current / response.data.status.total) * 100));
-        setTimeout(() => checkSyncStatus(taskId), 2000);
-      } else {
-        setTimeout(() => checkSyncStatus(taskId), 2000);
-      }
-    } catch (err) {
-      console.error('Sync status check error:', err);
-      setError('Failed to check sync status');
+  useEffect(() => {
+    fetchSyncHistory();
+    if (syncStatus === 'syncing' || syncStatus === 'checking') {
+      const interval = setInterval(fetchSyncStatus, 5000);
+      return () => clearInterval(interval);
     }
-  };
+  }, [syncStatus, fetchSyncStatus, fetchSyncHistory]);
 
   const startSync = async () => {
-    setSyncStatus('syncing');
-    setProgress(0);
-    setError(null);
     try {
+      dispatch(setSyncStatus('syncing'));
+      dispatch(setProgress(0));
+      dispatch(setError(null));
       const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       });
-      setTaskId(response.data.task_id);
-      checkSyncStatus(response.data.task_id);
+      dispatch(setTaskId(response.data.task_id));
     } catch (err) {
-      console.error('Sync error:', err);
-      setSyncStatus('error');
-      setError('Sync failed to start. Please try again.');
+      dispatch(setSyncStatus('error'));
+      dispatch(setError('Sync failed to start. Please try again.'));
+    }
+  };
+
+  const renderSyncStatus = () => {
+    switch (syncStatus) {
+      case 'idle':
+        return <RefreshCw size={24} className="text-secondary" />;
+      case 'syncing':
+        return <RefreshCw size={24} className="text-primary animate-spin" />;
+      case 'checking':
+        return <Loader size={24} className="text-primary animate-spin" />;
+      case 'completed':
+        return <Check size={24} className="text-green-500" />;
+      case 'error':
+        return <AlertTriangle size={24} className="text-red-500" />;
+      default:
+        return null;
     }
   };
 
@@ -89,22 +96,32 @@ const Sync = () => {
         <CardContent>
           <div className="flex items-center mb-4">
             <div className="mr-4">
-              {syncStatus === 'idle' && <RefreshCw size={24} className="text-secondary" />}
-              {syncStatus === 'syncing' && <RefreshCw size={24} className="text-primary animate-spin" />}
-              {syncStatus === 'completed' && <Check size={24} className="text-green-500" />}
-              {syncStatus === 'error' && <AlertTriangle size={24} className="text-red-500" />}
+              {renderSyncStatus()}
             </div>
             <span className="capitalize text-lg">{syncStatus}</span>
           </div>
-          {syncStatus === 'syncing' && (
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-              <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-            </div>
+          {(syncStatus === 'syncing' || syncStatus === 'checking') && (
+            <>
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+                {progress > 0 ? (
+                  <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
+                ) : (
+                  <div className="bg-primary h-2.5 rounded-full animate-pulse"></div>
+                )}
+              </div>
+              <div className="text-sm text-secondary">
+                {totalItems ? (
+                  <span>{currentItem} of {totalItems} items processed</span>
+                ) : (
+                  <span>Processing items...</span>
+                )}
+              </div>
+            </>
           )}
           <button
             onClick={startSync}
-            disabled={syncStatus === 'syncing'}
-            className="btn disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={syncStatus === 'syncing' || syncStatus === 'checking'}
+            className="btn mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Start Sync
           </button>
@@ -117,14 +134,16 @@ const Sync = () => {
         </CardHeader>
         <CardContent>
           {error && <div className="text-red-500 mb-4">{error}</div>}
-          {syncHistory ? (
+          {isLoadingHistory ? (
+            <div>Loading sync history...</div>
+          ) : syncHistory ? (
             <ul className="space-y-2">
               <li>Last successful sync: {syncHistory.lastSuccessful || 'N/A'}</li>
               <li>Total syncs today: {syncHistory.totalToday}</li>
               <li>Failed syncs today: {syncHistory.failedToday}</li>
             </ul>
           ) : (
-            <div>Loading sync history...</div>
+            <div>No sync history available.</div>
           )}
         </CardContent>
       </Card>

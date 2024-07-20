@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
-import { Home, List, Repeat, ChevronRight, ChevronLeft, LogOut, User } from 'lucide-react';
+import { Home, List, Repeat, ChevronRight, ChevronLeft, LogOut, User, RefreshCw, Loader } from 'lucide-react';
 import axios from 'axios';
+import { checkSyncStatus } from '../store/syncSlice';
 
 const Layout = ({ onLogout, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { syncStatus, progress, taskId, userId } = useSelector((state) => state.sync);
+
+  useEffect(() => {
+    if (taskId && userId === user.id) {
+      const interval = setInterval(() => {
+        dispatch(checkSyncStatus({ taskId, userId }));
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [taskId, userId, dispatch, user.id]);
 
   const navItems = [
     { path: '/', label: 'Dashboard', icon: Home },
@@ -16,19 +29,22 @@ const Layout = ({ onLogout, user }) => {
 
   const handleLogout = () => {
     onLogout();
-    // Clear local storage
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user'); // Assuming user data is stored here
-
-    // Clear cookies if any are set (for demonstration, using js-cookie library)
-    // import Cookies from 'js-cookie';
-    // Cookies.remove('access_token');
-    // Cookies.remove('refresh_token');
-
-    // Clear authorization header
+    localStorage.removeItem('user');
     delete axios.defaults.headers.common['Authorization'];
     navigate('/');
+  };
+
+  const renderSyncIcon = () => {
+    switch (syncStatus) {
+      case 'syncing':
+        return <RefreshCw className="h-4 w-4 mr-2 animate-spin" />;
+      case 'checking':
+        return <Loader className="h-4 w-4 mr-2 animate-spin" />;
+      default:
+        return null;
+    }
   };
 
   return (
@@ -66,6 +82,24 @@ const Layout = ({ onLogout, user }) => {
             </button>
           </li>
         </ul>
+        {(syncStatus === 'syncing' || syncStatus === 'checking') && userId === user.id && (
+          <div className={`mt-4 ${isCollapsed ? 'hidden' : 'block'}`}>
+            <div className="flex items-center text-sm text-secondary mb-1">
+              {renderSyncIcon()}
+              <span>{syncStatus === 'checking' ? 'Checking sync' : 'Sync in progress'}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+              {progress > 0 ? (
+                <div
+                  className="bg-primary h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              ) : (
+                <div className="bg-primary h-2 rounded-full animate-pulse"></div>
+              )}
+            </div>
+          </div>
+        )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="absolute bottom-4 left-4 bg-primary-light text-secondary-light p-2 rounded-full"
@@ -73,7 +107,9 @@ const Layout = ({ onLogout, user }) => {
           {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
         </button>
       </nav>
-      <main className="flex-1 overflow-y-auto p-8 bg-background"><Outlet /></main>
+      <main className="flex-1 overflow-y-auto p-8 bg-background">
+        <Outlet />
+      </main>
     </div>
   );
 };

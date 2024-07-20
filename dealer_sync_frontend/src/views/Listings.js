@@ -90,9 +90,9 @@ const Listings = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredListings.map((listing) => (
               <div key={listing.id} className="bg-background-light p-4 rounded-lg shadow">
-                <img 
-                  src={listing.image_url || defaultVehicleImage} 
-                  alt={listing.title} 
+                <img
+                  src={listing.image_url || defaultVehicleImage}
+                  alt={listing.title}
                   className="w-full h-48 object-cover rounded-md mb-2"
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop

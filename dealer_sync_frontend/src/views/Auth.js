@@ -27,6 +27,7 @@ const Auth = ({ onAuth }) => {
     return true;
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');

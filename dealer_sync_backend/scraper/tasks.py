@@ -7,17 +7,29 @@ from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
 
+
 @shared_task(bind=True)
 def run_scrapers(self, user_id):
     User = get_user_model()
     try:
         user = User.objects.get(id=user_id)
-        sync_attempt = SyncAttempt.objects.create(user=user, status='IN_PROGRESS')
-        
+        sync_attempt = SyncAttempt.objects.create(
+            user=user,
+            status='IN_PROGRESS',
+            task_id=self.request.id  # Store the Celery task ID
+        )
+
+        self.update_state(state='PROGRESS', meta={
+            'user_id': user_id,
+            'current': 0,
+            'total': 100,
+            'percent': 0
+        })
+
         listings = run_all_scrapers()
-        
         if listings is None:
-            logger.warning("Scraper returned None instead of a list of listings")
+            logger.warning(
+                "Scraper returned None instead of a list of listings")
             listings = []
 
         logger.info(f"Scraped {len(listings)} listings")
@@ -28,7 +40,7 @@ def run_scrapers(self, user_id):
             sync_attempt.end_time = timezone.now()
             sync_attempt.save()
             return "No listings found"
-        
+
         listings_added = 0
         listings_updated = 0
         total_listings = len(listings)
@@ -48,13 +60,19 @@ def run_scrapers(self, user_id):
                     'needs_update': False
                 }
             )
+
             if created:
                 listings_added += 1
             else:
                 listings_updated += 1
 
             progress = int((index / total_listings) * 100)
-            self.update_state(state='PROGRESS', meta={'current': index, 'total': total_listings, 'percent': progress})
+            self.update_state(state='PROGRESS', meta={
+                'user_id': user_id,
+                'current': index,
+                'total': total_listings,
+                'percent': progress
+            })
 
         sync_attempt.status = 'COMPLETED'
         sync_attempt.listings_added = listings_added
@@ -63,6 +81,7 @@ def run_scrapers(self, user_id):
         sync_attempt.save()
 
         return f"Scraping completed successfully. Added: {listings_added}, Updated: {listings_updated}"
+
     except Exception as e:
         logger.error(f"Error in run_scrapers task: {str(e)}")
         if 'sync_attempt' in locals():

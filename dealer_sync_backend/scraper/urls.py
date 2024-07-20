@@ -1,10 +1,12 @@
 from django.urls import path
-from .views import StartScraperView, ScraperStatusView, RunScraperNowView, SyncHistoryView, DumpListingsView
+from .views import StartScraperView, ScraperStatusView, SyncHistoryView, DumpListingsView, DashboardView
 
 urlpatterns = [
-    path('start/', StartScraperView.as_view(), name='start_scraper'),
-    path('status/', ScraperStatusView.as_view(), name='scraper_status'),
-    path('run-now/', RunScraperNowView.as_view(), name='run_scraper_now'),
-    path('sync/history/', SyncHistoryView.as_view(), name='sync_history'),
-    path('dump-listings/', DumpListingsView.as_view(), name='dump_listings'),
+    path('start/', StartScraperView.as_view(), name='start-scraper'),
+    path('status/', ScraperStatusView.as_view(), name='scraper-status'),
+    path('sync/history/', SyncHistoryView.as_view(), name='sync-history'),
+    path('listings/', DumpListingsView.as_view(), name='dump-listings'),
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('run-now/', StartScraperView.as_view(), name='run-scraper'),
+
 ]

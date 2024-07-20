@@ -1,410 +1,44 @@
 {
   "files": [
     {
-      "name": "README.md",
-      "path": "README.md",
-      "size": 8214,
-      "type": "text",
-      "content_preview": "# DealerSync\n\n\n\n## \ud83d\udccb Project Overview\n\n\n\nDealerSync is a comprehensive web application for managing vehicle listings. It comprises a frontend developed with React and a backend built using Django. The backend includes Django applications for authentication, data scraping, and dashboard functionalities. The frontend integrates Tailwind CSS for styling.\n\n\n\n## \ud83d\uddc2\ufe0f Project Structure\n\n\n\nBackend (Django)\n\n\n",
-      "line_count": 20
-    },
-    {
-      "name": "project.py",
-      "path": "project.py",
-      "size": 3921,
-      "type": "text",
-      "content_preview": "import os\n\nimport json\n\nfrom typing import Dict, List, Union\n\n\n\nEXCLUDED_DIRS = {'node_modules', 'venv', '.git', '__pycache__', 'migrations', 'build'}\n\nIMPORTANT_FILE_TYPES = {'.py', '.js', '.jsx', '.ts', '.tsx', '.json', '.yml', '.yaml', '.md', '.html', '.css'}\n\nKEY_FILES_DJANGO = {'models.py', 'views.py', 'urls.py', 'settings.py', 'serializers.py', 'forms.py', 'admin.py'}\n\nKEY_FILES_REACT = {'.jsx', '.js'}\n\n\n\ndef analyze_project(root_dir: str) -> Dict[str, Union[List[Dict[str, str]], Dict[str, str]]]:\n",
-      "line_count": 20
-    },
-    {
-      "name": "todo.org",
-      "path": "todo.org",
-      "size": 6995,
-      "type": "other"
-    },
-    {
-      "name": "output.json",
-      "path": "output.json",
-      "size": 80369,
-      "type": "text",
-      "content_preview": "{\n\n  \"files\": [\n\n    {\n\n      \"name\": \"project.py\",\n\n      \"path\": \"project.py\",\n\n      \"size\": 3921,\n\n      \"type\": \"text\",\n\n      \"content_preview\": \"import os\\n\\nimport json\\n\\nfrom typing import Dict, List, Union\\n\\n\\n\\nEXCLUDED_DIRS = {'node_modules', 'venv', '.git', '__pycache__', 'migrations', 'build'}\\n\\nIMPORTANT_FILE_TYPES = {'.py', '.js', '.jsx', '.ts', '.tsx', '.json', '.yml', '.yaml', '.md', '.html', '.css'}\\n\\nKEY_FILES_DJANGO = {'models.py', 'views.py', 'urls.py', 'settings.py', 'serializers.py', 'forms.py', 'admin.py'}\\n\\nKEY_FILES_REACT = {'.jsx', '.js'}\\n\\n\\n\\ndef analyze_project(root_dir: str) -> Dict[str, Union[List[Dict[str, str]], Dict[str, str]]]:\\n\",\n\n      \"line_count\": 20\n\n    },\n",
-      "line_count": 20
-    },
-    {
-      "name": ".output",
-      "path": ".output",
-      "size": 13271,
-      "type": "other"
-    },
-    {
-      "name": ".gitignore",
-      "path": ".gitignore",
-      "size": 555,
-      "type": "other"
-    },
-    {
-      "name": "test.org",
-      "path": "test.org",
-      "size": 630,
-      "type": "other"
-    },
-    {
-      "name": "package-lock.json",
-      "path": "package-lock.json",
-      "size": 7206,
-      "type": "text",
-      "content_preview": "{\n\n  \"name\": \"DealerSync\",\n\n  \"lockfileVersion\": 3,\n\n  \"requires\": true,\n\n  \"packages\": {\n\n    \"\": {\n\n      \"dependencies\": {\n\n        \"axios\": \"^1.7.2\",\n\n        \"react-router-dom\": \"^6.24.1\"\n\n      }\n",
-      "line_count": 20
-    },
-    {
-      "name": "package.json",
-      "path": "package.json",
-      "size": 85,
-      "type": "text",
-      "content_preview": "{\n\n  \"dependencies\": {\n\n    \"axios\": \"^1.7.2\",\n\n    \"react-router-dom\": \"^6.24.1\"\n\n  }\n\n}\n",
-      "line_count": 12
-    },
-    {
-      "name": "README.md",
-      "path": "dealer_sync_frontend/README.md",
-      "size": 3359,
-      "type": "text",
-      "content_preview": "# Getting Started with Create React App\n\n\n\nThis project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).\n\n\n\n## Available Scripts\n\n\n\nIn the project directory, you can run:\n\n\n\n### `npm start`\n\n\n",
-      "line_count": 20
-    },
-    {
-      "name": "tailwind.config.js",
-      "path": "dealer_sync_frontend/tailwind.config.js",
-      "size": 353,
-      "type": "text",
-      "content": "module.exports = {\n  content: [\n    \"./src/**/*.{js,jsx,ts,tsx}\",\n  ],\n  theme: {\n    extend: {\n      colors: {\n        background: '#1a1a1a',\n        'background-light': '#2a2a2a',\n        primary: '#ffc107',  // Amber\n        secondary: '#dc3545',  // Red\n        text: '#f8f9fa',\n        'text-dark': '#adb5bd',\n      },\n    },\n  },\n  plugins: [],\n}\n",
-      "line_count": 18
-    },
-    {
-      "name": ".gitignore",
-      "path": "dealer_sync_frontend/.gitignore",
-      "size": 310,
-      "type": "other"
-    },
-    {
-      "name": "babel.config.js",
-      "path": "dealer_sync_frontend/babel.config.js",
-      "size": 127,
-      "type": "text",
-      "content": "module.exports = {\n    presets: [\n      '@babel/preset-env',\n      ['@babel/preset-react', {runtime: 'automatic'}],\n    ],\n  };",
-      "line_count": 6
-    },
-    {
-      "name": "package-lock.json",
-      "path": "dealer_sync_frontend/package-lock.json",
-      "size": 716082,
-      "type": "text",
-      "content_preview": "{\n\n  \"name\": \"dealer_sync_frontend\",\n\n  \"version\": \"0.1.0\",\n\n  \"lockfileVersion\": 3,\n\n  \"requires\": true,\n\n  \"packages\": {\n\n    \"\": {\n\n      \"name\": \"dealer_sync_frontend\",\n\n      \"version\": \"0.1.0\",\n\n      \"dependencies\": {\n",
-      "line_count": 20
-    },
-    {
-      "name": "package.json",
-      "path": "dealer_sync_frontend/package.json",
-      "size": 1584,
-      "type": "text",
-      "content_preview": "{\n\n  \"name\": \"dealer_sync_frontend\",\n\n  \"version\": \"0.1.0\",\n\n  \"private\": true,\n\n  \"dependencies\": {\n\n    \"@radix-ui/react-icons\": \"^1.3.0\",\n\n    \"@testing-library/jest-dom\": \"^5.17.0\",\n\n    \"@testing-library/react\": \"^13.4.0\",\n\n    \"@testing-library/user-event\": \"^13.5.0\",\n\n    \"autoprefixer\": \"^10.4.19\",\n",
-      "line_count": 20
-    },
-    {
-      "name": "styleMock.js",
-      "path": "dealer_sync_frontend/mocks/styleMock.js",
-      "size": 20,
-      "type": "text",
-      "content": "module.exports = {};",
-      "line_count": 1
-    },
-    {
-      "name": "fileMock.js",
-      "path": "dealer_sync_frontend/mocks/fileMock.js",
-      "size": 34,
-      "type": "text",
-      "content": "module.exports = 'test-file-stub';",
-      "line_count": 1
-    },
-    {
-      "name": "index.css",
-      "path": "dealer_sync_frontend/src/index.css",
-      "size": 1181,
-      "type": "text",
-      "content_preview": "@tailwind base;\n\n@tailwind components;\n\n@tailwind utilities;\n\n\n\nbody {\n\n  margin: 0;\n\n  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',\n\n    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',\n\n    sans-serif;\n\n  -webkit-font-smoothing: antialiased;\n",
-      "line_count": 20
-    },
-    {
-      "name": "logo.svg",
-      "path": "dealer_sync_frontend/src/logo.svg",
-      "size": 2632,
-      "type": "image"
-    },
-    {
-      "name": "App.test.js",
-      "path": "dealer_sync_frontend/src/App.test.js",
-      "size": 246,
-      "type": "text",
-      "content": "import { render, screen } from '@testing-library/react';\nimport App from './App';\n\ntest('renders learn react link', () => {\n  render(<App />);\n  const linkElement = screen.getByText(/learn react/i);\n  expect(linkElement).toBeInTheDocument();\n});\n",
-      "line_count": 8
-    },
-    {
-      "name": "setupTests.js",
-      "path": "dealer_sync_frontend/src/setupTests.js",
-      "size": 241,
-      "type": "text",
-      "content": "// jest-dom adds custom jest matchers for asserting on DOM nodes.\n// allows you to do things like:\n// expect(element).toHaveTextContent(/react/i)\n// learn more: https://github.com/testing-library/jest-dom\nimport '@testing-library/jest-dom';\n",
-      "line_count": 5
-    },
-    {
-      "name": "App.css",
-      "path": "dealer_sync_frontend/src/App.css",
-      "size": 564,
-      "type": "text",
-      "content_preview": ".App {\n\n  text-align: center;\n\n}\n\n\n\n.App-logo {\n\n  height: 40vmin;\n\n  pointer-events: none;\n\n}\n\n\n\n@media (prefers-reduced-motion: no-preference) {\n",
-      "line_count": 20
-    },
-    {
-      "name": "index.js",
-      "path": "dealer_sync_frontend/src/index.js",
-      "size": 254,
-      "type": "text",
-      "content": "import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);\n",
-      "line_count": 11
-    },
-    {
       "name": "App.js",
       "path": "dealer_sync_frontend/src/App.js",
-      "size": 3173,
+      "size": 3324,
       "type": "text",
-      "content": "import React, { useState, useEffect } from 'react';\nimport { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';\nimport axios from 'axios';\nimport Layout from './components/Layout';\nimport Dashboard from './views/Dashboard';\nimport Listings from './views/Listings';\nimport Sync from './views/Sync';\nimport Auth from './views/Auth';\nimport ProtectedRoute from './components/ProtectedRoute';\n\n// Configure axios\naxios.defaults.baseURL = 'http://localhost:8000';\naxios.defaults.withCredentials = true;\n\nfunction App() {\n  const [user, setUser] = useState(null);\n\n  useEffect(() => {\n    const token = localStorage.getItem('access_token');\n    if (token) {\n      setAuthToken(token);\n      fetchUserData();\n    }\n\n    // Set up axios interceptor for token refresh\n    const interceptor = axios.interceptors.response.use(\n      (response) => response,\n      async (error) => {\n        const originalRequest = error.config;\n        if (error.response?.status === 401 && !originalRequest._retry) {\n          originalRequest._retry = true;\n          try {\n            const refreshToken = localStorage.getItem('refresh_token');\n            const response = await axios.post('/api/auth/token/refresh/', {\n              refresh: refreshToken\n            });\n            const newToken = response.data.access;\n            localStorage.setItem('access_token', newToken);\n            setAuthToken(newToken);\n            originalRequest.headers['Authorization'] = `Bearer ${newToken}`;\n            return axios(originalRequest);\n          } catch (err) {\n            handleLogout();\n          }\n        }\n        return Promise.reject(error);\n      }\n    );\n\n    // Cleanup function\n    return () => {\n      axios.interceptors.response.eject(interceptor);\n    };\n  }, []);\n\n  const setAuthToken = (token) => {\n    if (token) {\n      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;\n    } else {\n      delete axios.defaults.headers.common['Authorization'];\n    }\n  };\n\n  const fetchUserData = async () => {\n    try {\n      const response = await axios.get('/api/auth/user/');\n      setUser(response.data);\n    } catch (error) {\n      console.error('Error fetching user data:', error);\n      handleLogout();\n    }\n  };\n\n  const handleAuth = (userData, token) => {\n    setUser(userData);\n    localStorage.setItem('access_token', token);\n    setAuthToken(token);\n  };\n\n  const handleLogout = () => {\n    setUser(null);\n    localStorage.removeItem('access_token');\n    localStorage.removeItem('refresh_token');\n    setAuthToken(null);\n  };\n\n  return (\n    <Router>\n      <Routes>\n        <Route path=\"/login\" element={user ? <Navigate to=\"/\" replace /> : <Auth onAuth={handleAuth} />} />\n        <Route element={<ProtectedRoute user={user} />}>\n          <Route element={<Layout user={user} onLogout={handleLogout} />}>\n            <Route path=\"/\" element={<Dashboard />} />\n            <Route path=\"/listings\" element={<Listings />} />\n            <Route path=\"/sync\" element={<Sync />} />\n          </Route>\n        </Route>\n        <Route path=\"*\" element={<Navigate to=\"/\" replace />} />\n      </Routes>\n    </Router>\n  );\n}\n\nexport default App;",
-      "line_count": 104
-    },
-    {
-      "name": "reportWebVitals.js",
-      "path": "dealer_sync_frontend/src/reportWebVitals.js",
-      "size": 362,
-      "type": "text",
-      "content": "const reportWebVitals = onPerfEntry => {\n  if (onPerfEntry && onPerfEntry instanceof Function) {\n    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {\n      getCLS(onPerfEntry);\n      getFID(onPerfEntry);\n      getFCP(onPerfEntry);\n      getLCP(onPerfEntry);\n      getTTFB(onPerfEntry);\n    });\n  }\n};\n\nexport default reportWebVitals;\n",
-      "line_count": 13
-    },
-    {
-      "name": "setuptTests.js",
-      "path": "dealer_sync_frontend/src/setuptTests.js",
-      "size": 35,
-      "type": "text",
-      "content": "import '@testing-library/jest-dom';",
-      "line_count": 1
-    },
-    {
-      "name": "index.css",
-      "path": "dealer_sync_frontend/src/styles/index.css",
-      "size": 1379,
-      "type": "text",
-      "content_preview": "@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');\n\n\n\nbody {\n\n  margin: 0;\n\n  padding: 0;\n\n  font-family: 'Poppins', sans-serif;\n\n  -webkit-font-smoothing: antialiased;\n\n  -moz-osx-font-smoothing: grayscale;\n\n  background-color: #121212;\n\n  color: #e0e0e0;\n",
-      "line_count": 20
-    },
-    {
-      "name": "Dashboard.css",
-      "path": "dealer_sync_frontend/src/styles/Dashboard.css",
-      "size": 1191,
-      "type": "text",
-      "content_preview": "\n\nbody {\n\n  background-color: #1a1a1a;\n\n  color: #e0e0e0;\n\n  font-family: 'Arial', sans-serif;\n\n}\n\n\n\n.dashboard {\n\n  max-width: 1200px;\n\n  margin: 0 auto;\n",
-      "line_count": 20
-    },
-    {
-      "name": "Listings.js",
-      "path": "dealer_sync_frontend/src/views/Listings.js",
-      "size": 4911,
-      "type": "text",
-      "content": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { Search, ChevronLeft, ChevronRight } from 'lucide-react';\n\nconst defaultVehicleImage = process.env.PUBLIC_URL + '/images/default-vehicle.webp';\n\nconst Listings = () => {\n  const [searchTerm, setSearchTerm] = useState('');\n  const [listings, setListings] = useState([]);\n  const [filteredListings, setFilteredListings] = useState([]);\n  const [isLoading, setIsLoading] = useState(true);\n  const [error, setError] = useState(null);\n  const [currentPage, setCurrentPage] = useState(1);\n  const [totalPages, setTotalPages] = useState(0);\n\n  useEffect(() => {\n    fetchListings(currentPage);\n  }, [currentPage]);\n\n  useEffect(() => {\n    handleSearch();\n  }, [searchTerm, listings]);\n\n  const fetchListings = async (page) => {\n    setIsLoading(true);\n    try {\n      const token = localStorage.getItem('access_token');\n      const response = await axios.get(`http://localhost:8000/api/listings/?page=${page}`, {\n        headers: {\n          Authorization: `Bearer ${token}`\n        }\n      });\n      setListings(response.data.results);\n      setTotalPages(Math.ceil(response.data.count / 20));\n      setFilteredListings(response.data.results);\n    } catch (err) {\n      setError('Failed to fetch listings');\n      console.error('Listings fetch error:', err);\n    } finally {\n      setIsLoading(false);\n    }\n  };\n\n  const handleSearch = () => {\n    const filtered = listings.filter(listing =>\n      Object.entries(listing).some(([key, value]) => {\n        if (value === null || value === undefined) return false;\n        return value.toString().toLowerCase().includes(searchTerm.toLowerCase());\n      })\n    );\n    setFilteredListings(filtered);\n  };\n\n  if (isLoading) return <div className=\"text-center mt-8\">Loading...</div>;\n  if (error) return <div className=\"text-center mt-8 text-red-500\">{error}</div>;\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">Vehicle Listings</h1>\n\n      <Card className=\"mb-6\">\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Search Listings</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"flex items-center\">\n            <input\n              type=\"text\"\n              placeholder=\"Search listings...\"\n              value={searchTerm}\n              onChange={(e) => setSearchTerm(e.target.value)}\n              className=\"flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-primary bg-background-light text-text\"\n            />\n            <button className=\"btn rounded-l-none\" onClick={handleSearch}>\n              <Search size={20} />\n            </button>\n          </div>\n        </CardContent>\n      </Card>\n\n      <Card>\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Listings</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4\">\n            {filteredListings.map((listing) => (\n              <div key={listing.id} className=\"bg-background-light p-4 rounded-lg shadow\">\n                <img \n                  src={listing.image_url || defaultVehicleImage} \n                  alt={listing.title} \n                  className=\"w-full h-48 object-cover rounded-md mb-2\"\n                  onError={(e) => {\n                    e.target.onerror = null; // Prevent infinite loop\n                    e.target.src = defaultVehicleImage;\n                  }}\n                />\n                <h3 className=\"text-lg font-semibold\">{listing.title}</h3>\n                <p className=\"text-sm text-gray-400\">{listing.dealership}</p>\n                <p className=\"mt-2\">Price: ${listing.price}</p>\n                <p>MSRP: ${listing.msrp}</p>\n                <p>{listing.year} {listing.make} {listing.model}</p>\n              </div>\n            ))}\n          </div>\n          <div className=\"mt-6 flex justify-center items-center\">\n            <button\n              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}\n              disabled={currentPage === 1}\n              className=\"btn mr-2\"\n            >\n              <ChevronLeft size={20} />\n            </button>\n            <span>Page {currentPage} of {totalPages}</span>\n            <button\n              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}\n              disabled={currentPage === totalPages}\n              className=\"btn ml-2\"\n            >\n              <ChevronRight size={20} />\n            </button>\n          </div>\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Listings;",
-      "line_count": 133
-    },
-    {
-      "name": "Auth.js",
-      "path": "dealer_sync_frontend/src/views/Auth.js",
-      "size": 5114,
-      "type": "text",
-      "content": "import React, { useState } from 'react';\nimport { useNavigate } from 'react-router-dom';\nimport axios from 'axios';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { User, Lock, Mail, AlertCircle } from 'lucide-react';\n\nconst Auth = ({ onAuth }) => {\n  const [isLogin, setIsLogin] = useState(true);\n  const [username, setUsername] = useState('');\n  const [password, setPassword] = useState('');\n  const [email, setEmail] = useState('');\n  const [error, setError] = useState('');\n  const navigate = useNavigate();\n\n  const validateForm = () => {\n    if (!username || !password) {\n      setError('Username and password are required');\n      return false;\n    }\n    if (!isLogin && !email) {\n      setError('Email is required for registration');\n      return false;\n    }\n    return true;\n  };\n\n  const handleSubmit = async (e) => {\n    e.preventDefault();\n    setError('');\n\n    if (!validateForm()) return;\n\n    try {\n      let response;\n      if (isLogin) {\n        response = await axios.post('http://localhost:8000/api/auth/token/', {\n          username,\n          password\n        });\n        const { access, refresh } = response.data;\n        localStorage.setItem('access_token', access);\n        localStorage.setItem('refresh_token', refresh);\n        onAuth({ username }, access);\n      } else {\n        response = await axios.post('http://localhost:8000/api/auth/register/', {\n          username,\n          email,\n          password\n        });\n        const { access, refresh } = response.data;\n        localStorage.setItem('access_token', access);\n        localStorage.setItem('refresh_token', refresh);\n        onAuth({ username, email }, access);\n      }\n\n      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;\n      navigate('/');\n    } catch (err) {\n      console.error('Authentication error:', err.response?.data || err.message);\n      setError(err.response?.data?.detail || 'Authentication failed. Please try again.');\n    }\n  };\n\n  return (\n    <div className=\"bg-background min-h-screen flex items-center justify-center\">\n      <Card className=\"w-full max-w-md\">\n        <CardHeader>\n          <CardTitle className=\"text-primary text-center\">{isLogin ? 'Login' : 'Register'}</CardTitle>\n        </CardHeader>\n        <CardContent>\n          {error && (\n            <div className=\"bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4\" role=\"alert\">\n              <span className=\"flex items-center\">\n                <AlertCircle className=\"mr-2\" size={18} />\n                {error}\n              </span>\n            </div>\n          )}\n          <form onSubmit={handleSubmit} className=\"space-y-4\">\n            <div className=\"flex items-center border-b border-primary py-2\">\n              <User className=\"text-primary mr-2\" />\n              <input\n                type=\"text\"\n                placeholder=\"Username\"\n                value={username}\n                onChange={(e) => setUsername(e.target.value)}\n                className=\"appearance-none bg-transparent border-none w-full text-text mr-3 py-1 px-2 leading-tight focus:outline-none\"\n              />\n            </div>\n            {!isLogin && (\n              <div className=\"flex items-center border-b border-primary py-2\">\n                <Mail className=\"text-primary mr-2\" />\n                <input\n                  type=\"email\"\n                  placeholder=\"Email\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  className=\"appearance-none bg-transparent border-none w-full text-text mr-3 py-1 px-2 leading-tight focus:outline-none\"\n                />\n              </div>\n            )}\n            <div className=\"flex items-center border-b border-primary py-2\">\n              <Lock className=\"text-primary mr-2\" />\n              <input\n                type=\"password\"\n                placeholder=\"Password\"\n                value={password}\n                onChange={(e) => setPassword(e.target.value)}\n                className=\"appearance-none bg-transparent border-none w-full text-text mr-3 py-1 px-2 leading-tight focus:outline-none\"\n              />\n            </div>\n            <button\n              type=\"submit\"\n              className=\"w-full bg-primary hover:bg-primary-dark text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline\"\n            >\n              {isLogin ? 'Login' : 'Register'}\n            </button>\n          </form>\n          <div className=\"mt-4 text-center\">\n            <button\n              onClick={() => {\n                setIsLogin(!isLogin);\n                setError('');\n              }}\n              className=\"text-primary hover:text-primary-dark\"\n            >\n              {isLogin ? 'Need an account? Register' : 'Already have an account? Login'}\n            </button>\n          </div>\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Auth;\n",
-      "line_count": 139
-    },
-    {
-      "name": "Sync.js",
-      "path": "dealer_sync_frontend/src/views/Sync.js",
-      "size": 4805,
-      "type": "text",
-      "content": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { RefreshCw, Check, AlertTriangle } from 'lucide-react';\n\nconst Sync = () => {\n  const [syncStatus, setSyncStatus] = useState('idle');\n  const [progress, setProgress] = useState(0);\n  const [syncHistory, setSyncHistory] = useState(null);\n  const [error, setError] = useState(null);\n  const [taskId, setTaskId] = useState(null);\n\n  useEffect(() => {\n    fetchSyncHistory();\n  }, []);\n\n  const fetchSyncHistory = async () => {\n    try {\n      const response = await axios.get('http://localhost:8000/api/scraper/sync/history/', {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setSyncHistory(response.data);\n    } catch (err) {\n      console.error('Sync history fetch error:', err);\n      setError('Failed to fetch sync history');\n    }\n  };\n\n  const checkSyncStatus = async (taskId) => {\n    try {\n      const response = await axios.get(`http://localhost:8000/api/scraper/status/?task_id=${taskId}`, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      \n      if (response.data.state === 'SUCCESS') {\n        setSyncStatus('completed');\n        setProgress(100);\n        fetchSyncHistory();\n      } else if (response.data.state === 'FAILURE') {\n        setSyncStatus('error');\n        setError('Sync failed. Please try again.');\n      } else if (response.data.state === 'PROGRESS') {\n        setSyncStatus('syncing');\n        setProgress(Math.round((response.data.status.current / response.data.status.total) * 100));\n        setTimeout(() => checkSyncStatus(taskId), 2000);\n      } else {\n        setTimeout(() => checkSyncStatus(taskId), 2000);\n      }\n    } catch (err) {\n      console.error('Sync status check error:', err);\n      setError('Failed to check sync status');\n    }\n  };\n\n  const startSync = async () => {\n    setSyncStatus('syncing');\n    setProgress(0);\n    setError(null);\n    try {\n      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setTaskId(response.data.task_id);\n      checkSyncStatus(response.data.task_id);\n    } catch (err) {\n      console.error('Sync error:', err);\n      setSyncStatus('error');\n      setError('Sync failed to start. Please try again.');\n    }\n  };\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">Sync Dashboard</h1>\n\n      <Card className=\"mb-6\">\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync Status</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"flex items-center mb-4\">\n            <div className=\"mr-4\">\n              {syncStatus === 'idle' && <RefreshCw size={24} className=\"text-secondary\" />}\n              {syncStatus === 'syncing' && <RefreshCw size={24} className=\"text-primary animate-spin\" />}\n              {syncStatus === 'completed' && <Check size={24} className=\"text-green-500\" />}\n              {syncStatus === 'error' && <AlertTriangle size={24} className=\"text-red-500\" />}\n            </div>\n            <span className=\"capitalize text-lg\">{syncStatus}</span>\n          </div>\n          {syncStatus === 'syncing' && (\n            <div className=\"w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700\">\n              <div className=\"bg-primary h-2.5 rounded-full\" style={{ width: `${progress}%` }}></div>\n            </div>\n          )}\n          <button\n            onClick={startSync}\n            disabled={syncStatus === 'syncing'}\n            className=\"btn disabled:opacity-50 disabled:cursor-not-allowed\"\n          >\n            Start Sync\n          </button>\n        </CardContent>\n      </Card>\n\n      <Card>\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync History</CardTitle>\n        </CardHeader>\n        <CardContent>\n          {error && <div className=\"text-red-500 mb-4\">{error}</div>}\n          {syncHistory ? (\n            <ul className=\"space-y-2\">\n              <li>Last successful sync: {syncHistory.lastSuccessful || 'N/A'}</li>\n              <li>Total syncs today: {syncHistory.totalToday}</li>\n              <li>Failed syncs today: {syncHistory.failedToday}</li>\n            </ul>\n          ) : (\n            <div>Loading sync history...</div>\n          )}\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Sync;",
-      "line_count": 135
-    },
-    {
-      "name": "Dashboard.js",
-      "path": "dealer_sync_frontend/src/views/Dashboard.js",
-      "size": 4147,
-      "type": "text",
-      "content": "import React, { useState, useEffect } from 'react';\nimport axios from 'axios';\nimport { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';\nimport Card from '../components/Card';\nimport CardContent from '../components/CardContent';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport { Car, Activity, Clock, Eye } from 'lucide-react';\n\nconst Dashboard = () => {\n  const [dashboardData, setDashboardData] = useState(null);\n  const [isLoading, setIsLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    const fetchDashboardData = async () => {\n      try {\n        const token = localStorage.getItem('access_token');\n        const response = await axios.get('http://localhost:8000/api/dashboard/', {\n          headers: {\n            Authorization: `Bearer ${token}`\n          }\n        });\n        setDashboardData(response.data);\n      } catch (err) {\n        setError('Failed to fetch dashboard data');\n        console.error('Dashboard fetch error:', err);\n      } finally {\n        setIsLoading(false);\n      }\n    };\n\n    fetchDashboardData();\n  }, []);\n\n  if (isLoading) return <div>Loading...</div>;\n  if (error) return <div>{error}</div>;\n  if (!dashboardData) return null;\n\n  const { stats, recentActivity, chartData } = dashboardData;\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">DealerSync Dashboard</h1>\n\n      <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8\">\n        {stats.map((stat, index) => (\n          <Card key={index} className=\"bg-background-light\">\n            <CardHeader className=\"flex flex-row items-center justify-between pb-2 space-y-0\">\n              <CardTitle className=\"text-sm font-medium text-text\">{stat.title}</CardTitle>\n              {stat.icon === 'Car' && <Car className=\"h-4 w-4 text-secondary\" />}\n              {stat.icon === 'Activity' && <Activity className=\"h-4 w-4 text-secondary\" />}\n              {stat.icon === 'Clock' && <Clock className=\"h-4 w-4 text-secondary\" />}\n              {stat.icon === 'Eye' && <Eye className=\"h-4 w-4 text-secondary\" />}\n            </CardHeader>\n            <CardContent>\n              <div className=\"text-2xl font-bold text-primary\">{stat.value}</div>\n            </CardContent>\n          </Card>\n        ))}\n      </div>\n\n      <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8\">\n        <Card className=\"card mb-6\">\n          <CardHeader>\n            <CardTitle className=\"text-primary\">Listings and Views Over Time</CardTitle>\n          </CardHeader>\n          <CardContent>\n            <ResponsiveContainer width=\"100%\" height={300}>\n              <BarChart data={chartData}>\n                <CartesianGrid strokeDasharray=\"3 3\" />\n                <XAxis dataKey=\"name\" />\n                <YAxis yAxisId=\"left\" />\n                <YAxis yAxisId=\"right\" orientation=\"right\" />\n                <Tooltip />\n                <Legend />\n                <Bar yAxisId=\"left\" dataKey=\"listings\" fill=\"#d4af37\" name=\"Listings\" />\n                <Bar yAxisId=\"right\" dataKey=\"views\" fill=\"#c41e3a\" name=\"Views\" />\n              </BarChart>\n            </ResponsiveContainer>\n          </CardContent>\n        </Card>\n\n        <Card>\n          <CardHeader>\n            <CardTitle className=\"text-primary\">Recent Activity</CardTitle>\n          </CardHeader>\n          <CardContent>\n            <ul className=\"space-y-4\">\n              {recentActivity.map((activity, index) => (\n                <li key={index} className=\"bg-background p-3 rounded-md border border-secondary\">\n                  <h4 className=\"font-semibold text-primary\">{activity.title}</h4>\n                  <p className=\"text-sm text-text\">{activity.description}</p>\n                  <span className=\"text-xs text-text-light\">{activity.time}</span>\n                </li>\n              ))}\n            </ul>\n          </CardContent>\n        </Card>\n      </div>\n    </div>\n  );\n};\n\nexport default Dashboard;",
-      "line_count": 105
-    },
-    {
-      "name": "setupTests.js",
-      "path": "dealer_sync_frontend/src/tests/setupTests.js",
-      "size": 185,
-      "type": "text",
-      "content": "import '@testing-library/jest-dom';\nimport { server } from './mocks/server';\n\nbeforeAll(() => server.listen());\nafterEach(() => server.resetHandlers());\nafterAll(() => server.close());\n",
-      "line_count": 6
-    },
-    {
-      "name": "Sync.test.js",
-      "path": "dealer_sync_frontend/src/tests/Sync.test.js",
-      "size": 995,
-      "type": "text",
-      "content": "import React from 'react';\nimport { render, fireEvent, waitFor } from '@testing-library/react';\nimport Sync from '../views/Sync';\nimport axios from 'axios';\n\njest.mock('axios');\n\ndescribe('Sync Component', () => {\n  beforeEach(() => {\n    jest.useFakeTimers();\n    axios.get.mockClear();\n    axios.post.mockClear();\n  });\n\n  afterEach(() => {\n    jest.useRealTimers();\n  });\n\n  test('starts sync process', async () => {\n    axios.post.mockResolvedValue({ data: { task_id: '123' } });\n    axios.get\n      .mockResolvedValueOnce({ data: { state: 'PENDING' } })\n      .mockResolvedValueOnce({ data: { state: 'IN_PROGRESS' } })\n      .mockResolvedValueOnce({ data: { state: 'SUCCESS' } });\n\n    const { getByText } = render(<Sync />);\n    \n    fireEvent.click(getByText('Start Sync'));\n    \n    await waitFor(() => expect(getByText('syncing')).toBeInTheDocument());\n    \n    jest.advanceTimersByTime(10000);\n    \n    await waitFor(() => expect(getByText('completed')).toBeInTheDocument());\n  });\n});",
-      "line_count": 36
-    },
-    {
-      "name": "Dashboard.test.js",
-      "path": "dealer_sync_frontend/src/tests/Dashboard.test.js",
-      "size": 1212,
-      "type": "text",
-      "content": "import React from 'react';\nimport { render, waitFor } from '@testing-library/react';\nimport Dashboard from '../views/Dashboard';\nimport axios from 'axios';\n\njest.mock('axios');\n\ndescribe('Dashboard Component', () => {\n  test('renders dashboard data', async () => {\n    axios.get.mockResolvedValue({\n      data: {\n        stats: [\n          { title: 'Total Listings', value: 100, icon: 'Car' },\n          { title: 'Active Syncs', value: 2, icon: 'Activity' },\n        ],\n        recentActivity: [\n          { title: 'New Listing Added', description: '2023 Toyota Camry', time: '2 days ago' },\n        ],\n        chartData: [\n          { name: 'Jan', listings: 50, views: 200 },\n          { name: 'Feb', listings: 60, views: 250 },\n        ]\n      }\n    });\n\n    const { getByText } = render(<Dashboard />);\n    \n    await waitFor(() => {\n      expect(getByText('Total Listings')).toBeInTheDocument();\n      expect(getByText('100')).toBeInTheDocument();\n      expect(getByText('Active Syncs')).toBeInTheDocument();\n      expect(getByText('2')).toBeInTheDocument();\n      expect(getByText('New Listing Added')).toBeInTheDocument();\n      expect(getByText('2023 Toyota Camry')).toBeInTheDocument();\n    });\n  });\n});",
-      "line_count": 37
-    },
-    {
-      "name": "Auth.test.js",
-      "path": "dealer_sync_frontend/src/tests/Auth.test.js",
-      "size": 1887,
-      "type": "text",
-      "content": "import React from 'react';\nimport { render, fireEvent, waitFor } from '@testing-library/react';\nimport { BrowserRouter as Router } from 'react-router-dom';\nimport Auth from '../views/Auth';\nimport axios from 'axios';\n\njest.mock('axios');\njest.mock('react-router-dom', () => ({\n  ...jest.requireActual('react-router-dom'),\n  useNavigate: () => jest.fn(),\n}));\n\ndescribe('Auth Component', () => {\n  test('renders login form by default', () => {\n    const { getByText, getByPlaceholderText } = render(\n      <Router>\n        <Auth onAuth={() => {}} />\n      </Router>\n    );\n    expect(getByText('Login')).toBeInTheDocument();\n    expect(getByPlaceholderText('Username')).toBeInTheDocument();\n    expect(getByPlaceholderText('Password')).toBeInTheDocument();\n  });\n\n  test('switches to registration form', () => {\n    const { getByText, getByPlaceholderText } = render(\n      <Router>\n        <Auth onAuth={() => {}} />\n      </Router>\n    );\n    fireEvent.click(getByText('Need an account? Register'));\n    expect(getByText('Register')).toBeInTheDocument();\n    expect(getByPlaceholderText('Email')).toBeInTheDocument();\n  });\n\n  test('submits login form', async () => {\n    axios.post.mockResolvedValue({ data: { access: 'token', refresh: 'refresh_token' } });\n    const mockOnAuth = jest.fn();\n    const { getByPlaceholderText, getByText } = render(\n      <Router>\n        <Auth onAuth={mockOnAuth} />\n      </Router>\n    );\n    \n    fireEvent.change(getByPlaceholderText('Username'), { target: { value: 'testuser' } });\n    fireEvent.change(getByPlaceholderText('Password'), { target: { value: 'password123' } });\n    fireEvent.click(getByText('Login'));\n    \n    await waitFor(() => expect(mockOnAuth).toHaveBeenCalled());\n    expect(axios.post).toHaveBeenCalledWith('http://localhost:8000/api/auth/token/', {\n      username: 'testuser',\n      password: 'password123'\n    });\n  });\n});",
-      "line_count": 55
-    },
-    {
-      "name": "default-vehicle.webp",
-      "path": "dealer_sync_frontend/src/images/default-vehicle.webp",
-      "size": 162292,
-      "type": "other"
-    },
-    {
-      "name": "CardHeader.js",
-      "path": "dealer_sync_frontend/src/components/CardHeader.js",
-      "size": 209,
-      "type": "text",
-      "content": "import React from 'react';\n\nconst CardHeader = ({ children, className }) => {\n  return (\n    <div className={`border-b pb-2 mb-4 ${className}`}>\n      {children}\n    </div>\n  );\n};\n\nexport default CardHeader;\n",
-      "line_count": 11
+      "content": "import React, { useState, useEffect } from 'react';\nimport { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';\nimport { Provider } from 'react-redux';\nimport { store } from './store/store';\nimport axios from 'axios';\nimport Layout from './components/Layout';\nimport Dashboard from './views/Dashboard';\nimport Listings from './views/Listings';\nimport Sync from './views/Sync';\nimport Auth from './views/Auth';\nimport ProtectedRoute from './components/ProtectedRoute';\n\n// Configure axios\naxios.defaults.baseURL = 'http://localhost:8000';\naxios.defaults.withCredentials = true;\n\nfunction App() {\n  const [user, setUser] = useState(null);\n\n  useEffect(() => {\n    const token = localStorage.getItem('access_token');\n    if (token) {\n      setAuthToken(token);\n      fetchUserData();\n    }\n\n    // Set up axios interceptor for token refresh\n    const interceptor = axios.interceptors.response.use(\n      (response) => response,\n      async (error) => {\n        const originalRequest = error.config;\n        if (error.response?.status === 401 && !originalRequest._retry) {\n          originalRequest._retry = true;\n          try {\n            const refreshToken = localStorage.getItem('refresh_token');\n            const response = await axios.post('/api/auth/token/refresh/', {\n              refresh: refreshToken\n            });\n            const newToken = response.data.access;\n            localStorage.setItem('access_token', newToken);\n            setAuthToken(newToken);\n            originalRequest.headers['Authorization'] = `Bearer ${newToken}`;\n            return axios(originalRequest);\n          } catch (err) {\n            handleLogout();\n          }\n        }\n        return Promise.reject(error);\n      }\n    );\n\n    // Cleanup function\n    return () => {\n      axios.interceptors.response.eject(interceptor);\n    };\n  }, []);\n\n  const setAuthToken = (token) => {\n    if (token) {\n      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;\n    } else {\n      delete axios.defaults.headers.common['Authorization'];\n    }\n  };\n\n  const fetchUserData = async () => {\n    try {\n      const response = await axios.get('/api/auth/user/');\n      setUser(response.data);\n    } catch (error) {\n      console.error('Error fetching user data:', error);\n      handleLogout();\n    }\n  };\n\n  const handleAuth = (userData, token) => {\n    setUser(userData);\n    localStorage.setItem('access_token', token);\n    setAuthToken(token);\n  };\n\n  const handleLogout = () => {\n    setUser(null);\n    localStorage.removeItem('access_token');\n    localStorage.removeItem('refresh_token');\n    setAuthToken(null);\n  };\n\n  return (\n    <Provider store={store}>\n      <Router>\n        <Routes>\n          <Route path=\"/login\" element={user ? <Navigate to=\"/\" replace /> : <Auth onAuth={handleAuth} />} />\n          <Route element={<ProtectedRoute user={user} />}>\n            <Route element={<Layout user={user} onLogout={handleLogout} />}>\n              <Route path=\"/\" element={<Dashboard />} />\n              <Route path=\"/listings\" element={<Listings />} />\n              <Route path=\"/sync\" element={<Sync />} />\n            </Route>\n          </Route>\n          <Route path=\"*\" element={<Navigate to=\"/\" replace />} />\n        </Routes>\n      </Router>\n    </Provider>\n  );\n}\n\nexport default App;\n",
+      "line_count": 108
     },
     {
       "name": "Layout.js",
       "path": "dealer_sync_frontend/src/components/Layout.js",
-      "size": 3185,
+      "size": 4564,
       "type": "text",
-      "content": "import React, { useState } from 'react';\nimport { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';\nimport { Home, List, Repeat, ChevronRight, ChevronLeft, LogOut, User } from 'lucide-react';\nimport axios from 'axios';\n\nconst Layout = ({ onLogout, user }) => {\n  const location = useLocation();\n  const navigate = useNavigate();\n  const [isCollapsed, setIsCollapsed] = useState(false);\n\n  const navItems = [\n    { path: '/', label: 'Dashboard', icon: Home },\n    { path: '/listings', label: 'Listings', icon: List },\n    { path: '/sync', label: 'Sync', icon: Repeat },\n  ];\n\n  const handleLogout = () => {\n    onLogout();\n    // Clear local storage\n    localStorage.removeItem('access_token');\n    localStorage.removeItem('refresh_token');\n    localStorage.removeItem('user'); // Assuming user data is stored here\n\n    // Clear cookies if any are set (for demonstration, using js-cookie library)\n    // import Cookies from 'js-cookie';\n    // Cookies.remove('access_token');\n    // Cookies.remove('refresh_token');\n\n    // Clear authorization header\n    delete axios.defaults.headers.common['Authorization'];\n    navigate('/');\n  };\n\n  return (\n    <div className=\"flex h-screen bg-background\">\n      <nav className={`bg-background-light p-4 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>\n        <div className={`text-2xl font-bold text-secondary-light mb-8 ${isCollapsed ? 'hidden' : 'block'}`}>DealerSync</div>\n        <ul>\n          {navItems.map((item) => (\n            <li key={item.path} className=\"mb-2\">\n              <Link\n                to={item.path}\n                className={`flex items-center p-2 rounded-md transition-colors duration-200 ${location.pathname === item.path\n                    ? 'bg-primary-light text-secondary-light'\n                    : 'text-secondary hover:bg-primary-dark hover:text-secondary-light'\n                  }`}\n              >\n                <item.icon className=\"h-5 w-5\" />\n                {!isCollapsed && <span className=\"ml-2\">{item.label}</span>}\n              </Link>\n            </li>\n          ))}\n          <li className=\"mt-auto\">\n            <div className=\"flex items-center p-2 text-secondary\">\n              <User className=\"h-5 w-5\" />\n              {!isCollapsed && <span className=\"ml-2\">{user?.username}</span>}\n            </div>\n          </li>\n          <li>\n            <button\n              onClick={handleLogout}\n              className=\"flex items-center p-2 rounded-md transition-colors duration-200 text-secondary hover:bg-primary-dark hover:text-secondary-light w-full\"\n            >\n              <LogOut className=\"h-5 w-5\" />\n              {!isCollapsed && <span className=\"ml-2\">Logout</span>}\n            </button>\n          </li>\n        </ul>\n        <button\n          onClick={() => setIsCollapsed(!isCollapsed)}\n          className=\"absolute bottom-4 left-4 bg-primary-light text-secondary-light p-2 rounded-full\"\n        >\n          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}\n        </button>\n      </nav>\n      <main className=\"flex-1 overflow-y-auto p-8 bg-background\"><Outlet /></main>\n    </div>\n  );\n};\n\nexport default Layout;\n",
-      "line_count": 81
+      "content": "import React, { useState, useEffect } from 'react';\nimport { useSelector, useDispatch } from 'react-redux';\nimport { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';\nimport { Home, List, Repeat, ChevronRight, ChevronLeft, LogOut, User, RefreshCw, Loader } from 'lucide-react';\nimport axios from 'axios';\nimport { checkSyncStatus } from '../store/syncSlice';\n\nconst Layout = ({ onLogout, user }) => {\n  const location = useLocation();\n  const navigate = useNavigate();\n  const dispatch = useDispatch();\n  const [isCollapsed, setIsCollapsed] = useState(false);\n  const { syncStatus, progress, taskId, userId } = useSelector((state) => state.sync);\n\n  useEffect(() => {\n    if (taskId && userId === user.id) {\n      const interval = setInterval(() => {\n        dispatch(checkSyncStatus({ taskId, userId }));\n      }, 5000);\n      return () => clearInterval(interval);\n    }\n  }, [taskId, userId, dispatch, user.id]);\n\n  const navItems = [\n    { path: '/', label: 'Dashboard', icon: Home },\n    { path: '/listings', label: 'Listings', icon: List },\n    { path: '/sync', label: 'Sync', icon: Repeat },\n  ];\n\n  const handleLogout = () => {\n    onLogout();\n    localStorage.removeItem('access_token');\n    localStorage.removeItem('refresh_token');\n    localStorage.removeItem('user');\n    delete axios.defaults.headers.common['Authorization'];\n    navigate('/');\n  };\n\n  const renderSyncIcon = () => {\n    switch (syncStatus) {\n      case 'syncing':\n        return <RefreshCw className=\"h-4 w-4 mr-2 animate-spin\" />;\n      case 'checking':\n        return <Loader className=\"h-4 w-4 mr-2 animate-spin\" />;\n      default:\n        return null;\n    }\n  };\n\n  return (\n    <div className=\"flex h-screen bg-background\">\n      <nav className={`bg-background-light p-4 transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-64'}`}>\n        <div className={`text-2xl font-bold text-secondary-light mb-8 ${isCollapsed ? 'hidden' : 'block'}`}>DealerSync</div>\n        <ul>\n          {navItems.map((item) => (\n            <li key={item.path} className=\"mb-2\">\n              <Link\n                to={item.path}\n                className={`flex items-center p-2 rounded-md transition-colors duration-200 ${location.pathname === item.path\n                    ? 'bg-primary-light text-secondary-light'\n                    : 'text-secondary hover:bg-primary-dark hover:text-secondary-light'\n                  }`}\n              >\n                <item.icon className=\"h-5 w-5\" />\n                {!isCollapsed && <span className=\"ml-2\">{item.label}</span>}\n              </Link>\n            </li>\n          ))}\n          <li className=\"mt-auto\">\n            <div className=\"flex items-center p-2 text-secondary\">\n              <User className=\"h-5 w-5\" />\n              {!isCollapsed && <span className=\"ml-2\">{user?.username}</span>}\n            </div>\n          </li>\n          <li>\n            <button\n              onClick={handleLogout}\n              className=\"flex items-center p-2 rounded-md transition-colors duration-200 text-secondary hover:bg-primary-dark hover:text-secondary-light w-full\"\n            >\n              <LogOut className=\"h-5 w-5\" />\n              {!isCollapsed && <span className=\"ml-2\">Logout</span>}\n            </button>\n          </li>\n        </ul>\n        {(syncStatus === 'syncing' || syncStatus === 'checking') && userId === user.id && (\n          <div className={`mt-4 ${isCollapsed ? 'hidden' : 'block'}`}>\n            <div className=\"flex items-center text-sm text-secondary mb-1\">\n              {renderSyncIcon()}\n              <span>{syncStatus === 'checking' ? 'Checking sync' : 'Sync in progress'}</span>\n            </div>\n            <div className=\"w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700\">\n              {progress > 0 ? (\n                <div\n                  className=\"bg-primary h-2 rounded-full transition-all duration-300\"\n                  style={{ width: `${progress}%` }}\n                ></div>\n              ) : (\n                <div className=\"bg-primary h-2 rounded-full animate-pulse\"></div>\n              )}\n            </div>\n          </div>\n        )}\n        <button\n          onClick={() => setIsCollapsed(!isCollapsed)}\n          className=\"absolute bottom-4 left-4 bg-primary-light text-secondary-light p-2 rounded-full\"\n        >\n          {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}\n        </button>\n      </nav>\n      <main className=\"flex-1 overflow-y-auto p-8 bg-background\">\n        <Outlet />\n      </main>\n    </div>\n  );\n};\n\nexport default Layout;\n",
+      "line_count": 117
     },
     {
-      "name": "CardTitle.js",
-      "path": "dealer_sync_frontend/src/components/CardTitle.js",
-      "size": 208,
+      "name": "Sync.js",
+      "path": "dealer_sync_frontend/src/views/Sync.js",
+      "size": 5449,
       "type": "text",
-      "content": "import React from 'react';\n\nconst CardTitle = ({ children, className }) => {\n  return (\n    <h2 className={`text-lg font-semibold ${className}`}>\n      {children}\n    </h2>\n  );\n};\n\nexport default CardTitle;\n",
-      "line_count": 11
+      "content": "import React, { useState, useEffect, useCallback } from 'react';\nimport { useSelector, useDispatch } from 'react-redux';\nimport axios from 'axios';\nimport { setSyncStatus, setProgress, setTaskId, setError, resetSync, checkSyncStatus, setUserId } from '../store/syncSlice';\nimport { RefreshCw, Check, AlertTriangle, Loader } from 'lucide-react';\nimport Card from '../components/Card';\nimport CardHeader from '../components/CardHeader';\nimport CardTitle from '../components/CardTitle';\nimport CardContent from '../components/CardContent';\n\nconst Sync = () => {\n  const dispatch = useDispatch();\n  const { syncStatus, progress, taskId, error, totalItems, currentItem, userId } = useSelector((state) => state.sync);\n  const [syncHistory, setSyncHistory] = useState(null);\n  const [isLoadingHistory, setIsLoadingHistory] = useState(true);\n\n  useEffect(() => {\n    const user = JSON.parse(localStorage.getItem('user'));\n    if (user) {\n      dispatch(setUserId(user.id));\n    }\n  }, [dispatch]);\n\n  const fetchSyncStatus = useCallback(async () => {\n    if (taskId && userId) {\n      dispatch(checkSyncStatus({ taskId, userId }));\n    }\n  }, [taskId, userId, dispatch]);\n\n  const fetchSyncHistory = useCallback(async () => {\n    try {\n      setIsLoadingHistory(true);\n      const response = await axios.get('http://localhost:8000/api/scraper/sync/history/', {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      setSyncHistory(response.data);\n    } catch (err) {\n      console.error('Failed to fetch sync history:', err);\n    } finally {\n      setIsLoadingHistory(false);\n    }\n  }, []);\n\n  useEffect(() => {\n    fetchSyncHistory();\n    if (syncStatus === 'syncing' || syncStatus === 'checking') {\n      const interval = setInterval(fetchSyncStatus, 5000);\n      return () => clearInterval(interval);\n    }\n  }, [syncStatus, fetchSyncStatus, fetchSyncHistory]);\n\n  const startSync = async () => {\n    try {\n      dispatch(setSyncStatus('syncing'));\n      dispatch(setProgress(0));\n      dispatch(setError(null));\n      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      dispatch(setTaskId(response.data.task_id));\n    } catch (err) {\n      dispatch(setSyncStatus('error'));\n      dispatch(setError('Sync failed to start. Please try again.'));\n    }\n  };\n\n  const renderSyncStatus = () => {\n    switch (syncStatus) {\n      case 'idle':\n        return <RefreshCw size={24} className=\"text-secondary\" />;\n      case 'syncing':\n        return <RefreshCw size={24} className=\"text-primary animate-spin\" />;\n      case 'checking':\n        return <Loader size={24} className=\"text-primary animate-spin\" />;\n      case 'completed':\n        return <Check size={24} className=\"text-green-500\" />;\n      case 'error':\n        return <AlertTriangle size={24} className=\"text-red-500\" />;\n      default:\n        return null;\n    }\n  };\n\n  return (\n    <div className=\"bg-background min-h-screen text-text p-6\">\n      <h1 className=\"text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary\">Sync Dashboard</h1>\n\n      <Card className=\"mb-6\">\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync Status</CardTitle>\n        </CardHeader>\n        <CardContent>\n          <div className=\"flex items-center mb-4\">\n            <div className=\"mr-4\">\n              {renderSyncStatus()}\n            </div>\n            <span className=\"capitalize text-lg\">{syncStatus}</span>\n          </div>\n          {(syncStatus === 'syncing' || syncStatus === 'checking') && (\n            <>\n              <div className=\"w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700\">\n                {progress > 0 ? (\n                  <div className=\"bg-primary h-2.5 rounded-full\" style={{ width: `${progress}%` }}></div>\n                ) : (\n                  <div className=\"bg-primary h-2.5 rounded-full animate-pulse\"></div>\n                )}\n              </div>\n              <div className=\"text-sm text-secondary\">\n                {totalItems ? (\n                  <span>{currentItem} of {totalItems} items processed</span>\n                ) : (\n                  <span>Processing items...</span>\n                )}\n              </div>\n            </>\n          )}\n          <button\n            onClick={startSync}\n            disabled={syncStatus === 'syncing' || syncStatus === 'checking'}\n            className=\"btn mt-4 disabled:opacity-50 disabled:cursor-not-allowed\"\n          >\n            Start Sync\n          </button>\n        </CardContent>\n      </Card>\n\n      <Card>\n        <CardHeader>\n          <CardTitle className=\"text-primary\">Sync History</CardTitle>\n        </CardHeader>\n        <CardContent>\n          {error && <div className=\"text-red-500 mb-4\">{error}</div>}\n          {isLoadingHistory ? (\n            <div>Loading sync history...</div>\n          ) : syncHistory ? (\n            <ul className=\"space-y-2\">\n              <li>Last successful sync: {syncHistory.lastSuccessful || 'N/A'}</li>\n              <li>Total syncs today: {syncHistory.totalToday}</li>\n              <li>Failed syncs today: {syncHistory.failedToday}</li>\n            </ul>\n          ) : (\n            <div>No sync history available.</div>\n          )}\n        </CardContent>\n      </Card>\n    </div>\n  );\n};\n\nexport default Sync;\n",
+      "line_count": 154
     },
     {
-      "name": "CardContent.js",
-      "path": "dealer_sync_frontend/src/components/CardContent.js",
-      "size": 154,
+      "name": "syncSlice.js",
+      "path": "dealer_sync_frontend/src/store/syncSlice.js",
+      "size": 2737,
       "type": "text",
-      "content": "import React from 'react';\n\nconst CardContent = ({ children }) => {\n  return (\n    <div>\n      {children}\n    </div>\n  );\n};\n\nexport default CardContent;\n",
-      "line_count": 11
+      "content": "import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';\nimport axios from 'axios';\n\nexport const checkSyncStatus = createAsyncThunk(\n  'sync/checkStatus',\n  async ({ taskId, userId }, { rejectWithValue }) => {\n    try {\n      const response = await axios.get(`http://localhost:8000/api/scraper/status/?task_id=${taskId}`, {\n        headers: {\n          Authorization: `Bearer ${localStorage.getItem('access_token')}`\n        }\n      });\n      return { ...response.data, userId };\n    } catch (err) {\n      return rejectWithValue(err.response.data);\n    }\n  }\n);\n\nconst initialState = {\n  syncStatus: 'idle',\n  progress: 0,\n  taskId: null,\n  error: null,\n  totalItems: null,\n  currentItem: 0,\n  userId: null,\n};\n\nexport const syncSlice = createSlice({\n  name: 'sync',\n  initialState,\n  reducers: {\n    setSyncStatus: (state, action) => {\n      state.syncStatus = action.payload;\n    },\n    setProgress: (state, action) => {\n      state.progress = action.payload;\n    },\n    setTaskId: (state, action) => {\n      state.taskId = action.payload;\n    },\n    setError: (state, action) => {\n      state.error = action.payload;\n    },\n    resetSync: (state) => {\n      state.syncStatus = 'idle';\n      state.progress = 0;\n      state.taskId = null;\n      state.error = null;\n      state.totalItems = null;\n      state.currentItem = 0;\n    },\n    setUserId: (state, action) => {\n      state.userId = action.payload;\n    },\n  },\n  extraReducers: (builder) => {\n    builder\n      .addCase(checkSyncStatus.pending, (state) => {\n        state.syncStatus = 'checking';\n      })\n      .addCase(checkSyncStatus.fulfilled, (state, action) => {\n        if (action.payload.userId !== state.userId) {\n          return; // Ignore updates for other users\n        }\n        if (action.payload.state === 'SUCCESS') {\n          state.syncStatus = 'completed';\n          state.progress = 100;\n        } else if (action.payload.state === 'FAILURE') {\n          state.syncStatus = 'error';\n          state.error = 'Sync failed. Please try again.';\n        } else if (action.payload.state === 'PROGRESS') {\n          state.syncStatus = 'syncing';\n          state.totalItems = action.payload.total || state.totalItems;\n          state.currentItem = action.payload.current;\n          if (state.totalItems) {\n            state.progress = Math.round((state.currentItem / state.totalItems) * 100);\n          }\n        }\n      })\n      .addCase(checkSyncStatus.rejected, (state, action) => {\n        state.syncStatus = 'error';\n        state.error = action.payload || 'Failed to check sync status';\n      });\n  },\n});\n\nexport const { setSyncStatus, setProgress, setTaskId, setError, resetSync, setUserId } = syncSlice.actions;\n\nexport default syncSlice.reducer;\n",
+      "line_count": 91
     },
     {
-      "name": "ProtectedRoute.js",
-      "path": "dealer_sync_frontend/src/components/ProtectedRoute.js",
-      "size": 272,
+      "name": "store.js",
+      "path": "dealer_sync_frontend/src/store/store.js",
+      "size": 174,
       "type": "text",
-      "content": "import React from 'react';\nimport { Navigate, Outlet } from 'react-router-dom';\n\nconst ProtectedRoute = ({ user, redirectPath = '/login' }) => {\n  if (!user) {\n    return <Navigate to={redirectPath} replace />;\n  }\n\n  return <Outlet />;\n};\n\nexport default ProtectedRoute;\n",
-      "line_count": 12
-    },
-    {
-      "name": "Card.js",
-      "path": "dealer_sync_frontend/src/components/Card.js",
-      "size": 270,
-      "type": "text",
-      "content": "import React from 'react';\n\nconst Card = ({ children, className }) => {\n  return (\n    <div className={`bg-background-light shadow-md rounded-lg p-6 transition-shadow duration-300 hover:shadow-lg ${className}`}>\n      {children}\n    </div>\n  );\n};\n\nexport default Card;\n",
-      "line_count": 11
-    },
-    {
-      "name": "logo192.png",
-      "path": "dealer_sync_frontend/public/logo192.png",
-      "size": 5347,
-      "type": "image"
-    },
-    {
-      "name": "logo512.png",
-      "path": "dealer_sync_frontend/public/logo512.png",
-      "size": 9664,
-      "type": "image"
-    },
-    {
-      "name": "favicon.ico",
-      "path": "dealer_sync_frontend/public/favicon.ico",
-      "size": 3870,
-      "type": "image"
-    },
-    {
-      "name": "manifest.json",
-      "path": "dealer_sync_frontend/public/manifest.json",
-      "size": 492,
-      "type": "text",
-      "content_preview": "{\n\n  \"short_name\": \"React App\",\n\n  \"name\": \"Create React App Sample\",\n\n  \"icons\": [\n\n    {\n\n      \"src\": \"favicon.ico\",\n\n      \"sizes\": \"64x64 32x32 24x24 16x16\",\n\n      \"type\": \"image/x-icon\"\n\n    },\n\n    {\n",
-      "line_count": 20
-    },
-    {
-      "name": "index.html",
-      "path": "dealer_sync_frontend/public/index.html",
-      "size": 1721,
-      "type": "text",
-      "content_preview": "<!DOCTYPE html>\n\n<html lang=\"en\">\n\n  <head>\n\n    <meta charset=\"utf-8\" />\n\n    <link rel=\"icon\" href=\"%PUBLIC_URL%/favicon.ico\" />\n\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\n    <meta name=\"theme-color\" content=\"#000000\" />\n\n    <meta\n\n      name=\"description\"\n\n      content=\"Web site created using create-react-app\"\n",
-      "line_count": 20
-    },
-    {
-      "name": "robots.txt",
-      "path": "dealer_sync_frontend/public/robots.txt",
-      "size": 67,
-      "type": "other"
-    },
-    {
-      "name": ".env",
-      "path": "dealer_sync_backend/.env",
-      "size": 166,
-      "type": "other"
-    },
-    {
-      "name": "requirements.txt",
-      "path": "dealer_sync_backend/requirements.txt",
-      "size": 691,
-      "type": "other"
-    },
-    {
-      "name": "manage.py",
-      "path": "dealer_sync_backend/manage.py",
-      "size": 675,
-      "type": "text",
-      "content_preview": "#!/usr/bin/env python\n\n\"\"\"Django's command-line utility for administrative tasks.\"\"\"\n\nimport os\n\nimport sys\n\n\n\n\n\ndef main():\n\n    \"\"\"Run administrative tasks.\"\"\"\n\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"dealer_sync_backend.settings\")\n\n    try:\n",
-      "line_count": 20
-    },
-    {
-      "name": "apps.py",
-      "path": "dealer_sync_backend/authentication/apps.py",
-      "size": 160,
-      "type": "text",
-      "content_preview": "from django.apps import AppConfig\n\n\n\n\n\nclass AuthenticationConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'authentication'\n",
-      "line_count": 12
-    },
-    {
-      "name": "urls.py",
-      "path": "dealer_sync_backend/authentication/urls.py",
-      "size": 442,
-      "type": "text",
-      "content": "from django.urls import path\nfrom .views import RegisterView, UserView\nfrom rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView\n\nurlpatterns = [\n    path('register/', RegisterView.as_view(), name='register'),\n    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),\n    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),\n    path('user/', UserView.as_view(), name='user'),\n]\n",
-      "line_count": 10
+      "content": "import { configureStore } from '@reduxjs/toolkit';\nimport syncReducer from './syncSlice';\n\nexport const store = configureStore({\n  reducer: {\n    sync: syncReducer,\n  },\n});\n",
+      "line_count": 8
     },
     {
       "name": "views.py",
@@ -415,196 +49,12 @@
       "line_count": 29
     },
     {
-      "name": "tests.py",
-      "path": "dealer_sync_backend/authentication/tests.py",
-      "size": 1494,
-      "type": "text",
-      "content_preview": "from django.test import TestCase\n\nfrom django.urls import reverse\n\nfrom rest_framework.test import APIClient\n\nfrom rest_framework import status\n\nfrom django.contrib.auth.models import User\n\n\n\nclass AuthenticationTests(TestCase):\n\n    def setUp(self):\n\n        self.client = APIClient()\n\n        self.user = User.objects.create_user(username='testuser', password='testpass123', email='test@example.com')\n",
-      "line_count": 20
-    },
-    {
-      "name": "serializers.py",
-      "path": "dealer_sync_backend/authentication/serializers.py",
-      "size": 552,
-      "type": "text",
-      "content": "#!/usr/bin/env python3\n\nfrom rest_framework import serializers\nfrom django.contrib.auth.models import User\n\nclass UserSerializer(serializers.ModelSerializer):\n    password = serializers.CharField(write_only=True)\n\n    class Meta:\n        model = User\n        fields = ('username', 'email', 'password')\n\n    def create(self, validated_data):\n        user = User.objects.create_user(\n            username=validated_data['username'],\n            email=validated_data['email'],\n            password=validated_data['password']\n        )\n        return user\n",
-      "line_count": 19
-    },
-    {
-      "name": "__init__.py",
-      "path": "dealer_sync_backend/authentication/__init__.py",
-      "size": 0,
-      "type": "text",
-      "content_preview": "",
-      "line_count": 1
-    },
-    {
-      "name": "admin.py",
-      "path": "dealer_sync_backend/authentication/admin.py",
-      "size": 63,
-      "type": "text",
-      "content": "from django.contrib import admin\n\n# Register your models here.\n",
-      "line_count": 3
-    },
-    {
-      "name": "models.py",
-      "path": "dealer_sync_backend/authentication/models.py",
-      "size": 57,
-      "type": "text",
-      "content": "from django.db import models\n\n# Create your models here.\n",
-      "line_count": 3
-    },
-    {
-      "name": "apps.py",
-      "path": "dealer_sync_backend/scraper/apps.py",
-      "size": 171,
-      "type": "text",
-      "content_preview": "from django.apps import AppConfig\n\n\n\nclass ScraperConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'scraper'  # Changed from 'scraping'",
-      "line_count": 9
-    },
-    {
-      "name": "urls.py",
-      "path": "dealer_sync_backend/scraper/urls.py",
-      "size": 528,
-      "type": "text",
-      "content": "from django.urls import path\nfrom .views import StartScraperView, ScraperStatusView, RunScraperNowView, SyncHistoryView, DumpListingsView\n\nurlpatterns = [\n    path('start/', StartScraperView.as_view(), name='start_scraper'),\n    path('status/', ScraperStatusView.as_view(), name='scraper_status'),\n    path('run-now/', RunScraperNowView.as_view(), name='run_scraper_now'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync_history'),\n    path('dump-listings/', DumpListingsView.as_view(), name='dump_listings'),\n]\n",
-      "line_count": 10
-    },
-    {
       "name": "views.py",
       "path": "dealer_sync_backend/scraper/views.py",
-      "size": 3906,
+      "size": 6620,
       "type": "text",
-      "content": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated\nfrom .tasks import run_scrapers\nfrom .models import SyncAttempt, VehicleListing\nfrom celery.result import AsyncResult\nfrom django.utils import timezone\nfrom celery.exceptions import OperationalError\nfrom .serializers import VehicleListingSerializer\n\nclass DumpListingsView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        listings = VehicleListing.objects.filter(user=request.user)\n        serializer = VehicleListingSerializer(listings, many=True)\n        return Response({\n            \"count\": listings.count(),\n            \"listings\": serializer.data\n        })\n\nclass StartScraperView(APIView):\n    permission_classes = [IsAuthenticated]\n    \n    def post(self, request):\n        try:\n            task = run_scrapers.delay(request.user.id)\n            return Response({\"message\": \"Scraper task started\", \"task_id\": str(task.id)})\n        except OperationalError:\n            return Response({\"error\": \"Could not connect to task queue. Please try again later.\"}, status=503)\n\nclass ScraperStatusView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        task_id = request.query_params.get('task_id')\n        if not task_id:\n            return Response({\"error\": \"No task_id provided\"}, status=400)\n\n        try:\n            task_result = AsyncResult(task_id)\n            if task_result.state == 'PENDING':\n                response = {\n                    'state': task_result.state,\n                    'status': 'Sync task is pending...'\n                }\n            elif task_result.state == 'PROGRESS':\n                response = {\n                    'state': task_result.state,\n                    'current': task_result.info.get('current', 0),\n                    'total': task_result.info.get('total', 1),\n                    'percent': task_result.info.get('percent', 0)\n                }\n            elif task_result.state != 'FAILURE':\n                response = {\n                    'state': task_result.state,\n                    'status': str(task_result.result),\n                }\n            else:\n                response = {\n                    'state': task_result.state,\n                    'status': str(task_result.info),\n                }\n            return Response(response)\n        except OperationalError:\n            return Response({\"error\": \"Could not connect to task queue. Please try again later.\"}, status=503)\n\nclass RunScraperNowView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def post(self, request):\n        user = request.user\n        sync_attempt = SyncAttempt.objects.create(user=user, status='IN_PROGRESS')\n        try:\n            task = run_scrapers.delay(user.id)\n            return Response({\n                \"message\": \"Scraper started\",\n                \"sync_attempt_id\": sync_attempt.id,\n                \"task_id\": str(task.id)\n            })\n        except Exception as e:\n            sync_attempt.status = 'FAILED'\n            sync_attempt.error_message = str(e)\n            sync_attempt.save()\n            return Response({\"error\": str(e)}, status=500)\n\nclass SyncHistoryView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        today = timezone.now().date()\n        last_successful = SyncAttempt.objects.filter(user=user, status='COMPLETED').order_by('-end_time').first()\n        sync_history = {\n            \"lastSuccessful\": last_successful.end_time.isoformat() if last_successful else None,\n            \"totalToday\": SyncAttempt.objects.filter(user=user, start_time__date=today).count(),\n            \"failedToday\": SyncAttempt.objects.filter(user=user, start_time__date=today, status='FAILED').count()\n        }\n        return Response(sync_history)",
-      "line_count": 99
-    },
-    {
-      "name": "tests.py",
-      "path": "dealer_sync_backend/scraper/tests.py",
-      "size": 1202,
-      "type": "text",
-      "content_preview": "from django.test import TestCase\n\nfrom unittest.mock import patch\n\nfrom .scraper import scrape_mclarty_daniel\n\nfrom .models import VehicleListing\n\n\n\nclass McLartyDanielScraperTests(TestCase):\n\n\n\n    @patch('scraper.scrape_mclarty_daniel.webdriver.Chrome')\n\n    def test_successful_scrape(self, mock_chrome):\n\n        # Mock the Chrome driver and its methods\n",
-      "line_count": 20
-    },
-    {
-      "name": "serializers.py",
-      "path": "dealer_sync_backend/scraper/serializers.py",
-      "size": 408,
-      "type": "text",
-      "content": "from rest_framework import serializers\nfrom .models import VehicleListing\n\nclass VehicleListingSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = VehicleListing\n        fields = ['id', 'dealership', 'title', 'price', 'msrp', 'year', 'make', 'model', 'image_url', 'created_at', 'updated_at', 'views', 'needs_update']\n        read_only_fields = ['id', 'created_at', 'updated_at', 'views']",
-      "line_count": 8
-    },
-    {
-      "name": "scraper.py",
-      "path": "dealer_sync_backend/scraper/scraper.py",
-      "size": 4724,
-      "type": "text",
-      "content_preview": "import requests\n\nfrom bs4 import BeautifulSoup\n\nfrom django.utils import timezone\n\nfrom .models import VehicleListing\n\nimport logging\n\nimport re\n\nfrom django.db import DataError\n\n\n\nlogger = logging.getLogger(__name__)\n\n\n",
-      "line_count": 20
-    },
-    {
-      "name": "__init__.py",
-      "path": "dealer_sync_backend/scraper/__init__.py",
-      "size": 49,
-      "type": "text",
-      "content_preview": "default_app_config = 'scraper.apps.ScraperConfig'",
-      "line_count": 1
-    },
-    {
-      "name": "tasks.py",
-      "path": "dealer_sync_backend/scraper/tasks.py",
-      "size": 2807,
-      "type": "text",
-      "content_preview": "from celery import shared_task\n\nfrom .scraper import run_all_scrapers\n\nfrom .models import SyncAttempt, VehicleListing\n\nfrom django.contrib.auth import get_user_model\n\nfrom django.utils import timezone\n\nfrom celery.utils.log import get_task_logger\n\n\n\nlogger = get_task_logger(__name__)\n\n\n\n@shared_task(bind=True)\n",
-      "line_count": 20
-    },
-    {
-      "name": "admin.py",
-      "path": "dealer_sync_backend/scraper/admin.py",
-      "size": 639,
-      "type": "text",
-      "content": "from django.contrib import admin\nfrom .models import VehicleListing, SyncAttempt\n\n@admin.register(VehicleListing)\nclass VehicleListingAdmin(admin.ModelAdmin):\n    list_display = ('year', 'make', 'model', 'price', 'msrp', 'dealership', 'views', 'needs_update')\n    list_filter = ('make', 'year', 'dealership', 'needs_update')\n    search_fields = ('make', 'model', 'dealership')\n\n@admin.register(SyncAttempt)\nclass SyncAttemptAdmin(admin.ModelAdmin):\n    list_display = ('id', 'start_time', 'end_time', 'status', 'listings_added', 'listings_updated')\n    list_filter = ('status',)\n    readonly_fields = ('start_time', 'end_time', 'duration')",
-      "line_count": 14
-    },
-    {
-      "name": "models.py",
-      "path": "dealer_sync_backend/scraper/models.py",
-      "size": 2307,
-      "type": "text",
-      "content": "from django.db import models\nfrom django.contrib.auth.models import User\nfrom django.utils import timezone\nfrom django.conf import settings\n\nclass VehicleListing(models.Model):\n    user = models.ForeignKey(\n        settings.AUTH_USER_MODEL,\n        on_delete=models.CASCADE,\n        related_name='vehicle_listings',\n        null=True,  # Allow null for existing entries\n        default=1  # Set this to the ID of a default user, or use a function to get the default user\n    )\n\n    # ... rest of the model fields ...)\n    dealership = models.CharField(max_length=100)\n    title = models.CharField(max_length=500)\n    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)\n    msrp = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)\n    year = models.IntegerField()\n    make = models.TextField()  # Increase from 50 to 100 or more\n    model = models.TextField()  # Increase from 50 to 100 or more\n    image_url = models.URLField(max_length=500)\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n    views = models.IntegerField(default=0)\n    needs_update = models.BooleanField(default=False)\n\n    def __str__(self):\n        return f\"{self.year} {self.make} {self.model} - {self.dealership} (User: {self.user.username})\"\n\n\nclass SyncAttempt(models.Model):\n    STATUS_CHOICES = [\n        ('PENDING', 'Pending'),\n        ('IN_PROGRESS', 'In Progress'),\n        ('COMPLETED', 'Completed'),\n        ('FAILED', 'Failed'),\n    ]\n    \n    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sync_attempts', null=True, blank=True )\n    start_time = models.DateTimeField(auto_now_add=True)\n    end_time = models.DateTimeField(null=True, blank=True)\n    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')\n    listings_added = models.IntegerField(default=0)\n    listings_updated = models.IntegerField(default=0)\n    error_message = models.TextField(blank=True, null=True)\n\n    def __str__(self):\n        return f\"Sync Attempt {self.id} - {self.status} (User: {self.user.username})\"\n\n    def duration(self):\n        if self.end_time:\n            return self.end_time - self.start_time\n        return timezone.now() - self.start_time\n",
-      "line_count": 55
-    },
-    {
-      "name": "check_database.py",
-      "path": "dealer_sync_backend/scraper/management/commands/check_database.py",
-      "size": 804,
-      "type": "text",
-      "content_preview": "from django.core.management.base import BaseCommand\n\nfrom scraper.models import VehicleListing\n\n\n\nclass Command(BaseCommand):\n\n    help = 'Check the content of the VehicleListing table'\n\n\n\n    def handle(self, *args, **options):\n\n        total_listings = VehicleListing.objects.count()\n\n        self.stdout.write(self.style.SUCCESS(f'Total vehicle listings: {total_listings}'))\n\n\n",
-      "line_count": 20
-    },
-    {
-      "name": "urls.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/urls.py",
-      "size": 961,
-      "type": "text",
-      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n    path('api/', include('dashboard.urls')),\n    path('api/scraper/', include('scraper.urls')),  # Changed from 'scraping'\n]",
-      "line_count": 25
-    },
-    {
-      "name": "wsgi.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/wsgi.py",
-      "size": 415,
-      "type": "text",
-      "content_preview": "\"\"\"\n\nWSGI config for dealer_sync_backend project.\n\n\n\nIt exposes the WSGI callable as a module-level variable named ``application``.\n\n\n\nFor more information on this file, see\n\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/\n\n\"\"\"\n\n\n\nimport os\n",
-      "line_count": 20
-    },
-    {
-      "name": "__init__.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/__init__.py",
-      "size": 129,
-      "type": "text",
-      "content_preview": "# DEALERSYNC/dealer_sync_backend/dealer_sync_backend/__init__.py\n\nfrom .celery import app as celery_app\n\n\n\n__all__ = ('celery_app',)",
-      "line_count": 7
-    },
-    {
-      "name": "asgi.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/asgi.py",
-      "size": 415,
-      "type": "text",
-      "content_preview": "\"\"\"\n\nASGI config for dealer_sync_backend project.\n\n\n\nIt exposes the ASGI callable as a module-level variable named ``application``.\n\n\n\nFor more information on this file, see\n\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/asgi/\n\n\"\"\"\n\n\n\nimport os\n",
-      "line_count": 20
-    },
-    {
-      "name": "settings.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/settings.py",
-      "size": 5114,
-      "type": "text",
-      "content": "\"\"\"\nDjango settings for dealer_sync_backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.6.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom decouple import config\nfrom pathlib import Path\nfrom datetime import timedelta\nfrom celery.schedules import crontab\nimport os\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = \"django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz\"\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS = []\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"rest_framework\",\n    \"rest_framework_simplejwt\",\n    \"corsheaders\",\n    \"scraper\",\n    \"dashboard\",\n    \"authentication\",\n]\n\n\nMIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n    'corsheaders.middleware.CorsMiddleware',\n]\n\nROOT_URLCONF = \"dealer_sync_backend.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"dealer_sync_backend.wsgi.application\"\n\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\n\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': config('POSTGRES_DB'),\n        'USER': config('POSTGRES_USER'),\n        'PASSWORD': config('POSTGRES_PASSWORD'),\n        'HOST': config('DATABASE_HOST'),\n        'PORT': config('DATABASE_PORT'),\n    }\n}\n\n\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\",\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = \"en-us\"\n\nTIME_ZONE = \"UTC\"\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOW_CREDENTIALS = True\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",\n]\nCORS_ALLOW_METHODS = [\n    'DELETE',\n    'GET',\n    'OPTIONS',\n    'PATCH',\n    'POST',\n    'PUT',\n]\nCORS_ALLOW_HEADERS = [\n    'accept',\n    'accept-encoding',\n    'authorization',\n    'content-type',\n    'dnt',\n    'origin',\n    'user-agent',\n    'x-csrftoken',\n    'x-requested-with',\n]\n\nSIMPLE_JWT = {\n    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),\n    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),\n    'ROTATE_REFRESH_TOKENS': True,\n    'BLACKLIST_AFTER_ROTATION': True,\n    'AUTH_HEADER_TYPES': ('Bearer',),\n    'USER_ID_FIELD': 'id',\n    'USER_ID_CLAIM': 'user_id',\n}\n\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': (\n        'rest_framework_simplejwt.authentication.JWTAuthentication',\n    ),\n    'DEFAULT_PERMISSION_CLASSES': (\n        'rest_framework.permissions.IsAuthenticated',\n    ),\n}\n\nCELERY_BROKER_URL = 'redis://localhost:6379'\nCELERY_RESULT_BACKEND = 'redis://localhost:6379'\nCELERY_ACCEPT_CONTENT = ['application/json']\nCELERY_TASK_SERIALIZER = 'json'\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = 'UTC'\n\nCELERY_BEAT_SCHEDULE = {\n    'run-scrapers-daily': {\n        'task': 'scraper.tasks.run_scrapers',\n        'schedule': crontab(hour=0, minute=0),  # Run daily at midnight\n    },\n}\n",
-      "line_count": 203
-    },
-    {
-      "name": "celery.py",
-      "path": "dealer_sync_backend/dealer_sync_backend/celery.py",
-      "size": 800,
-      "type": "text",
-      "content_preview": "from __future__ import absolute_import, unicode_literals\n\nimport os\n\nfrom celery import Celery\n\nfrom kombu import Exchange, Queue\n\n\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dealer_sync_backend.settings')\n\n\n\napp = Celery('dealer_sync_backend')\n\napp.config_from_object('django.conf:settings', namespace='CELERY')\n\napp.autodiscover_tasks()\n",
-      "line_count": 20
-    },
-    {
-      "name": "apps.py",
-      "path": "dealer_sync_backend/dashboard/apps.py",
-      "size": 150,
-      "type": "text",
-      "content_preview": "from django.apps import AppConfig\n\n\n\n\n\nclass DashboardConfig(AppConfig):\n\n    default_auto_field = 'django.db.models.BigAutoField'\n\n    name = 'dashboard'\n",
-      "line_count": 12
-    },
-    {
-      "name": "urls.py",
-      "path": "dealer_sync_backend/dashboard/urls.py",
-      "size": 404,
-      "type": "text",
-      "content": "\n\nfrom django.urls import path\nfrom .views import DashboardView, ListingsView, SyncHistoryView, SyncStartView\n\nurlpatterns = [\n    path('dashboard/', DashboardView.as_view(), name='dashboard'),\n    path('listings/', ListingsView.as_view(), name='listings'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync_history'),\n    path('sync/start/', SyncStartView.as_view(), name='sync_start'),\n]\n",
-      "line_count": 11
+      "content": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated\nfrom .tasks import run_scrapers\nfrom .models import SyncAttempt, VehicleListing\nfrom celery.result import AsyncResult\nfrom django.utils import timezone\nfrom celery.exceptions import OperationalError\nfrom .serializers import VehicleListingSerializer\nfrom django.core.exceptions import FieldError\nfrom django.db.models import Count\n\n\nclass StartScraperView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def post(self, request):\n        try:\n            task = run_scrapers.delay(request.user.id)\n            sync_attempt = SyncAttempt.objects.create(\n                user=request.user,\n                task_id=task.id,\n                status='PENDING'\n            )\n            return Response({\"message\": \"Scraper task started\", \"task_id\": str(task.id)})\n        except OperationalError:\n            return Response({\"error\": \"Could not connect to task queue. Please try again later.\"}, status=503)\n\n\nclass ScraperStatusView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        task_id = request.query_params.get('task_id')\n        user_id = request.user.id\n        if not task_id:\n            return Response({\"error\": \"No task_id provided\"}, status=400)\n\n        try:\n            sync_attempt = SyncAttempt.objects.filter(\n                task_id=task_id, user_id=user_id).first()\n            if not sync_attempt:\n                return Response({\"error\": \"No sync attempt found for this task and user\"}, status=404)\n\n            task_result = AsyncResult(task_id)\n            if task_result.state == 'PENDING':\n                response = {\n                    'state': task_result.state,\n                    'status': 'Sync task is pending...'\n                }\n            elif task_result.state == 'PROGRESS':\n                response = {\n                    'state': task_result.state,\n                    'current': task_result.info.get('current', 0),\n                    'total': task_result.info.get('total', 1),\n                    'percent': task_result.info.get('percent', 0)\n                }\n            elif task_result.state != 'FAILURE':\n                response = {\n                    'state': task_result.state,\n                    'status': str(task_result.result),\n                }\n            else:\n                response = {\n                    'state': task_result.state,\n                    'status': str(task_result.info),\n                }\n            return Response(response)\n        except OperationalError:\n            return Response({\"error\": \"Could not connect to task queue. Please try again later.\"}, status=503)\n\n\nclass DumpListingsView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        try:\n            listings = VehicleListing.objects.filter(user=request.user)\n            serializer = VehicleListingSerializer(listings, many=True)\n            return Response({\n                \"count\": listings.count(),\n                \"listings\": serializer.data\n            })\n        except FieldError as e:\n            return Response({\"error\": f\"FieldError: {str(e)}\"}, status=400)\n        except Exception as e:\n            return Response({\"error\": f\"An unexpected error occurred: {str(e)}\"}, status=500)\n\n\nclass SyncHistoryView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        today = timezone.now().date()\n        last_successful = SyncAttempt.objects.filter(\n            user=user, status='COMPLETED').order_by('-end_time').first()\n        sync_history = {\n            \"lastSuccessful\": last_successful.end_time.isoformat() if last_successful else None,\n            \"totalToday\": SyncAttempt.objects.filter(user=user, start_time__date=today).count(),\n            \"failedToday\": SyncAttempt.objects.filter(user=user, start_time__date=today, status='FAILED').count()\n        }\n        return Response(sync_history)\n\n\nclass DashboardView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        total_listings = VehicleListing.objects.filter(user=user).count()\n        today = timezone.now().date()\n        listings_today = VehicleListing.objects.filter(\n            user=user, created_at__date=today).count()\n\n        active_syncs = SyncAttempt.objects.filter(\n            user=user, status='IN_PROGRESS').count()\n        pending_updates = VehicleListing.objects.filter(\n            user=user, needs_update=True).count()\n        total_views = VehicleListing.objects.filter(user=user).aggregate(\n            total_views=Count('views'))['total_views']\n\n        # Get data for chart (last 4 months)\n        chart_data = []\n        for i in range(3, -1, -1):\n            month_start = (timezone.now() -\n                           timezone.timedelta(days=30*i)).replace(day=1)\n            month_end = (month_start + timezone.timedelta(days=32)\n                         ).replace(day=1) - timezone.timedelta(days=1)\n            listings_count = VehicleListing.objects.filter(\n                user=user, created_at__range=(month_start, month_end)).count()\n            views_count = VehicleListing.objects.filter(user=user, created_at__range=(\n                month_start, month_end)).aggregate(total_views=Count('views'))['total_views']\n            chart_data.append({\n                \"name\": month_start.strftime(\"%b\"),\n                \"listings\": listings_count,\n                \"views\": views_count\n            })\n\n        # Recent activity (last 4 events)\n        recent_listings = VehicleListing.objects.filter(\n            user=user).order_by('-created_at')[:4]\n        recent_activity = [\n            {\n                \"title\": \"New Listing Added\",\n                \"description\": f\"{listing.year} {listing.make} {listing.model}\",\n                \"time\": f\"{(timezone.now() - listing.created_at).days} days ago\"\n            } for listing in recent_listings\n        ]\n\n        dashboard_data = {\n            \"stats\": [\n                {\"title\": \"Total Listings\", \"value\": total_listings, \"icon\": \"Car\"},\n                {\"title\": \"Active Syncs\", \"value\": active_syncs, \"icon\": \"Activity\"},\n                {\"title\": \"Pending Updates\",\n                    \"value\": pending_updates, \"icon\": \"Clock\"},\n                {\"title\": \"Total Views\", \"value\": total_views, \"icon\": \"Eye\"},\n            ],\n            \"recentActivity\": recent_activity,\n            \"chartData\": chart_data\n        }\n        return Response(dashboard_data)\n",
+      "line_count": 162
     },
     {
       "name": "views.py",
@@ -615,36 +65,28 @@
       "line_count": 94
     },
     {
-      "name": "tests.py",
-      "path": "dealer_sync_backend/dashboard/tests.py",
-      "size": 1799,
+      "name": "tasks.py",
+      "path": "dealer_sync_backend/scraper/tasks.py",
+      "size": 3172,
       "type": "text",
-      "content_preview": "from django.test import TestCase\n\nfrom django.urls import reverse\n\nfrom rest_framework.test import APIClient\n\nfrom rest_framework import status\n\nfrom django.contrib.auth.models import User\n\nfrom scraper.models import VehicleListing, SyncAttempt\n\nfrom django.utils import timezone\n\n\n\nclass DashboardTests(TestCase):\n\n    def setUp(self):\n",
+      "content_preview": "from celery import shared_task\n\nfrom .scraper import run_all_scrapers\n\nfrom .models import SyncAttempt, VehicleListing\n\nfrom django.contrib.auth import get_user_model\n\nfrom django.utils import timezone\n\nfrom celery.utils.log import get_task_logger\n\n\n\nlogger = get_task_logger(__name__)\n\n\n\n\n",
       "line_count": 20
     },
     {
-      "name": "serializers.py",
-      "path": "dealer_sync_backend/dashboard/serializers.py",
-      "size": 319,
+      "name": "models.py",
+      "path": "dealer_sync_backend/authentication/models.py",
+      "size": 57,
       "type": "text",
-      "content": "from rest_framework import serializers\nfrom scraper.models import VehicleListing\n\nclass VehicleListingSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = VehicleListing\n        fields = ['id', 'dealership', 'title', 'price', 'msrp', 'year', 'make', 'model', 'image_url', 'created_at', 'updated_at']",
-      "line_count": 7
-    },
-    {
-      "name": "__init__.py",
-      "path": "dealer_sync_backend/dashboard/__init__.py",
-      "size": 0,
-      "type": "text",
-      "content_preview": "",
-      "line_count": 1
-    },
-    {
-      "name": "admin.py",
-      "path": "dealer_sync_backend/dashboard/admin.py",
-      "size": 63,
-      "type": "text",
-      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "content": "from django.db import models\n\n# Create your models here.\n",
       "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "dealer_sync_backend/scraper/models.py",
+      "size": 2116,
+      "type": "text",
+      "content": "from django.db import models\nfrom django.conf import settings\nfrom django.utils import timezone\n\n\nclass VehicleListing(models.Model):\n    user = models.ForeignKey(\n        settings.AUTH_USER_MODEL,\n        on_delete=models.CASCADE,\n        related_name='vehicle_listings',\n        default=1\n    )\n    dealership = models.CharField(max_length=100)\n    title = models.CharField(max_length=500)\n    price = models.DecimalField(\n        max_digits=10, decimal_places=2, null=True, blank=True)\n    msrp = models.DecimalField(\n        max_digits=10, decimal_places=2, null=True, blank=True)\n    year = models.IntegerField()\n    make = models.TextField()\n    model = models.TextField()\n    image_url = models.URLField(max_length=500)\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n    views = models.IntegerField(default=0)\n    needs_update = models.BooleanField(default=False)\n\n    def __str__(self):\n        return f\"{self.year} {self.make} {self.model} - {self.dealership} (User: {self.user})\"\n\n\nclass SyncAttempt(models.Model):\n    STATUS_CHOICES = [\n        ('PENDING', 'Pending'),\n        ('IN_PROGRESS', 'In Progress'),\n        ('COMPLETED', 'Completed'),\n        ('FAILED', 'Failed'),\n    ]\n\n    user = models.ForeignKey(\n        settings.AUTH_USER_MODEL,\n        on_delete=models.CASCADE,\n        related_name='sync_attempts',\n        default=1\n    )\n    start_time = models.DateTimeField(auto_now_add=True)\n    end_time = models.DateTimeField(null=True, blank=True)\n    status = models.CharField(\n        max_length=20, choices=STATUS_CHOICES, default='PENDING')\n    listings_added = models.IntegerField(default=0)\n    listings_updated = models.IntegerField(default=0)\n    error_message = models.TextField(blank=True, null=True)\n    task_id = models.CharField(max_length=255, null=True, blank=True)\n\n    def __str__(self):\n        return f\"Sync Attempt {self.id} - {self.status} (User: {self.user})\"\n\n    def duration(self):\n        if self.end_time:\n            return self.end_time - self.start_time\n        return timezone.now() - self.start_time\n",
+      "line_count": 61
     },
     {
       "name": "models.py",
@@ -653,86 +95,40 @@
       "type": "text",
       "content": "from django.db import models\n\n# Create your models here.\n",
       "line_count": 3
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/authentication/urls.py",
+      "size": 442,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import RegisterView, UserView\nfrom rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView\n\nurlpatterns = [\n    path('register/', RegisterView.as_view(), name='register'),\n    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),\n    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),\n    path('user/', UserView.as_view(), name='user'),\n]\n",
+      "line_count": 10
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/scraper/urls.py",
+      "size": 511,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import StartScraperView, ScraperStatusView, SyncHistoryView, DumpListingsView, DashboardView\n\nurlpatterns = [\n    path('start/', StartScraperView.as_view(), name='start-scraper'),\n    path('status/', ScraperStatusView.as_view(), name='scraper-status'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync-history'),\n    path('listings/', DumpListingsView.as_view(), name='dump-listings'),\n    path('dashboard/', DashboardView.as_view(), name='dashboard'),\n]\n",
+      "line_count": 10
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/dealer_sync_backend/urls.py",
+      "size": 961,
+      "type": "text",
+      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n    path('api/', include('dashboard.urls')),\n    path('api/scraper/', include('scraper.urls')),  # Changed from 'scraping'\n]",
+      "line_count": 25
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/dashboard/urls.py",
+      "size": 404,
+      "type": "text",
+      "content": "\n\nfrom django.urls import path\nfrom .views import DashboardView, ListingsView, SyncHistoryView, SyncStartView\n\nurlpatterns = [\n    path('dashboard/', DashboardView.as_view(), name='dashboard'),\n    path('listings/', ListingsView.as_view(), name='listings'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync_history'),\n    path('sync/start/', SyncStartView.as_view(), name='sync_start'),\n]\n",
+      "line_count": 11
     }
   ],
-  "directories": [
-    {
-      "path": "dealer_sync_frontend",
-      "name": "dealer_sync_frontend"
-    },
-    {
-      "path": "dealer_sync_frontend/mocks",
-      "name": "mocks"
-    },
-    {
-      "path": "dealer_sync_frontend/src",
-      "name": "src"
-    },
-    {
-      "path": "dealer_sync_frontend/src/styles",
-      "name": "styles"
-    },
-    {
-      "path": "dealer_sync_frontend/src/views",
-      "name": "views"
-    },
-    {
-      "path": "dealer_sync_frontend/src/tests",
-      "name": "tests"
-    },
-    {
-      "path": "dealer_sync_frontend/src/images",
-      "name": "images"
-    },
-    {
-      "path": "dealer_sync_frontend/src/components",
-      "name": "components"
-    },
-    {
-      "path": "dealer_sync_frontend/public",
-      "name": "public"
-    },
-    {
-      "path": "dealer_sync_frontend/public/images",
-      "name": "images"
-    },
-    {
-      "path": "dealer_sync_backend",
-      "name": "dealer_sync_backend"
-    },
-    {
-      "path": "dealer_sync_backend/authentication",
-      "name": "authentication"
-    },
-    {
-      "path": "dealer_sync_backend/scraper",
-      "name": "scraper"
-    },
-    {
-      "path": "dealer_sync_backend/scraper/management",
-      "name": "management"
-    },
-    {
-      "path": "dealer_sync_backend/scraper/management/commands",
-      "name": "commands"
-    },
-    {
-      "path": "dealer_sync_backend/dealer_sync_backend",
-      "name": "dealer_sync_backend"
-    },
-    {
-      "path": "dealer_sync_backend/dashboard",
-      "name": "dashboard"
-    }
-  ],
-  "analysis": {
-    "framework": "Django",
-    "django_apps": [
-      "dealer_sync_backend",
-      "authentication",
-      "scraper",
-      "dashboard"
-    ],
-    "frontend": "React"
-  }
+  "directories": [],
+  "analysis": {}
 }

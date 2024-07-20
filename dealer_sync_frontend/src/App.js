@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 import axios from 'axios';
 import Layout from './components/Layout';
 import Dashboard from './views/Dashboard';
@@ -85,19 +87,21 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Auth onAuth={handleAuth} />} />
-        <Route element={<ProtectedRoute user={user} />}>
-          <Route element={<Layout user={user} onLogout={handleLogout} />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/listings" element={<Listings />} />
-            <Route path="/sync" element={<Sync />} />
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/login" element={user ? <Navigate to="/" replace /> : <Auth onAuth={handleAuth} />} />
+          <Route element={<ProtectedRoute user={user} />}>
+            <Route element={<Layout user={user} onLogout={handleLogout} />}>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/listings" element={<Listings />} />
+              <Route path="/sync" element={<Sync />} />
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 

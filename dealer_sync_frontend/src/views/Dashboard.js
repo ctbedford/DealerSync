@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Card from '../components/Card';
 import CardContent from '../components/CardContent';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
-import { Car, Activity, Clock, Eye } from 'lucide-react';
+import { Car, Activity, Clock, Eye, RefreshCw } from 'lucide-react';
 
 const Dashboard = () => {
+  const { syncStatus, progress } = useSelector((state) => state.sync);
   const [dashboardData, setDashboardData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,6 +44,26 @@ const Dashboard = () => {
   return (
     <div className="bg-background min-h-screen text-text p-6">
       <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">DealerSync Dashboard</h1>
+
+      {syncStatus === 'syncing' && (
+        <Card className="mb-6 bg-primary-light">
+          <CardHeader>
+            <CardTitle className="text-secondary flex items-center">
+              <RefreshCw className="h-5 w-5 mr-2 animate-spin" />
+              Sync in Progress
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-2">Progress: {progress}%</div>
+            <div className="w-full bg-background rounded-full h-2.5">
+              <div
+                className="bg-secondary h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {stats.map((stat, index) => (
