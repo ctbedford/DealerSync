@@ -7,6 +7,7 @@ import Card from '../components/Card';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
 import CardContent from '../components/CardContent';
+import { wait } from '@testing-library/user-event/dist/utils';
 
 const Sync = () => {
   const dispatch = useDispatch();
@@ -22,10 +23,10 @@ const Sync = () => {
   }, [dispatch]);
 
   const fetchSyncStatus = useCallback(async () => {
-    if (taskId && userId) {
-      dispatch(checkSyncStatus({ taskId, userId }));
+    if (taskId) {
+      dispatch(checkSyncStatus({ taskId }));
     }
-  }, [taskId, userId, dispatch]);
+  }, [taskId, dispatch]);
 
   const fetchSyncHistory = useCallback(async () => {
     try {
@@ -44,11 +45,14 @@ const Sync = () => {
   }, []);
 
   useEffect(() => {
+    fetchSyncStatus()
+  }, [])
+
+  useEffect(() => {
     fetchSyncHistory();
-    if (syncStatus === 'syncing' || syncStatus === 'checking') {
-      const interval = setInterval(fetchSyncStatus, 5000);
-      return () => clearInterval(interval);
-    }
+    //  fetchSyncStatus();
+    const interval = setInterval(fetchSyncStatus, 5000);
+    return () => clearInterval(interval);
   }, [syncStatus, fetchSyncStatus, fetchSyncHistory]);
 
   const startSync = async () => {
@@ -133,7 +137,7 @@ const Sync = () => {
           <CardTitle className="text-primary">Sync History</CardTitle>
         </CardHeader>
         <CardContent>
-          {error && <div className="text-red-500 mb-4">{error}</div>}
+          {syncStatus === "error" && error && <div className="text-red-500 mb-4">{error.error}</div>}
           {isLoadingHistory ? (
             <div>Loading sync history...</div>
           ) : syncHistory ? (

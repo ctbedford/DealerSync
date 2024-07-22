@@ -3,14 +3,14 @@ import axios from 'axios';
 
 export const checkSyncStatus = createAsyncThunk(
   'sync/checkStatus',
-  async ({ taskId, userId }, { rejectWithValue }) => {
+  async ({ taskId }, { rejectWithValue }) => {
     try {
       const response = await axios.get(`http://localhost:8000/api/scraper/status/?task_id=${taskId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
-      });
-      return { ...response.data, userId };
+      })
+      return { ...response.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
