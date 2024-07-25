@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list[str] = []
 
 
 # Application definition
@@ -86,7 +86,6 @@ WSGI_APPLICATION = "dealer_sync_backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -97,8 +96,6 @@ DATABASES = {
         'PORT': config('DATABASE_PORT'),
     }
 }
-
-
 
 
 # Password validation

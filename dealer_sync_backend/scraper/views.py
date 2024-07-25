@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, BasePermission
 from .tasks import run_scrapers
 from .models import SyncAttempt, VehicleListing
 from celery.result import AsyncResult
@@ -9,10 +9,12 @@ from celery.exceptions import OperationalError
 from .serializers import VehicleListingSerializer
 from django.core.exceptions import FieldError
 from django.db.models import Count
+from typing import List
 
 
 class StartScraperView(APIView):
-    permission_classes = [IsAuthenticated]
+
+    permission_classes: List[type[BasePermission]] = [IsAuthenticated]
 
     def post(self, request):
         try:
@@ -28,7 +30,8 @@ class StartScraperView(APIView):
 
 
 class ScraperStatusView(APIView):
-    permission_classes = [IsAuthenticated]
+
+    permission_classes: List[type[BasePermission]] = [IsAuthenticated]
 
     def get(self, request):
         task_id = request.query_params.get('task_id')
@@ -71,7 +74,8 @@ class ScraperStatusView(APIView):
 
 
 class DumpListingsView(APIView):
-    permission_classes = [IsAuthenticated]
+
+    permission_classes: List[type[BasePermission]] = [IsAuthenticated]
 
     def get(self, request):
         try:
@@ -88,7 +92,8 @@ class DumpListingsView(APIView):
 
 
 class SyncHistoryView(APIView):
-    permission_classes = [IsAuthenticated]
+
+    permission_classes: List[type[BasePermission]] = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
@@ -104,7 +109,8 @@ class SyncHistoryView(APIView):
 
 
 class DashboardView(APIView):
-    permission_classes = [IsAuthenticated]
+
+    permission_classes: List[type[BasePermission]] = [IsAuthenticated]
 
     def get(self, request):
         user = request.user
