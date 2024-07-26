@@ -26,7 +26,8 @@ def run_scrapers(self, user_id):
             'percent': 0
         })
 
-        listings = run_all_scrapers()
+        listings = run_all_scrapers(user_id)
+
         if listings is None:
             logger.warning(
                 "Scraper returned None instead of a list of listings")
@@ -46,11 +47,14 @@ def run_scrapers(self, user_id):
         total_listings = len(listings)
 
         for index, listing_data in enumerate(listings, start=1):
+            unique_identifier = listing_data['unique_identifier']
+
             listing, created = VehicleListing.objects.update_or_create(
                 user=user,
-                dealership=listing_data['dealership'],
-                title=listing_data['title'],
+                unique_identifier=unique_identifier,
                 defaults={
+                    'dealership': listing_data['dealership'],
+                    'title': listing_data['title'],
                     'price': listing_data.get('price'),
                     'msrp': listing_data.get('msrp'),
                     'year': listing_data['year'],
@@ -74,6 +78,12 @@ def run_scrapers(self, user_id):
                 'percent': progress
             })
 
+        # Mark listings that weren't updated as needing update
+        VehicleListing.objects.filter(
+            user=user,
+            updated_at__lt=timezone.now() - timezone.timedelta(hours=1)
+        ).update(needs_update=True)
+
         sync_attempt.status = 'COMPLETED'
         sync_attempt.listings_added = listings_added
         sync_attempt.listings_updated = listings_updated
@@ -89,4 +99,4 @@ def run_scrapers(self, user_id):
             sync_attempt.error_message = str(e)
             sync_attempt.end_time = timezone.now()
             sync_attempt.save()
-        raise  # Re-raise the exception so Celery knows the task failed
+        raise  # Re-raise the exception so Celery knows the task failedws the task failed

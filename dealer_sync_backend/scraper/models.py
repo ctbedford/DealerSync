@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django_stubs_ext import WithAnnotations
+import hashlib
 
 
 class VehicleListing(models.Model):
@@ -26,6 +27,16 @@ class VehicleListing(models.Model):
     updated_at: models.DateTimeField = models.DateTimeField(auto_now=True)
     views: models.IntegerField = models.IntegerField(default=0)
     needs_update: models.BooleanField = models.BooleanField(default=False)
+    dealer_specific_id: models.CharField = models.CharField(
+        max_length=20, unique=True)
+    vin: models.CharField = models.CharField(
+        max_length=17, null=True, blank=True)
+    color: models.CharField = models.CharField(
+        max_length=50, null=True, blank=True)
+    # New field for unique identifier
+
+    class Meta:
+        unique_together = ('year', 'make', 'model', 'dealer_specific_id')
 
     def __str__(self):
         return f"{self.year} {self.make} {self.model} - {self.dealership} (User: {self.user})"

@@ -10,7 +10,7 @@ const Layout = ({ onLogout, user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { syncStatus, progress, taskId, userId } = useSelector((state) => state.sync);
+  const { syncStatus, progress, taskId, userId, currentItem, totalItems, currentVehicle } = useSelector((state) => state.sync);
 
   useEffect(() => {
     if (taskId && userId === user.id) {
@@ -57,8 +57,8 @@ const Layout = ({ onLogout, user }) => {
               <Link
                 to={item.path}
                 className={`flex items-center p-2 rounded-md transition-colors duration-200 ${location.pathname === item.path
-                    ? 'bg-primary-light text-secondary-light'
-                    : 'text-secondary hover:bg-primary-dark hover:text-secondary-light'
+                  ? 'bg-primary-light text-secondary-light'
+                  : 'text-secondary hover:bg-primary-dark hover:text-secondary-light'
                   }`}
               >
                 <item.icon className="h-5 w-5" />
@@ -98,6 +98,18 @@ const Layout = ({ onLogout, user }) => {
                 <div className="bg-primary h-2 rounded-full animate-pulse"></div>
               )}
             </div>
+            <div className="text-xs text-secondary mt-1">
+              {currentItem && totalItems ? (
+                <span>Vehicle {currentItem} of {totalItems}</span>
+              ) : (
+                <span>Processing vehicles...</span>
+              )}
+            </div>
+            {currentVehicle && (
+              <div className="text-xs text-secondary mt-1">
+                Current: {currentVehicle}
+              </div>
+            )}
           </div>
         )}
         <button

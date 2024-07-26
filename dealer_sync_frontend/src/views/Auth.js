@@ -5,7 +5,9 @@ import Card from '../components/Card';
 import CardContent from '../components/CardContent';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
+import { setUserId } from '../store/syncSlice';
 import { User, Lock, Mail, AlertCircle } from 'lucide-react';
+import { useDispatch } from 'react-redux';
 
 const Auth = ({ onAuth }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -14,6 +16,7 @@ const Auth = ({ onAuth }) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Add this line to use dispatch
 
   const validateForm = () => {
     if (!username || !password) {
@@ -31,39 +34,47 @@ const Auth = ({ onAuth }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!validateForm()) return;
 
     try {
-      let response;
+      let userData;
       if (isLogin) {
-        response = await axios.post('http://localhost:8000/api/auth/token/', {
+        const response = await axios.post('http://localhost:8000/api/auth/token/', {
           username,
           password
         });
-        const { access, refresh } = response.data;
-        localStorage.setItem('access_token', access);
-        localStorage.setItem('refresh_token', refresh);
-        onAuth({ username }, access);
+        userData = response.data;
       } else {
-        response = await axios.post('http://localhost:8000/api/auth/register/', {
+        // Handle registration
+        await axios.post('http://localhost:8000/api/auth/register/', {
           username,
           email,
           password
         });
-        const { access, refresh } = response.data;
-        localStorage.setItem('access_token', access);
-        localStorage.setItem('refresh_token', refresh);
-        onAuth({ username, email }, access);
+        // After successful registration, log the user in
+        const loginResponse = await axios.post('http://localhost:8000/api/auth/token/', {
+          username,
+          password
+        });
+        userData = loginResponse.data;
       }
 
-      axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('access_token')}`;
+      const { access, refresh, user } = userData;
+      localStorage.setItem('access_token', access);
+      localStorage.setItem('refresh_token', refresh);
+      localStorage.setItem('user', JSON.stringify(user));
+      onAuth(user, access);
+      dispatch(setUserId(user.id));
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${access}`;
+      console.log('Authentication successful. User ID:', user.id);
       navigate('/');
     } catch (err) {
       console.error('Authentication error:', err.response?.data || err.message);
       setError(err.response?.data?.detail || 'Authentication failed. Please try again.');
     }
   };
+
 
   return (
     <div className="bg-background min-h-screen flex items-center justify-center">

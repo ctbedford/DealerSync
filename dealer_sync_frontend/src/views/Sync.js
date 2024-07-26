@@ -7,11 +7,10 @@ import Card from '../components/Card';
 import CardHeader from '../components/CardHeader';
 import CardTitle from '../components/CardTitle';
 import CardContent from '../components/CardContent';
-import { wait } from '@testing-library/user-event/dist/utils';
 
 const Sync = () => {
   const dispatch = useDispatch();
-  const { syncStatus, progress, taskId, error, totalItems, currentItem, userId } = useSelector((state) => state.sync);
+  const { syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle } = useSelector((state) => state.sync);
   const [syncHistory, setSyncHistory] = useState(null);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
 
@@ -22,8 +21,13 @@ const Sync = () => {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    console.log('Sync component state updated:', { syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle });
+  }, [syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle]);
+
   const fetchSyncStatus = useCallback(async () => {
     if (taskId) {
+      console.log('Fetching sync status for task:', taskId);
       dispatch(checkSyncStatus({ taskId }));
     }
   }, [taskId, dispatch]);
@@ -45,22 +49,23 @@ const Sync = () => {
   }, []);
 
   useEffect(() => {
-    fetchSyncStatus()
-  }, [])
-
-  useEffect(() => {
+    fetchSyncStatus();
     fetchSyncHistory();
-    //  fetchSyncStatus();
-    const interval = setInterval(fetchSyncStatus, 5000);
+    const interval = setInterval(fetchSyncStatus, 10000); // Check every 10 seconds
     return () => clearInterval(interval);
-  }, [syncStatus, fetchSyncStatus, fetchSyncHistory]);
+  }, [fetchSyncStatus, fetchSyncHistory]);
 
   const startSync = async () => {
+    if (!userId) {
+      console.error('User ID not set. Cannot start sync.');
+      dispatch(setError('User not authenticated. Please log in again.'));
+      return;
+    }
     try {
       dispatch(setSyncStatus('syncing'));
       dispatch(setProgress(0));
       dispatch(setError(null));
-      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', {}, {
+      const response = await axios.post('http://localhost:8000/api/scraper/run-now/', { userId }, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
@@ -89,6 +94,59 @@ const Sync = () => {
     }
   };
 
+  const renderProgressBar = () => (
+    <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+      {progress > 0 ? (
+        <div
+          className="bg-primary h-2.5 rounded-full transition-all duration-300"
+          style={{ width: `${progress}%` }}
+        ></div>
+      ) : (
+        <div className="bg-primary h-2.5 rounded-full animate-pulse"></div>
+      )}
+    </div>
+  );
+
+  const renderSyncDetails = () => (
+    <>
+      {renderProgressBar()}
+      <div className="text-sm text-secondary">
+        {totalItems ? (
+          <span>{currentItem} of {totalItems} vehicles processed</span>
+        ) : (
+          <span>Processing vehicles...</span>
+        )}
+      </div>
+      {currentVehicle && (
+        <div className="text-sm text-secondary mt-1">
+          Current vehicle: {currentVehicle}
+        </div>
+      )}
+    </>
+  );
+
+  const renderSyncHistory = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-primary">Sync History</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {syncStatus === "error" && error && <div className="text-red-500 mb-4">{error}</div>}
+        {isLoadingHistory ? (
+          <div>Loading sync history...</div>
+        ) : syncHistory ? (
+          <ul className="space-y-2">
+            <li>Last successful sync: {syncHistory.lastSuccessful || 'N/A'}</li>
+            <li>Total syncs today: {syncHistory.totalToday}</li>
+            <li>Failed syncs today: {syncHistory.failedToday}</li>
+          </ul>
+        ) : (
+          <div>No sync history available.</div>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="bg-background min-h-screen text-text p-6">
       <h1 className="text-4xl font-bold mb-6 text-primary pb-2 border-b-2 border-primary">Sync Dashboard</h1>
@@ -104,24 +162,7 @@ const Sync = () => {
             </div>
             <span className="capitalize text-lg">{syncStatus}</span>
           </div>
-          {(syncStatus === 'syncing' || syncStatus === 'checking') && (
-            <>
-              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
-                {progress > 0 ? (
-                  <div className="bg-primary h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
-                ) : (
-                  <div className="bg-primary h-2.5 rounded-full animate-pulse"></div>
-                )}
-              </div>
-              <div className="text-sm text-secondary">
-                {totalItems ? (
-                  <span>{currentItem} of {totalItems} items processed</span>
-                ) : (
-                  <span>Processing items...</span>
-                )}
-              </div>
-            </>
-          )}
+          {(syncStatus === 'syncing' || syncStatus === 'checking') && renderSyncDetails()}
           <button
             onClick={startSync}
             disabled={syncStatus === 'syncing' || syncStatus === 'checking'}
@@ -132,25 +173,7 @@ const Sync = () => {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-primary">Sync History</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {syncStatus === "error" && error && <div className="text-red-500 mb-4">{error.error}</div>}
-          {isLoadingHistory ? (
-            <div>Loading sync history...</div>
-          ) : syncHistory ? (
-            <ul className="space-y-2">
-              <li>Last successful sync: {syncHistory.lastSuccessful || 'N/A'}</li>
-              <li>Total syncs today: {syncHistory.totalToday}</li>
-              <li>Failed syncs today: {syncHistory.failedToday}</li>
-            </ul>
-          ) : (
-            <div>No sync history available.</div>
-          )}
-        </CardContent>
-      </Card>
+      {renderSyncHistory()}
     </div>
   );
 };
