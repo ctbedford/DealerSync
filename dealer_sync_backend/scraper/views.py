@@ -74,11 +74,12 @@ class ScraperStatusView(APIView):
                 response.update({
                     'current': info.get('current', 0),
                     'total': info.get('total', 'unknown'),
-                    'status': f"Processing vehicle {info.get('current', 0)}",
-                    'currentVehicle': info.get('current_vehicle', 'Unknown'),
+                    'percent': info.get('percent', 0),
+                    'status': f"Processing vehicle {info.get('current', 0)} of {info.get('total', 'unknown')}",
+                    'currentVehicle': info.get('currentVehicle', 'Unknown'),
                 })
-            elif task_result.state != 'FAILURE':
-                response['status'] = str(task_result.result)
+            elif task_result.state == 'SUCCESS':
+                response['status'] = task_result.result
             else:
                 response['status'] = str(task_result.info)
 

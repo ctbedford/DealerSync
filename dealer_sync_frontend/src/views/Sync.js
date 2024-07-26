@@ -114,7 +114,7 @@ const Sync = () => {
         {totalItems ? (
           <span>{currentItem} of {totalItems} vehicles processed</span>
         ) : (
-          <span>Processing vehicles...</span>
+          <span>{currentItem} vehicles processed</span>
         )}
       </div>
       {currentVehicle && (

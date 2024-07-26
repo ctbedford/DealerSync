@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -28,7 +27,6 @@ const initialState = {
   userId: null,
   currentVehicle: null,
 };
-
 
 export const syncSlice = createSlice({
   name: 'sync',
@@ -93,7 +91,7 @@ export const syncSlice = createSlice({
           if (state.totalItems && state.totalItems !== 'unknown') {
             state.progress = Math.round((state.currentItem / state.totalItems) * 100);
           } else {
-            state.progress = 0;
+            state.progress = action.payload.percent || 0;
           }
         }
       })
@@ -105,7 +103,6 @@ export const syncSlice = createSlice({
       });
   },
 });
-
 
 export const { setSyncStatus, setProgress, setTaskId, setError, resetSync, setUserId, clearUserState } = syncSlice.actions;
 
