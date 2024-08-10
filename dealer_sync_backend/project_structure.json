@@ -1,0 +1,330 @@
+{
+  "files": [
+    {
+      "name": "manage.py",
+      "path": "manage.py",
+      "size": 701,
+      "type": "text",
+      "content": "#!/usr/bin/env python\n\"\"\"Django's command-line utility for administrative tasks.\"\"\"\nimport os\nimport sys\n\n\ndef main():\n    \"\"\"Run administrative tasks.\"\"\"\n    os.environ.setdefault(\"DJANGO_SETTINGS_MODULE\",\n                          \"dealer_sync_backend.settings\")\n    try:\n        from django.core.management import execute_from_command_line\n    except ImportError as exc:\n        raise ImportError(\n            \"Couldn't import Django. Are you sure it's installed and \"\n            \"available on your PYTHONPATH environment variable? Did you \"\n            \"forget to activate a virtual environment?\"\n        ) from exc\n    execute_from_command_line(sys.argv)\n\n\nif __name__ == \"__main__\":\n    main()\n",
+      "line_count": 23
+    },
+    {
+      "name": "apps.py",
+      "path": "authentication/apps.py",
+      "size": 160,
+      "type": "text",
+      "content": "from django.apps import AppConfig\n\n\nclass AuthenticationConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'authentication'\n",
+      "line_count": 6
+    },
+    {
+      "name": "urls.py",
+      "path": "authentication/urls.py",
+      "size": 475,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import RegisterView, UserView, CustomTokenObtainPairView\nfrom rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView\n\nurlpatterns = [\n    path('register/', RegisterView.as_view(), name='register'),\n    path('token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),\n    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),\n    path('user/', UserView.as_view(), name='user'),\n]\n",
+      "line_count": 10
+    },
+    {
+      "name": "views.py",
+      "path": "authentication/views.py",
+      "size": 1747,
+      "type": "text",
+      "content": "from django.shortcuts import render\nfrom rest_framework import status\nfrom rest_framework.response import Response\nfrom rest_framework.views import APIView\nfrom rest_framework.permissions import IsAuthenticated, BasePermission\nfrom rest_framework_simplejwt.tokens import RefreshToken\nfrom rest_framework_simplejwt.views import TokenObtainPairView\nfrom rest_framework_simplejwt.serializers import TokenObtainPairSerializer\nfrom .serializers import UserSerializer\nfrom typing import List\n\n\nclass RegisterView(APIView):\n\n    permission_classes: List[type[BasePermission]] = []\n\n    def post(self, request):\n        serializer = UserSerializer(data=request.data)\n        if serializer.is_valid():\n            user = serializer.save()\n            refresh = RefreshToken.for_user(user)\n            return Response({\n                'user': serializer.data,\n                'refresh': str(refresh),\n                'access': str(refresh.access_token),\n            }, status=status.HTTP_201_CREATED)\n        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)\n\n\nclass CustomTokenObtainPairSerializer(TokenObtainPairSerializer):\n    def validate(self, attrs):\n        data = super().validate(attrs)\n        refresh = self.get_token(self.user)\n        data['refresh'] = str(refresh)\n        data['access'] = str(refresh.access_token)\n        data['user'] = UserSerializer(self.user).data\n        return data\n\n\nclass CustomTokenObtainPairView(TokenObtainPairView):\n    serializer_class = CustomTokenObtainPairSerializer\n\n\nclass UserView(APIView):\n\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        serializer = UserSerializer(request.user)\n        return Response(serializer.data)\n",
+      "line_count": 50
+    },
+    {
+      "name": "tests.py",
+      "path": "authentication/tests.py",
+      "size": 1494,
+      "type": "text",
+      "content": "from django.test import TestCase\nfrom django.urls import reverse\nfrom rest_framework.test import APIClient\nfrom rest_framework import status\nfrom django.contrib.auth.models import User\n\nclass AuthenticationTests(TestCase):\n    def setUp(self):\n        self.client = APIClient()\n        self.user = User.objects.create_user(username='testuser', password='testpass123', email='test@example.com')\n\n    def test_user_registration(self):\n        url = reverse('register')\n        data = {'username': 'newuser', 'password': 'newpass123', 'email': 'newuser@example.com'}\n        response = self.client.post(url, data)\n        self.assertEqual(response.status_code, status.HTTP_201_CREATED)\n        self.assertIn('access', response.data)\n        self.assertIn('refresh', response.data)\n\n    def test_user_login(self):\n        url = reverse('token_obtain_pair')\n        data = {'username': 'testuser', 'password': 'testpass123'}\n        response = self.client.post(url, data)\n        self.assertEqual(response.status_code, status.HTTP_200_OK)\n        self.assertIn('access', response.data)\n        self.assertIn('refresh', response.data)\n\n    def test_user_data_retrieval(self):\n        self.client.force_authenticate(user=self.user)\n        url = reverse('user')\n        response = self.client.get(url)\n        self.assertEqual(response.status_code, status.HTTP_200_OK)\n        self.assertEqual(response.data['username'], 'testuser')\n        self.assertEqual(response.data['email'], 'test@example.com')",
+      "line_count": 34
+    },
+    {
+      "name": "serializers.py",
+      "path": "authentication/serializers.py",
+      "size": 570,
+      "type": "text",
+      "content": "from rest_framework import serializers\nfrom django.contrib.auth.models import User\n\n\nclass UserSerializer(serializers.ModelSerializer):\n    password = serializers.CharField(write_only=True)\n\n    class Meta:\n        model = User\n        fields = ('id', 'username', 'email', 'password')\n        read_only_fields = ('id',)\n\n    def create(self, validated_data):\n        user = User.objects.create_user(\n            username=validated_data['username'],\n            email=validated_data['email'],\n            password=validated_data['password']\n        )\n        return user\n",
+      "line_count": 19
+    },
+    {
+      "name": "__init__.py",
+      "path": "authentication/__init__.py",
+      "size": 0,
+      "type": "text"
+    },
+    {
+      "name": "admin.py",
+      "path": "authentication/admin.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "authentication/models.py",
+      "size": 57,
+      "type": "text",
+      "content": "from django.db import models\n\n# Create your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "apps.py",
+      "path": "scraper/apps.py",
+      "size": 171,
+      "type": "text",
+      "content": "from django.apps import AppConfig\n\nclass ScraperConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'scraper'  # Changed from 'scraping'",
+      "line_count": 5
+    },
+    {
+      "name": "urls.py",
+      "path": "scraper/urls.py",
+      "size": 582,
+      "type": "text",
+      "content": "from django.urls import path\nfrom .views import StartScraperView, ScraperStatusView, SyncHistoryView, DumpListingsView, DashboardView\n\nurlpatterns = [\n    path('start/', StartScraperView.as_view(), name='start-scraper'),\n    path('status/', ScraperStatusView.as_view(), name='scraper-status'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync-history'),\n    path('listings/', DumpListingsView.as_view(), name='dump-listings'),\n    path('dashboard/', DashboardView.as_view(), name='dashboard'),\n    path('run-now/', StartScraperView.as_view(), name='run-scraper'),\n\n]\n",
+      "line_count": 12
+    },
+    {
+      "name": "views.py",
+      "path": "scraper/views.py",
+      "size": 9339,
+      "type": "text",
+      "content": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated, BasePermission\nfrom .tasks import run_scrapers\nfrom .models import SyncAttempt, VehicleListing\nfrom celery.result import AsyncResult\nfrom django.utils import timezone\nfrom celery.exceptions import OperationalError\nfrom .serializers import VehicleListingSerializer\nfrom django.core.exceptions import FieldError\nfrom django.db.models import Count\nfrom typing import List\nimport logging\n\nlogger = logging.getLogger(__name__)\n\n\nclass StartScraperView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def post(self, request):\n        try:\n            logger.info(f\"Starting scraper task for user {request.user.id}\")\n            task = run_scrapers.delay(request.user.id)\n            sync_attempt = SyncAttempt.objects.create(\n                user=request.user,\n                task_id=task.id,\n                status='PENDING'\n            )\n            logger.info(f\"Scraper task started. Task ID: {task.id}\")\n            return Response({\"message\": \"Scraper task started\", \"task_id\": str(task.id)})\n        except OperationalError as e:\n            logger.error(f\"OperationalError while starting scraper: {str(e)}\")\n            return Response({\"error\": \"Could not connect to task queue. Please try again later.\"}, status=503)\n        except Exception as e:\n            logger.exception(\n                f\"Unexpected error while starting scraper: {str(e)}\")\n            return Response({\"error\": \"An unexpected error occurred. Please try again.\"}, status=500)\n\n\nclass ScraperStatusView(APIView):\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        task_id = request.query_params.get('task_id')\n        user_id = request.user.id\n        logger.info(f\"Checking scraper status. Task ID: {\n                    task_id}, User ID: {user_id}\")\n\n        if not task_id:\n            logger.warning(\"No task_id provided in request\")\n            return Response({\"error\": \"No task_id provided\"}, status=400)\n\n        try:\n            sync_attempt = SyncAttempt.objects.filter(\n                task_id=task_id, user_id=user_id).first()\n            if not sync_attempt:\n                logger.warning(f\"No sync attempt found for task {\n                               task_id} and user {user_id}\")\n                return Response({\"error\": \"No sync attempt found for this task and user\"}, status=404)\n\n            task_result = AsyncResult(task_id)\n            logger.info(f\"Task state: {task_result.state}\")\n\n            response = {\n                'state': task_result.state,\n                'userId': user_id,\n            }\n\n            if task_result.state == 'PENDING':\n                response['status'] = 'Sync task is pending...'\n            elif task_result.state == 'PROGRESS':\n                info = task_result.info or {}\n                response.update({\n                    'current': info.get('current', 0),\n                    'total': info.get('total', 'unknown'),\n                    'percent': info.get('percent', 0),\n                    'status': f\"Processing vehicle {info.get('current', 0)} of {info.get('total', 'unknown')}\",\n                    'currentVehicle': info.get('currentVehicle', 'Unknown'),\n                })\n                logger.info(f\"Returning progress response: {response}\")\n            elif task_result.state == 'SUCCESS':\n                response['status'] = task_result.result\n            else:\n                response['status'] = str(task_result.info)\n\n            logger.info(f\"Returning response for task {task_id}: {response}\")\n            return Response(response)\n        except Exception as e:\n            logger.exception(\n                f\"Unexpected error while checking scraper status: {str(e)}\")\n            return Response({\"error\": \"An unexpected error occurred. Please try again.\"}, status=500)\n\n\nclass DumpListingsView(APIView):\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        try:\n            logger.info(f\"Fetching listings for user {request.user.id}\")\n            listings = VehicleListing.objects.filter(user=request.user)\n            serializer = VehicleListingSerializer(listings, many=True)\n            logger.info(f\"Retrieved {listings.count()\n                                     } listings for user {request.user.id}\")\n            return Response({\n                \"count\": listings.count(),\n                \"listings\": serializer.data\n            })\n        except FieldError as e:\n            logger.error(f\"FieldError while fetching listings: {str(e)}\")\n            return Response({\"error\": f\"FieldError: {str(e)}\"}, status=400)\n        except Exception as e:\n            logger.exception(\n                f\"Unexpected error while fetching listings: {str(e)}\")\n            return Response({\"error\": f\"An unexpected error occurred: {str(e)}\"}, status=500)\n\n\nclass SyncHistoryView(APIView):\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        today = timezone.now().date()\n        logger.info(f\"Fetching sync history for user {user.id}\")\n\n        try:\n            last_successful = SyncAttempt.objects.filter(\n                user=user, status='COMPLETED').order_by('-end_time').first()\n            sync_history = {\n                \"lastSuccessful\": last_successful.end_time.isoformat() if last_successful else None,\n                \"totalToday\": SyncAttempt.objects.filter(user=user, start_time__date=today).count(),\n                \"failedToday\": SyncAttempt.objects.filter(user=user, start_time__date=today, status='FAILED').count()\n            }\n            logger.info(f\"Sync history for user {user.id}: {sync_history}\")\n            return Response(sync_history)\n        except Exception as e:\n            logger.exception(f\"Error fetching sync history for user {\n                             user.id}: {str(e)}\")\n            return Response({\"error\": \"Failed to fetch sync history\"}, status=500)\n\n\nclass DashboardView(APIView):\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        logger.info(f\"Fetching dashboard data for user {user.id}\")\n\n        try:\n            total_listings = VehicleListing.objects.filter(user=user).count()\n            today = timezone.now().date()\n            listings_today = VehicleListing.objects.filter(\n                user=user, created_at__date=today).count()\n\n            active_syncs = SyncAttempt.objects.filter(\n                user=user, status='IN_PROGRESS').count()\n            pending_updates = VehicleListing.objects.filter(\n                user=user, needs_update=True).count()\n            total_views = VehicleListing.objects.filter(user=user).aggregate(\n                total_views=Count('views'))['total_views']\n\n            # Get data for chart (last 4 months)\n            chart_data = []\n            for i in range(3, -1, -1):\n                month_start = (timezone.now() -\n                               timezone.timedelta(days=30*i)).replace(day=1)\n                month_end = (month_start + timezone.timedelta(days=32)\n                             ).replace(day=1) - timezone.timedelta(days=1)\n                listings_count = VehicleListing.objects.filter(\n                    user=user, created_at__range=(month_start, month_end)).count()\n                views_count = VehicleListing.objects.filter(user=user, created_at__range=(\n                    month_start, month_end)).aggregate(total_views=Count('views'))['total_views']\n                chart_data.append({\n                    \"name\": month_start.strftime(\"%b\"),\n                    \"listings\": listings_count,\n                    \"views\": views_count\n                })\n\n            # Recent activity (last 4 events)\n            recent_listings = VehicleListing.objects.filter(\n                user=user).order_by('-created_at')[:4]\n            recent_activity = [\n                {\n                    \"title\": \"New Listing Added\",\n                    \"description\": f\"{listing.year} {listing.make} {listing.model}\",\n                    \"time\": f\"{(timezone.now() - listing.created_at).days} days ago\"\n                } for listing in recent_listings\n            ]\n\n            dashboard_data = {\n                \"stats\": [\n                    {\"title\": \"Total Listings\",\n                        \"value\": total_listings, \"icon\": \"Car\"},\n                    {\"title\": \"Active Syncs\",\n                        \"value\": active_syncs, \"icon\": \"Activity\"},\n                    {\"title\": \"Pending Updates\",\n                        \"value\": pending_updates, \"icon\": \"Clock\"},\n                    {\"title\": \"Total Views\", \"value\": total_views, \"icon\": \"Eye\"},\n                ],\n                \"recentActivity\": recent_activity,\n                \"chartData\": chart_data\n            }\n            logger.info(\n                f\"Dashboard data fetched successfully for user {user.id}\")\n            return Response(dashboard_data)\n        except Exception as e:\n            logger.exception(f\"Error fetching dashboard data for user {\n                             user.id}: {str(e)}\")\n            return Response({\"error\": \"Failed to fetch dashboard data\"}, status=500)\n",
+      "line_count": 209
+    },
+    {
+      "name": "tests.py",
+      "path": "scraper/tests.py",
+      "size": 1202,
+      "type": "text",
+      "content": "from django.test import TestCase\nfrom unittest.mock import patch\nfrom .scraper import scrape_mclarty_daniel\nfrom .models import VehicleListing\n\nclass McLartyDanielScraperTests(TestCase):\n\n    @patch('scraper.scrape_mclarty_daniel.webdriver.Chrome')\n    def test_successful_scrape(self, mock_chrome):\n        # Mock the Chrome driver and its methods\n        mock_driver = mock_chrome.return_value\n        mock_driver.find_elements.return_value = [\n            # Add mock elements here that simulate vehicle cards\n        ]\n\n        results = scrape_mclarty_daniel()\n        \n        self.assertIsInstance(results, list)\n        self.assertTrue(len(results) > 0)\n        self.assertIsInstance(results[0], VehicleListing)\n        # Add more assertions to check the content of the results\n\n    @patch('scraper.scrape_mclarty_daniel.webdriver.Chrome')\n    def test_error_handling(self, mock_chrome):\n        # Simulate an error condition\n        mock_chrome.side_effect = Exception(\"Simulated error\")\n\n        results = scrape_mclarty_daniel()\n        \n        self.assertEqual(results, [])\n        # Check that the error was logged (you might need to mock the logger)\n\n    # Add more test methods as needed",
+      "line_count": 33
+    },
+    {
+      "name": "consumers.py",
+      "path": "scraper/consumers.py",
+      "size": 2546,
+      "type": "text",
+      "content": "import json\nimport logging\nfrom channels.generic.websocket import AsyncWebsocketConsumer\nfrom channels.exceptions import DenyConnection\n\nlogger = logging.getLogger(__name__)\n\n\nclass SyncConsumer(AsyncWebsocketConsumer):\n    async def connect(self):\n        try:\n            self.user = self.scope.get(\"user\")\n            if not self.user or not self.user.is_authenticated:\n                raise DenyConnection(\"User is not authenticated\")\n\n            self.sync_group_name = f'sync_{self.user.id}'\n            logger.info(f\"WebSocket connection attempt for user {\n                        self.user.id}\")\n\n            # Join sync group\n            await self.channel_layer.group_add(\n                self.sync_group_name,\n                self.channel_name\n            )\n            logger.info(f\"User {self.user.id} added to group {\n                        self.sync_group_name}\")\n            await self.accept()\n        except Exception as e:\n            logger.error(f\"Error in connect: {str(e)}\")\n            raise\n\n    async def disconnect(self, close_code):\n        try:\n            if hasattr(self, 'sync_group_name'):\n                # Leave sync group\n                await self.channel_layer.group_discard(\n                    self.sync_group_name,\n                    self.channel_name\n                )\n                logger.info(f\"User {self.user.id} disconnected from group {\n                            self.sync_group_name}\")\n        except Exception as e:\n            logger.error(f\"Error in disconnect: {str(e)}\")\n\n    async def receive(self, text_data):\n        try:\n            text_data_json = json.loads(text_data)\n            message = text_data_json['message']\n            logger.info(f\"Received message from user {\n                        self.user.id}: {message}\")\n\n            # Send message to sync group\n            await self.channel_layer.group_send(\n                self.sync_group_name,\n                {\n                    'type': 'sync_message',\n                    'message': message\n                }\n            )\n        except Exception as e:\n            logger.error(f\"Error in receive: {str(e)}\")\n\n    async def sync_message(self, event):\n        try:\n            message = event['message']\n            logger.info(f\"Sending message to user {self.user.id}: {message}\")\n\n            # Send message to WebSocket\n            await self.send(text_data=json.dumps({\n                'message': message\n            }))\n        except Exception as e:\n            logger.error(f\"Error in sync_message: {str(e)}\")\n",
+      "line_count": 73
+    },
+    {
+      "name": "routing.py",
+      "path": "scraper/routing.py",
+      "size": 146,
+      "type": "text",
+      "content": "from django.urls import re_path\nfrom . import consumers\n\nwebsocket_urlpatterns = [\n    re_path(r'ws/sync/$', consumers.SyncConsumer.as_asgi()),\n]\n",
+      "line_count": 6
+    },
+    {
+      "name": "serializers.py",
+      "path": "scraper/serializers.py",
+      "size": 428,
+      "type": "text",
+      "content": "from rest_framework import serializers\nfrom .models import VehicleListing\n\n\nclass VehicleListingSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = VehicleListing\n        fields = ['id', 'dealership', 'title', 'price', 'msrp', 'year', 'make',\n                  'model', 'image_url', 'created_at', 'updated_at', 'views', 'needs_update']\n        read_only_fields = ['id', 'created_at', 'updated_at', 'views']\n",
+      "line_count": 10
+    },
+    {
+      "name": "scraper.py",
+      "path": "scraper/scraper.py",
+      "size": 7326,
+      "type": "text",
+      "content": "import requests\nfrom bs4 import BeautifulSoup\nfrom django.utils import timezone\nfrom .models import VehicleListing\nimport logging\nimport re\nfrom django.db import DataError\nfrom django.contrib.auth.models import User\nfrom urllib.parse import urljoin\nimport time\nfrom urllib.parse import urlparse\n\nlogger = logging.getLogger(__name__)\n\nBASE_URL = \"https://www.mclartydaniel.com\"\nVEHICLE_SEARCH_URL = urljoin(BASE_URL, \"/VehicleSearchResults\")\nPARAMS = {\n    \"configCtx\": '{\"webId\":\"motp-rml-auto-portal\",\"locale\":\"en_US\",\"version\":\"LIVE\",\"page\":\"VehicleSearchResults\",\"secureSiteId\":null}',\n    \"fragmentId\": \"view/card/63413352-/887f-4bc8-94e5-56ab589ed678\",\n    \"limit\": 24,\n    \"forceOrigin\": \"true\"\n}\n\nHEADERS = {\n    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'\n}\n\n\ndef clean_text(text):\n    return re.sub(r'\\s+', ' ', text).strip()\n\n\ndef truncate_field(value, max_length=500):\n    return value[:max_length] if value else value\n\n\ndef is_valid_url(url):\n    try:\n        result = urlparse(url)\n        return all([result.scheme, result.netloc])\n    except ValueError:\n        return False\n\n\ndef standardize_vehicle_title(title):\n    parts = title.split()\n    year = next((part for part in parts if part.isdigit()\n                and len(part) == 4), None)\n    if year:\n        make_model = ' '.join(parts[parts.index(year) + 1:])\n        make, *model = make_model.split(' ', 1)\n        model = model[0] if model else ''\n        trim = ' '.join(parts[parts.index(year) + 3:])\n        standardized = f\"{year} {make} {model}\".strip()\n        if trim:\n            standardized += f\" {trim}\"\n        return standardized, year, make, model\n    return title, None, None, None\n\n\ndef parse_price(price_text):\n    if price_text.lower() == 'contact us':\n        return None\n    return float(price_text.replace('$', '').replace(',', ''))\n\n\ndef generate_unique_identifier(year, make, model, dealership):\n    return f\"{year}-{make}-{model}-{dealership}\".lower().replace(' ', '-')\n\n\ndef get_vehicle_details(detail_url):\n    try:\n        full_url = urljoin(BASE_URL, detail_url)\n        if not is_valid_url(full_url):\n            logger.error(f\"Invalid URL: {full_url}\")\n            return None, None\n        response = requests.get(full_url, headers=HEADERS)\n        response.raise_for_status()\n        soup = BeautifulSoup(response.text, 'html.parser')\n\n        vin = soup.find('span', {'data-vin': True})\n        vin = vin['data-vin'] if vin else None\n\n        color = soup.find('span', {'data-exterior-color': True})\n        color = color['data-exterior-color'] if color else None\n\n        return vin, color\n    except (requests.RequestException, ValueError, AttributeError) as e:\n        logger.error(f\"Error processing vehicle: {type(e).__name__}: {e}\")\n\n\ndef scrape_mclarty_daniel(user_id):\n    logger.info(\"Starting McLarty Daniel scraper\")\n    offset = 0\n    total_processed = 0\n    total_saved = 0\n    all_listings = []\n\n# Inside the main loop in scrape_mclarty_daniel:\n    # time.sleep(1)\n    user = User.objects.get(id=user_id)\n\n    while True:\n        PARAMS[\"offset\"] = offset\n        PARAMS[\"page\"] = offset // 24 + 1\n        logger.info(f\"Fetching page {PARAMS['page']} from {\n                    VEHICLE_SEARCH_URL}\")\n        try:\n            response = requests.get(\n                VEHICLE_SEARCH_URL, params=PARAMS, headers=HEADERS)\n            response.raise_for_status()\n        except requests.RequestException as e:\n            logger.error(f\"Failed to fetch page {PARAMS['page']}: {e}\")\n            break\n\n        soup = BeautifulSoup(response.text, 'html.parser')\n        vehicles = soup.find_all(class_=\"vehicle-product-item\")\n\n        if not vehicles:\n            break\n        logger.info(f\"Found {len(vehicles)} vehicles on page {PARAMS['page']}\")\n        for vehicle in vehicles:\n            try:\n                title_element = vehicle.find(class_=\"title\")\n                if not title_element:\n                    logger.warning(\"Title element not found, skipping vehicle\")\n                    continue\n\n                original_title = clean_text(title_element.text)\n                standardized_title, year, make, model = standardize_vehicle_title(\n                    original_title)\n\n                if not all([year, make, model]):\n                    logger.warning(f\"Couldn't parse year, make, or model from title: {\n                                   original_title}\")\n                    continue\n\n                price_element = vehicle.find(class_=\"value\")\n                price = parse_price(\n                    price_element.text) if price_element else None\n\n                msrp_element = vehicle.find(class_=\"msrp\")\n                msrp = parse_price(msrp_element.text.replace(\n                    'MSRP', '').strip()) if msrp_element else None\n\n                image_element = vehicle.find('img')\n                image_url = image_element['src'] if image_element else \"\"\n\n# Extract the dealer-specific ID from the vehicle details link\n                details_link = vehicle.find('a', class_='vehicle-name')['href']\n                dealer_specific_id = details_link.split('/')[-1]\n                full_details_url = urljoin(\n                    \"https://www.mclartydaniel.com\", details_link)\n                vin, color = get_vehicle_details(full_details_url)\n\n                listing_data = {\n                    'user': user,\n                    'dealership': truncate_field(\"McLarty Daniel\"),\n                    'title': truncate_field(standardized_title),\n                    'price': price,\n                    'msrp': msrp,\n                    'image_url': truncate_field(image_url),\n                    'year': int(year),\n                    'make': make,\n                    'model': model,\n                    'dealer_specific_id': dealer_specific_id,\n                    'vin': vin,\n                    'color': color,\n                    'needs_update': False\n                }\n\n                obj, created = VehicleListing.objects.update_or_create(\n                    dealer_specific_id=dealer_specific_id,\n                    defaults=listing_data\n                )\n\n                if created:\n                    logger.info(f\"New vehicle added: {standardized_title}\")\n                else:\n                    logger.info(f\"Vehicle updated: {standardized_title}\")\n\n                all_listings.append(listing_data)\n\n                total_saved += 1\n                total_processed += 1\n\n            except Exception as e:\n                logger.error(f\"Error processing vehicle: {e}\")\n                total_processed += 1\n        offset += 24\n\n        if not vehicles:\n            break\n\n    # Mark listings that weren't updated as needing update\n    VehicleListing.objects.filter(\n        user=user,\n        dealership=\"McLarty Daniel\",\n        updated_at__lt=timezone.now() - timezone.timedelta(hours=1)\n    ).update(needs_update=True)\n\n    logger.info(f\"McLarty Daniel scraper finished. Processed: {\n                total_processed}, Saved/Updated: {total_saved}\")\n    return all_listings\n\n\ndef run_all_scrapers(user_id):\n    try:\n        return scrape_mclarty_daniel(user_id)\n    except Exception as e:\n        logger.error(f\"Error in run_all_scrapers: {str(e)}\")\n        return []\n",
+      "line_count": 212
+    },
+    {
+      "name": "__init__.py",
+      "path": "scraper/__init__.py",
+      "size": 49,
+      "type": "text",
+      "content": "default_app_config = 'scraper.apps.ScraperConfig'",
+      "line_count": 1
+    },
+    {
+      "name": "tasks.py",
+      "path": "scraper/tasks.py",
+      "size": 5026,
+      "type": "text",
+      "content": "from celery import shared_task\nfrom .scraper import run_all_scrapers\nfrom .models import SyncAttempt, VehicleListing\nfrom django.contrib.auth import get_user_model\nfrom django.utils import timezone\nfrom celery.utils.log import get_task_logger\nfrom channels.layers import get_channel_layer\nfrom asgiref.sync import async_to_sync\nimport json\n\nlogger = get_task_logger(__name__)\n\n\n@shared_task(bind=True)\ndef run_scrapers(self, user_id):\n    channel_layer = get_channel_layer()\n    User = get_user_model()\n    sync_attempt = None\n\n    def update_progress(current, total, current_vehicle):\n        progress = int((current / total) * 100) if total > 0 else 0\n        message = {\n            'user_id': user_id,\n            'current': current,\n            'total': total,\n            'percent': progress,\n            'currentVehicle': current_vehicle\n        }\n        self.update_state(state='PROGRESS', meta=message)\n        try:\n            async_to_sync(channel_layer.group_send)(\n                f'sync_{user_id}',\n                {\n                    'type': 'sync_message',\n                    'message': json.dumps(message)\n                }\n            )\n            logger.info(f\"WebSocket message sent: {message}\")\n        except Exception as e:\n            logger.error(f\"Failed to send WebSocket message: {str(e)}\")\n        logger.info(f\"Updated task state: {\n                    progress}% complete, current vehicle: {current_vehicle}\")\n\n    try:\n        user = User.objects.get(id=user_id)\n        sync_attempt = SyncAttempt.objects.create(\n            user=user,\n            status='IN_PROGRESS',\n            task_id=self.request.id\n        )\n\n        update_progress(0, 100, 'Starting scrape...')\n        logger.info(f\"Starting scrape for user {user_id}\")\n\n        listings = run_all_scrapers(user_id) or []\n        logger.info(f\"Scraped {len(listings)} listings\")\n\n        if not listings:\n            logger.warning(\"No listings returned from scraper\")\n            sync_attempt.status = 'COMPLETED'\n            sync_attempt.end_time = timezone.now()\n            sync_attempt.save()\n            update_progress(100, 100, 'No listings found')\n            return \"No listings found\"\n\n        listings_added = 0\n        listings_updated = 0\n        total_listings = len(listings)\n\n        for index, listing_data in enumerate(listings, start=1):\n            unique_identifier = listing_data.get('unique_identifier')\n            if not unique_identifier:\n                logger.warning(\n                    f\"Skipping listing without unique identifier: {listing_data}\")\n                continue\n\n            current_vehicle = f\"{listing_data.get(\n                'year', 'N/A')} {listing_data.get('make', 'N/A')} {listing_data.get('model', 'N/A')}\"\n\n            try:\n                listing, created = VehicleListing.objects.update_or_create(\n                    user=user,\n                    unique_identifier=unique_identifier,\n                    defaults={\n                        'dealership': listing_data.get('dealership'),\n                        'title': listing_data.get('title'),\n                        'price': listing_data.get('price'),\n                        'msrp': listing_data.get('msrp'),\n                        'year': listing_data.get('year'),\n                        'make': listing_data.get('make'),\n                        'model': listing_data.get('model'),\n                        'image_url': listing_data.get('image_url'),\n                        'needs_update': False\n                    }\n                )\n\n                if created:\n                    listings_added += 1\n                else:\n                    listings_updated += 1\n\n                update_progress(index, total_listings, current_vehicle)\n            except Exception as e:\n                logger.error(f\"Error processing listing {\n                             unique_identifier}: {str(e)}\")\n\n        # Mark listings that weren't updated as needing update\n        VehicleListing.objects.filter(\n            user=user,\n            updated_at__lt=timezone.now() - timezone.timedelta(hours=1)\n        ).update(needs_update=True)\n\n        sync_attempt.status = 'COMPLETED'\n        sync_attempt.listings_added = listings_added\n        sync_attempt.listings_updated = listings_updated\n        sync_attempt.end_time = timezone.now()\n        sync_attempt.save()\n\n        logger.info(f\"Scraping completed. Added: {\n                    listings_added}, Updated: {listings_updated}\")\n        update_progress(total_listings, total_listings, 'Scraping completed')\n        return f\"Scraping completed successfully. Added: {listings_added}, Updated: {listings_updated}\"\n\n    except Exception as e:\n        logger.error(f\"Error in run_scrapers task: {str(e)}\")\n        if sync_attempt:\n            sync_attempt.status = 'FAILED'\n            sync_attempt.error_message = str(e)\n            sync_attempt.end_time = timezone.now()\n            sync_attempt.save()\n        update_progress(0, 100, f'Error: {str(e)}')\n        raise\n",
+      "line_count": 132
+    },
+    {
+      "name": "admin.py",
+      "path": "scraper/admin.py",
+      "size": 640,
+      "type": "text",
+      "content": "from django.contrib import admin\nfrom .models import VehicleListing, SyncAttempt\n\n@admin.register(VehicleListing)\nclass VehicleListingAdmin(admin.ModelAdmin):\n    list_display = ('year', 'make', 'model', 'price', 'msrp', 'dealership', 'views', 'needs_update')\n    list_filter = ('make', 'year', 'dealership', 'needs_update')\n    search_fields = ('make', 'model', 'dealership')\n\n@admin.register(SyncAttempt)\nclass SyncAttemptAdmin(admin.ModelAdmin):\n    list_display = ('id', 'start_time', 'end_time', 'status', 'listings_added', 'listings_updated')\n    list_filter = ('status',)\n    readonly_fields = ('start_time', 'end_time', 'duration')\n",
+      "line_count": 14
+    },
+    {
+      "name": "models.py",
+      "path": "scraper/models.py",
+      "size": 2513,
+      "type": "text",
+      "content": "from django.db import models\nfrom django.conf import settings\nfrom django.utils import timezone\nfrom django_stubs_ext import WithAnnotations\nimport hashlib\n\n\nclass VehicleListing(models.Model):\n    id = models.AutoField(primary_key=True)\n    user = models.ForeignKey(\n        settings.AUTH_USER_MODEL,\n        on_delete=models.CASCADE,\n        related_name='vehicle_listings',\n        default=1\n    )\n    dealership = models.CharField(max_length=100)\n    title = models.CharField(max_length=500)\n    price = models.DecimalField(\n        max_digits=10, decimal_places=2, null=True, blank=True)\n    msrp = models.DecimalField(\n        max_digits=10, decimal_places=2, null=True, blank=True)\n    year = models.IntegerField()\n    make = models.TextField()\n    model = models.TextField()\n    image_url = models.URLField(max_length=500)\n    created_at = models.DateTimeField(auto_now_add=True)\n    updated_at = models.DateTimeField(auto_now=True)\n    views = models.IntegerField(default=0)\n    needs_update = models.BooleanField(default=False)\n    dealer_specific_id = models.CharField(max_length=20, unique=True)\n    vin = models.CharField(max_length=17, null=True, blank=True)\n    color = models.CharField(max_length=50, null=True, blank=True)\n\n    class Meta:\n        unique_together = ('year', 'make', 'model', 'dealer_specific_id')\n\n    def __str__(self):\n        return f\"{self.year} {self.make} {self.model} - {self.dealership} (User: {self.user})\"\n\n\nclass SyncAttempt(models.Model):\n    STATUS_CHOICES = [\n        ('PENDING', 'Pending'),\n        ('IN_PROGRESS', 'In Progress'),\n        ('COMPLETED', 'Completed'),\n        ('FAILED', 'Failed'),\n    ]\n\n    user = models.ForeignKey(\n        settings.AUTH_USER_MODEL,\n        on_delete=models.CASCADE,\n        related_name='sync_attempts',\n        default=1\n    )\n    start_time = models.DateTimeField(auto_now_add=True)\n    end_time = models.DateTimeField(null=True, blank=True)\n    status = models.CharField(\n        max_length=20, choices=STATUS_CHOICES, default='PENDING')\n    listings_added = models.IntegerField(default=0)\n    listings_updated = models.IntegerField(default=0)\n    error_message = models.TextField(blank=True, null=True)\n    task_id = models.CharField(max_length=255, null=True, blank=True)\n\n    def __str__(self):\n        return f\"Sync Attempt {self.id} - {self.status} (User: {self.user})\"\n\n    def duration(self):\n        if self.end_time:\n            return self.end_time - self.start_time\n        return timezone.now() - self.start_time\n",
+      "line_count": 70
+    },
+    {
+      "name": "check_duplicates.py",
+      "path": "scraper/management/commands/check_duplicates.py",
+      "size": 746,
+      "type": "text",
+      "content": "from django.db.models import Count\nfrom scraper.models import VehicleListing\n\n# Find duplicate listings based on certain fields\nduplicates = VehicleListing.objects.values(\n    'dealership', 'year', 'make', 'model').annotate(count=Count('id')).filter(count__gt=1)\n\nprint(f\"Number of potential duplicates: {len(duplicates)}\")\n\n# Print details of potential duplicates\nfor dup in duplicates:\n    print(f\"Potential duplicate: {dup}\")\n    listings = VehicleListing.objects.filter(\n        dealership=dup['dealership'],\n        year=dup['year'],\n        make=dup['make'],\n        model=dup['model']\n    )\n    for listing in listings:\n        print(f\"  ID: {listing.id}, Title: {\n              listing.title}, Created: {listing.created_at}\")\n    print()\n",
+      "line_count": 22
+    },
+    {
+      "name": "check_database.py",
+      "path": "scraper/management/commands/check_database.py",
+      "size": 804,
+      "type": "text",
+      "content": "from django.core.management.base import BaseCommand\nfrom scraper.models import VehicleListing\n\nclass Command(BaseCommand):\n    help = 'Check the content of the VehicleListing table'\n\n    def handle(self, *args, **options):\n        total_listings = VehicleListing.objects.count()\n        self.stdout.write(self.style.SUCCESS(f'Total vehicle listings: {total_listings}'))\n\n        if total_listings > 0:\n            latest_listings = VehicleListing.objects.order_by('-created_at')[:5]\n            self.stdout.write(self.style.SUCCESS('Latest 5 listings:'))\n            for listing in latest_listings:\n                self.stdout.write(f'{listing.year} {listing.make} {listing.model} - ${listing.price}')\n        else:\n            self.stdout.write(self.style.WARNING('No listings found in the database.'))\n",
+      "line_count": 17
+    },
+    {
+      "name": "urls.py",
+      "path": "dealer_sync_backend/urls.py",
+      "size": 961,
+      "type": "text",
+      "content": "\"\"\"\nURL configuration for dealer_sync_backend project.\n\nThe `urlpatterns` list routes URLs to views. For more information please see:\n    https://docs.djangoproject.com/en/5.0/topics/http/urls/\nExamples:\nFunction views\n    1. Add an import:  from my_app import views\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\nClass-based views\n    1. Add an import:  from other_app.views import Home\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\nIncluding another URLconf\n    1. Import the include() function: from django.urls import include, path\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\n\"\"\"\nfrom django.contrib import admin\nfrom django.urls import path, include\n\nurlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/auth/', include('authentication.urls')),\n    path('api/', include('dashboard.urls')),\n    path('api/scraper/', include('scraper.urls')),  # Changed from 'scraping'\n]",
+      "line_count": 25
+    },
+    {
+      "name": "wsgi.py",
+      "path": "dealer_sync_backend/wsgi.py",
+      "size": 415,
+      "type": "text",
+      "content": "\"\"\"\nWSGI config for dealer_sync_backend project.\n\nIt exposes the WSGI callable as a module-level variable named ``application``.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/wsgi/\n\"\"\"\n\nimport os\n\nfrom django.core.wsgi import get_wsgi_application\n\nos.environ.setdefault(\"DJANGO_SETTINGS_MODULE\", \"dealer_sync_backend.settings\")\n\napplication = get_wsgi_application()\n",
+      "line_count": 16
+    },
+    {
+      "name": "__init__.py",
+      "path": "dealer_sync_backend/__init__.py",
+      "size": 129,
+      "type": "text",
+      "content": "# DEALERSYNC/dealer_sync_backend/dealer_sync_backend/__init__.py\nfrom .celery import app as celery_app\n\n__all__ = ('celery_app',)",
+      "line_count": 4
+    },
+    {
+      "name": "asgi.py",
+      "path": "dealer_sync_backend/asgi.py",
+      "size": 729,
+      "type": "text",
+      "content": "\"\"\"\nASGI config for dealer_sync_backend project.\n\nIt exposes the ASGI callable as a module-level variable named ``application``.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/howto/deployment/asgi/\n\"\"\"\n\nimport os\nfrom django.core.asgi import get_asgi_application\nfrom channels.routing import ProtocolTypeRouter, URLRouter\nfrom channels.auth import AuthMiddlewareStack\nimport scraper.routing  # We'll create this file\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dealer_sync_backend.settings')\n\napplication = ProtocolTypeRouter({\n    \"http\": get_asgi_application(),\n    \"websocket\": AuthMiddlewareStack(\n        URLRouter(\n            scraper.routing.websocket_urlpatterns\n        )\n    ),\n})\n",
+      "line_count": 25
+    },
+    {
+      "name": "settings.py",
+      "path": "dealer_sync_backend/settings.py",
+      "size": 5411,
+      "type": "text",
+      "content": "\"\"\"\nDjango settings for dealer_sync_backend project.\n\nGenerated by 'django-admin startproject' using Django 5.0.6.\n\nFor more information on this file, see\nhttps://docs.djangoproject.com/en/5.0/topics/settings/\n\nFor the full list of settings and their values, see\nhttps://docs.djangoproject.com/en/5.0/ref/settings/\n\"\"\"\n\nfrom decouple import config\nfrom pathlib import Path\nfrom datetime import timedelta\nfrom celery.schedules import crontab\nimport os\n\n# Build paths inside the project like this: BASE_DIR / 'subdir'.\nBASE_DIR = Path(__file__).resolve().parent.parent\n\n\n# Quick-start development settings - unsuitable for production\n# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/\n\n# SECURITY WARNING: keep the secret key used in production secret!\nSECRET_KEY = \"django-insecure-+-s$27uxhbg&5)jk#yeb1c^3m$p%y4ihix&=q0x1a#ah*3)-cz\"\n\n# SECURITY WARNING: don't run with debug turned on in production!\nDEBUG = True\n\nALLOWED_HOSTS: list[str] = []\n\n\n# Application definition\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    \"rest_framework\",\n    \"rest_framework_simplejwt\",\n    \"corsheaders\",\n    \"scraper\",\n    \"dashboard\",\n    \"authentication\",\n    'channels',\n]\n\n\nMIDDLEWARE = [\n    \"django.middleware.security.SecurityMiddleware\",\n    \"django.contrib.sessions.middleware.SessionMiddleware\",\n    \"django.middleware.common.CommonMiddleware\",\n    \"django.middleware.csrf.CsrfViewMiddleware\",\n    \"django.contrib.auth.middleware.AuthenticationMiddleware\",\n    \"django.contrib.messages.middleware.MessageMiddleware\",\n    \"django.middleware.clickjacking.XFrameOptionsMiddleware\",\n    'corsheaders.middleware.CorsMiddleware',\n]\n\nROOT_URLCONF = \"dealer_sync_backend.urls\"\n\nTEMPLATES = [\n    {\n        \"BACKEND\": \"django.template.backends.django.DjangoTemplates\",\n        \"DIRS\": [],\n        \"APP_DIRS\": True,\n        \"OPTIONS\": {\n            \"context_processors\": [\n                \"django.template.context_processors.debug\",\n                \"django.template.context_processors.request\",\n                \"django.contrib.auth.context_processors.auth\",\n                \"django.contrib.messages.context_processors.messages\",\n            ],\n        },\n    },\n]\n\nWSGI_APPLICATION = \"dealer_sync_backend.wsgi.application\"\n\n\n# Database\n# https://docs.djangoproject.com/en/5.0/ref/settings/#databases\n\n\nDATABASES = {\n    'default': {\n        'ENGINE': 'django.db.backends.postgresql',\n        'NAME': config('POSTGRES_DB'),\n        'USER': config('POSTGRES_USER'),\n        'PASSWORD': config('POSTGRES_PASSWORD'),\n        'HOST': config('DATABASE_HOST'),\n        'PORT': config('DATABASE_PORT'),\n    }\n}\n\n\n# Password validation\n# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators\n\nAUTH_PASSWORD_VALIDATORS = [\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.UserAttributeSimilarityValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.MinimumLengthValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.CommonPasswordValidator\",\n    },\n    {\n        \"NAME\": \"django.contrib.auth.password_validation.NumericPasswordValidator\",\n    },\n]\n\n\n# Internationalization\n# https://docs.djangoproject.com/en/5.0/topics/i18n/\n\nLANGUAGE_CODE = \"en-us\"\n\nTIME_ZONE = \"UTC\"\n\nUSE_I18N = True\n\nUSE_TZ = True\n\n\n# Static files (CSS, JavaScript, Images)\n# https://docs.djangoproject.com/en/5.0/howto/static-files/\n\nSTATIC_URL = '/static/'\nSTATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]\n\n\n# Default primary key field type\n# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field\n\nDEFAULT_AUTO_FIELD = \"django.db.models.BigAutoField\"\n\nCORS_ALLOW_ALL_ORIGINS = True\nCORS_ALLOW_CREDENTIALS = True\nCORS_ALLOWED_ORIGINS = [\n    \"http://localhost:3000\",\n]\nCORS_ALLOW_METHODS = [\n    'DELETE',\n    'GET',\n    'OPTIONS',\n    'PATCH',\n    'POST',\n    'PUT',\n]\nCORS_ALLOW_HEADERS = [\n    'accept',\n    'accept-encoding',\n    'authorization',\n    'content-type',\n    'dnt',\n    'origin',\n    'user-agent',\n    'x-csrftoken',\n    'x-requested-with',\n]\n\nSIMPLE_JWT = {\n    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),\n    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),\n    'ROTATE_REFRESH_TOKENS': True,\n    'BLACKLIST_AFTER_ROTATION': True,\n    'AUTH_HEADER_TYPES': ('Bearer',),\n    'USER_ID_FIELD': 'id',\n    'USER_ID_CLAIM': 'user_id',\n}\n\nREST_FRAMEWORK = {\n    'DEFAULT_AUTHENTICATION_CLASSES': (\n        'rest_framework_simplejwt.authentication.JWTAuthentication',\n    ),\n    'DEFAULT_PERMISSION_CLASSES': (\n        'rest_framework.permissions.IsAuthenticated',\n    ),\n}\n\nCELERY_BROKER_URL = 'redis://localhost:6379'\nCELERY_RESULT_BACKEND = 'redis://localhost:6379'\nCELERY_ACCEPT_CONTENT = ['application/json']\nCELERY_TASK_SERIALIZER = 'json'\nCELERY_RESULT_SERIALIZER = 'json'\nCELERY_TIMEZONE = 'UTC'\n\nCELERY_BEAT_SCHEDULE = {\n    'run-scrapers-daily': {\n        'task': 'scraper.tasks.run_scrapers',\n        'schedule': crontab(hour='0', minute='0'),  # Run daily at midnight\n    },\n}\n\n# Add Channels configuration\n\nASGI_APPLICATION = 'dealer_sync_backend.asgi.application'\nCHANNEL_LAYERS = {\n    'default': {\n        'BACKEND': 'channels_redis.core.RedisChannelLayer',\n        'CONFIG': {\n            \"hosts\": [('127.0.0.1', 6379)],\n        },\n    },\n}\n",
+      "line_count": 213
+    },
+    {
+      "name": "celery.py",
+      "path": "dealer_sync_backend/celery.py",
+      "size": 838,
+      "type": "text",
+      "content": "from __future__ import absolute_import, unicode_literals\nimport os\nfrom celery import Celery\nfrom kombu import Exchange, Queue\n\nos.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dealer_sync_backend.settings')\n\napp = Celery('dealer_sync_backend')\napp.config_from_object('django.conf:settings', namespace='CELERY')\napp.autodiscover_tasks()\n\ndefault_exchange = Exchange('default')\napp.conf.task_queues = (\n    Queue('default', default_exchange, routing_key='default'),\n)\n\napp.conf.task_default_queue = 'default'\napp.conf.task_default_exchange = 'default'\napp.conf.task_default_routing_key = 'default'\n\n# Retry settings\napp.conf.broker_transport_options = {\n    'max_retries': 3,\n    'interval_start': 0,\n    'interval_step': 0.2,\n    'interval_max': 0.5,\n}\n\n\n@app.task(bind=True)\ndef debug_task(self):\n    print(f'Request: {self.request!r}')\n",
+      "line_count": 32
+    },
+    {
+      "name": "apps.py",
+      "path": "dashboard/apps.py",
+      "size": 150,
+      "type": "text",
+      "content": "from django.apps import AppConfig\n\n\nclass DashboardConfig(AppConfig):\n    default_auto_field = 'django.db.models.BigAutoField'\n    name = 'dashboard'\n",
+      "line_count": 6
+    },
+    {
+      "name": "urls.py",
+      "path": "dashboard/urls.py",
+      "size": 404,
+      "type": "text",
+      "content": "\n\nfrom django.urls import path\nfrom .views import DashboardView, ListingsView, SyncHistoryView, SyncStartView\n\nurlpatterns = [\n    path('dashboard/', DashboardView.as_view(), name='dashboard'),\n    path('listings/', ListingsView.as_view(), name='listings'),\n    path('sync/history/', SyncHistoryView.as_view(), name='sync_history'),\n    path('sync/start/', SyncStartView.as_view(), name='sync_start'),\n]\n",
+      "line_count": 11
+    },
+    {
+      "name": "views.py",
+      "path": "dashboard/views.py",
+      "size": 4528,
+      "type": "text",
+      "content": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework.permissions import IsAuthenticated, BasePermission\nfrom scraper.tasks import run_scrapers\nfrom scraper.models import VehicleListing, SyncAttempt\nfrom .serializers import VehicleListingSerializer\nfrom rest_framework.pagination import PageNumberPagination\nfrom django.db.models import Count\nfrom django.utils import timezone\nfrom datetime import timedelta\nfrom typing import List\n\n\nclass DashboardView(APIView):\n\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        user = request.user\n        total_listings = VehicleListing.objects.filter(user=user).count()\n        today = timezone.now().date()\n        listings_today = VehicleListing.objects.filter(\n            user=user, created_at__date=today).count()\n\n        active_syncs = SyncAttempt.objects.filter(\n            user=user, status='IN_PROGRESS').count()\n        pending_updates = VehicleListing.objects.filter(\n            user=user, needs_update=True).count()\n        total_views = VehicleListing.objects.filter(user=user).aggregate(\n            total_views=Count('views'))['total_views']\n\n        # Get data for chart (last 4 months)\n        chart_data = []\n        for i in range(3, -1, -1):\n            month_start = (timezone.now() -\n                           timedelta(days=30*i)).replace(day=1)\n            month_end = (month_start + timedelta(days=32)\n                         ).replace(day=1) - timedelta(days=1)\n            listings_count = VehicleListing.objects.filter(\n                user=user, created_at__range=(month_start, month_end)).count()\n            views_count = VehicleListing.objects.filter(user=user, created_at__range=(\n                month_start, month_end)).aggregate(total_views=Count('views'))['total_views']\n            chart_data.append({\n                \"name\": month_start.strftime(\"%b\"),\n                \"listings\": listings_count,\n                \"views\": views_count\n            })\n\n        # Recent activity (last 4 events)\n        recent_listings = VehicleListing.objects.filter(\n            user=user).order_by('-created_at')[:4]\n        recent_activity = [\n            {\n                \"title\": \"New Listing Added\",\n                \"description\": f\"{listing.year} {listing.make} {listing.model}\",\n                \"time\": f\"{(timezone.now() - listing.created_at).days} days ago\"\n            } for listing in recent_listings\n        ]\n\n        dashboard_data = {\n            \"stats\": [\n                {\"title\": \"Total Listings\", \"value\": total_listings, \"icon\": \"Car\"},\n                {\"title\": \"Active Syncs\", \"value\": active_syncs, \"icon\": \"Activity\"},\n                {\"title\": \"Pending Updates\",\n                    \"value\": pending_updates, \"icon\": \"Clock\"},\n                {\"title\": \"Total Views\", \"value\": total_views, \"icon\": \"Eye\"},\n            ],\n            \"recentActivity\": recent_activity,\n            \"chartData\": chart_data\n        }\n        return Response(dashboard_data)\n\n\nclass ListingsView(APIView):\n\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        paginator = PageNumberPagination()\n        paginator.page_size = 20\n        listings = VehicleListing.objects.filter(\n            user=request.user).order_by('-created_at')\n        result_page = paginator.paginate_queryset(listings, request)\n        serializer = VehicleListingSerializer(result_page, many=True)\n        return paginator.get_paginated_response(serializer.data)\n\n\nclass SyncHistoryView(APIView):\n\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def get(self, request):\n        today = timezone.now().date()\n        last_successful = SyncAttempt.objects.filter(\n            status='COMPLETED').order_by('-end_time').first()\n        sync_history = {\n            \"lastSuccessful\": last_successful.end_time if last_successful else None,\n            \"totalToday\": SyncAttempt.objects.filter(start_time__date=today).count(),\n            \"failedToday\": SyncAttempt.objects.filter(start_time__date=today, status='FAILED').count()\n        }\n        return Response(sync_history)\n\n\nclass SyncStartView(APIView):\n\n    permission_classes: List[type[BasePermission]] = [IsAuthenticated]\n\n    def post(self, request):\n        # Trigger the Celery task\n        task = run_scrapers.delay()\n        return Response({\n            \"message\": \"Sync process started\",\n            \"task_id\": task.id\n        })\n",
+      "line_count": 114
+    },
+    {
+      "name": "tests.py",
+      "path": "dashboard/tests.py",
+      "size": 1799,
+      "type": "text",
+      "content": "from django.test import TestCase\nfrom django.urls import reverse\nfrom rest_framework.test import APIClient\nfrom rest_framework import status\nfrom django.contrib.auth.models import User\nfrom scraper.models import VehicleListing, SyncAttempt\nfrom django.utils import timezone\n\nclass DashboardTests(TestCase):\n    def setUp(self):\n        self.client = APIClient()\n        self.user = User.objects.create_user(username='testuser', password='testpass123')\n        self.client.force_authenticate(user=self.user)\n        \n        # Create some test data\n        VehicleListing.objects.create(\n            dealership=\"Test Dealer\",\n            title=\"2023 Test Car\",\n            price=25000,\n            msrp=26000,\n            year=2023,\n            make=\"Test\",\n            model=\"Car\"\n        )\n        SyncAttempt.objects.create(status='COMPLETED')\n\n    def test_dashboard_data(self):\n        url = reverse('dashboard')\n        response = self.client.get(url)\n        self.assertEqual(response.status_code, status.HTTP_200_OK)\n        self.assertIn('stats', response.data)\n        self.assertIn('recentActivity', response.data)\n        self.assertIn('chartData', response.data)\n\n    def test_listings_view(self):\n        url = reverse('listings')\n        response = self.client.get(url)\n        self.assertEqual(response.status_code, status.HTTP_200_OK)\n        self.assertIn('results', response.data)\n        self.assertEqual(len(response.data['results']), 1)\n\n    def test_sync_history_view(self):\n        url = reverse('sync_history')\n        response = self.client.get(url)\n        self.assertEqual(response.status_code, status.HTTP_200_OK)\n        self.assertIn('lastSuccessful', response.data)\n        self.assertIn('totalToday', response.data)\n        self.assertIn('failedToday', response.data)",
+      "line_count": 48
+    },
+    {
+      "name": "serializers.py",
+      "path": "dashboard/serializers.py",
+      "size": 319,
+      "type": "text",
+      "content": "from rest_framework import serializers\nfrom scraper.models import VehicleListing\n\nclass VehicleListingSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = VehicleListing\n        fields = ['id', 'dealership', 'title', 'price', 'msrp', 'year', 'make', 'model', 'image_url', 'created_at', 'updated_at']",
+      "line_count": 7
+    },
+    {
+      "name": "__init__.py",
+      "path": "dashboard/__init__.py",
+      "size": 0,
+      "type": "text"
+    },
+    {
+      "name": "admin.py",
+      "path": "dashboard/admin.py",
+      "size": 63,
+      "type": "text",
+      "content": "from django.contrib import admin\n\n# Register your models here.\n",
+      "line_count": 3
+    },
+    {
+      "name": "models.py",
+      "path": "dashboard/models.py",
+      "size": 57,
+      "type": "text",
+      "content": "from django.db import models\n\n# Create your models here.\n",
+      "line_count": 3
+    }
+  ],
+  "directories": [
+    {
+      "path": "authentication",
+      "name": "authentication"
+    },
+    {
+      "path": "scraper",
+      "name": "scraper"
+    },
+    {
+      "path": "scraper/management",
+      "name": "management"
+    },
+    {
+      "path": "scraper/management/commands",
+      "name": "commands"
+    },
+    {
+      "path": "dealer_sync_backend",
+      "name": "dealer_sync_backend"
+    },
+    {
+      "path": "dashboard",
+      "name": "dashboard"
+    }
+  ],
+  "analysis": {
+    "framework": "Django",
+    "django_apps": [
+      "authentication",
+      "scraper",
+      "dashboard"
+    ]
+  }
+}

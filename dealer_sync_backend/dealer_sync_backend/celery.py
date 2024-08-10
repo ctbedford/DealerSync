@@ -9,8 +9,9 @@ app = Celery('dealer_sync_backend')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
+default_exchange = Exchange('default')
 app.conf.task_queues = (
-    Queue('default', Exchange('default'), routing_key='default'),
+    Queue('default', default_exchange, routing_key='default'),
 )
 
 app.conf.task_default_queue = 'default'
@@ -24,6 +25,7 @@ app.conf.broker_transport_options = {
     'interval_step': 0.2,
     'interval_max': 0.5,
 }
+
 
 @app.task(bind=True)
 def debug_task(self):

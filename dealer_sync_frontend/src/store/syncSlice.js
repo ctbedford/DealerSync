@@ -62,6 +62,14 @@ export const syncSlice = createSlice({
       state.syncStatus = 'idle';
       state.error = null;
     },
+    updateSyncProgress: (state, action) => {
+      const { current, total, percent, currentVehicle } = action.payload;
+      state.currentItem = current;
+      state.totalItems = total;
+      state.progress = percent;
+      state.currentVehicle = currentVehicle;
+      state.syncStatus = 'syncing';
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -79,15 +87,18 @@ export const syncSlice = createSlice({
           state.syncStatus = 'completed';
           state.progress = 100;
           state.currentVehicle = null;
+          console.log('Updated sync state:', state);
         } else if (action.payload.state === 'FAILURE') {
           state.syncStatus = 'error';
           state.error = 'Sync failed. Please try again.';
           state.currentVehicle = null;
+          console.log('Updated sync state:', state);
         } else if (action.payload.state === 'PROGRESS') {
           state.syncStatus = 'syncing';
           state.totalItems = action.payload.total;
           state.currentItem = action.payload.current;
           state.currentVehicle = action.payload.currentVehicle || null;
+          console.log('Updated sync state:', state);
           if (state.totalItems && state.totalItems !== 'unknown') {
             state.progress = Math.round((state.currentItem / state.totalItems) * 100);
           } else {
@@ -104,6 +115,15 @@ export const syncSlice = createSlice({
   },
 });
 
-export const { setSyncStatus, setProgress, setTaskId, setError, resetSync, setUserId, clearUserState } = syncSlice.actions;
+export const {
+  setSyncStatus,
+  setProgress,
+  setTaskId,
+  setError,
+  resetSync,
+  setUserId,
+  clearUserState,
+  updateSyncProgress  // Add this line
+} = syncSlice.actions;
 
 export default syncSlice.reducer;

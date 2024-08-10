@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { setSyncStatus, setProgress, setTaskId, setError, resetSync, checkSyncStatus, setUserId } from '../store/syncSlice';
+import { setSyncStatus, setProgress, setTaskId, setError, resetSync, setUserId, updateSyncProgress } from '../store/syncSlice';
 import { RefreshCw, Check, AlertTriangle, Loader } from 'lucide-react';
 import Card from '../components/Card';
 import CardHeader from '../components/CardHeader';
@@ -13,11 +13,13 @@ const Sync = () => {
   const { syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle } = useSelector((state) => state.sync);
   const [syncHistory, setSyncHistory] = useState(null);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const webSocket = useRef(null);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       dispatch(setUserId(user.id));
+      connectWebSocket(user.id);
     }
   }, [dispatch]);
 
@@ -25,12 +27,45 @@ const Sync = () => {
     console.log('Sync component state updated:', { syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle });
   }, [syncStatus, progress, taskId, error, totalItems, currentItem, userId, currentVehicle]);
 
-  const fetchSyncStatus = useCallback(async () => {
-    if (taskId) {
-      console.log('Fetching sync status for task:', taskId);
-      dispatch(checkSyncStatus({ taskId }));
-    }
-  }, [taskId, dispatch]);
+  const connectWebSocket = useCallback((userId) => {
+    if (webSocket.current?.readyState === WebSocket.OPEN) return;
+
+    webSocket.current = new WebSocket(`ws://localhost:8000/ws/sync/?user_id=${userId}`);
+
+    webSocket.current.onopen = () => {
+      console.log('WebSocket connected');
+    };
+
+    webSocket.current.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('WebSocket message received:', data);
+        if (data.message) {
+          const message = JSON.parse(data.message);
+          dispatch(updateSyncProgress(message));
+        }
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
+      }
+    };
+
+    webSocket.current.onclose = (event) => {
+      console.log('WebSocket disconnected:', event.code, event.reason);
+      setTimeout(() => connectWebSocket(userId), 5000);
+    };
+
+    webSocket.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    return () => {
+      if (webSocket.current) {
+        webSocket.current.close();
+      }
+    };
+  }, []);
 
   const fetchSyncHistory = useCallback(async () => {
     try {
@@ -49,11 +84,8 @@ const Sync = () => {
   }, []);
 
   useEffect(() => {
-    fetchSyncStatus();
     fetchSyncHistory();
-    const interval = setInterval(fetchSyncStatus, 10000); // Check every 10 seconds
-    return () => clearInterval(interval);
-  }, [fetchSyncStatus, fetchSyncHistory]);
+  }, [fetchSyncHistory]);
 
   const startSync = async () => {
     if (!userId) {

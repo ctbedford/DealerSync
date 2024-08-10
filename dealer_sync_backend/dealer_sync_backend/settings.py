@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "scraper",
     "dashboard",
     "authentication",
+    'channels',
 ]
 
 
@@ -79,7 +80,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "dealer_sync_backend.wsgi.application"
+# WSGI_APPLICATION = "dealer_sync_backend.wsgi.application"
+# Add Channels configuration
+
+ASGI_APPLICATION = 'dealer_sync_backend.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -195,6 +207,6 @@ CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'run-scrapers-daily': {
         'task': 'scraper.tasks.run_scrapers',
-        'schedule': crontab(hour=0, minute=0),  # Run daily at midnight
+        'schedule': crontab(hour='0', minute='0'),  # Run daily at midnight
     },
 }

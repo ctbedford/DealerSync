@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 import json
 from typing import Dict, List, Union
@@ -125,10 +126,9 @@ def analyze_project_structure(project_structure: Dict) -> Dict[str, str]:
 
 def main():
     parser = argparse.ArgumentParser(description="Analyze project structure")
+    parser.add_argument("root", help="Root directory of the project")
     parser.add_argument(
-        "--root", help="Root directory of the project", required=True)
-    parser.add_argument(
-        "--output", help="Output JSON file name", required=True)
+        "--output", help="Output directory for analysis results", default=".")
     parser.add_argument("--files", nargs="*", help="Specific files to analyze")
     parser.add_argument("--no-content", action="store_true",
                         help="Exclude file content from the analysis")
